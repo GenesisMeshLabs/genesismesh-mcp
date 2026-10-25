@@ -34,10 +34,18 @@ def build_tools(settings: Settings) -> list[ToolSpec]:
         raise ValueError("Packaged core contract metadata does not match its compatibility pin")
     from .authority import build_tools as authority_tools
     from .local import build_tools as local_tools
+    from .local_workflows import build_tools as local_workflow_tools
+    from .multi_workflows import build_tools as multi_workflow_tools
     from .offline import build_tools as offline_tools
+    from .proof_workflows import build_tools as proof_tools
+    from .provision_workflows import build_tools as provision_tools
+    from .runtime_workflows import build_tools as runtime_tools
+    from .workflow_support import build_tools as support_tools
     from .workflows import build_tools as workflow_tools
 
-    tools = [*authority_tools(settings), *offline_tools(settings), *local_tools(settings), *workflow_tools(settings)]
+    tools = [*authority_tools(settings), *offline_tools(settings), *local_tools(settings), *workflow_tools(settings),
+             *local_workflow_tools(settings), *multi_workflow_tools(settings), *proof_tools(settings),
+             *provision_tools(settings), *runtime_tools(settings), *support_tools(settings)]
     if len({tool.name for tool in tools}) != len(tools):
         raise ValueError("Duplicate MCP tool registration")
     registered_names = {tool.name for tool in tools}
@@ -171,7 +179,10 @@ def create_server(settings: Settings | None = None, *, tools: list[ToolSpec] | N
                 raise ToolError("output_too_large", "The result exceeds the output limit; no partial artifact is returned.")
             logger.info("tool=%s outcome=completed", tool.name)
             return mt.CallToolResult(content=[mt.TextContent(type="text", text=encoded)], structuredContent=result,
-                                     isError=isinstance(result, dict) and result.get("http_ok") is False)
+                                     isError=isinstance(result, dict) and (result.get("http_ok") is False
+                                         or result.get("completed") is False
+                                         or result.get("complete") is False
+                                         or result.get("status") in ("partial", "unknown", "failed")))
         except ToolError as exc:
             error = {"error": {"code": exc.code, "message": str(exc)}}
         except ValidationError:

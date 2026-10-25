@@ -10,8 +10,9 @@ A standalone [Model Context Protocol](https://modelcontextprotocol.io/) server f
 - Offline tools cover agreements, delegation, recognition, tokens, freshness, policy decisions, execution evidence, audit verification, disclosure, consensus, data governance, oversight, risk, privacy, purge, discovery, interoperability, grants and key history.
 - The catalog accounts for **782 contract entries**, including every CLI command, public Python symbol, signed artifact, error code, package and behavioral rule. These are overlapping surfaces, not 782 independent features.
 - Resources include model schemas, all **137 CLI command references**, compatibility details, configuration capabilities and the current coverage report.
+- **284 tools** include configured workflows for federation, fleet generation/mesh/status/verification, remote proofs/canaries/cleanup, audit packs/archives, held anchors, treaty lifecycle, node enrollment/status, peer sends and guard requests.
 
-Coverage accounting, executable adapters and tested behavior are reported separately. Some fleet/federation/proof/peer-runtime workflows remain explicit gaps; multi-step audit, enrollment and treaty workflows have usable component operations without claiming end-to-end orchestration. Host daemons, database migration/restore and root-key custody have documented boundaries. See [the measured coverage report](docs/coverage.md) and [architecture](docs/architecture.md).
+Coverage accounting, executable adapters and tested behavior are reported separately. The executable-workflow gap count is **zero** against the pinned contract: 119 CLI commands have adapters and 18 describe host/custody operations. Host daemons, general database migration/restore and production root-key custody remain documented boundaries. This is not identical CLI flag/process behavior or proof of production deployment. See [measured coverage](docs/coverage.md), [workflow scope](docs/operational-gaps.md), and [configuration examples](docs/workflows.md).
 
 ## Install
 
@@ -67,7 +68,10 @@ Profiles are checked both when listing tools and when invoking them directly:
 | `node` | Dedicated node identity operations; also needs `write` |
 | `write` | Authority mutations and recorded operations |
 | `sign` | Offline artifact signing with explicitly permitted signers |
-| `local` | Read bounded artifacts from a configured workspace; also needs `verify` |
+| `local` | Confined artifact reads and configured workflow storage/journals |
+| `execute` | Configured peer sends and fixed guard actions; requires their other profiles |
+| `provision` | Private fleet or node-key creation in server-configured storage |
+| `maintain` | Configured canary audit stores and explicitly disposable proof-database cleanup |
 
 For authority administration, configure `operator_key_file`, `operator_key_id`, and an independently obtained `authority_public_key`. Core operator tiers still apply. Node operations use `node_key_file`; edge enrollment also uses `executor_key_file`. Enrollment's `invite_token` is local configuration, not a model input.
 
@@ -115,17 +119,17 @@ Typed tools expose argument schemas through MCP. Binary arguments/results use st
 .\.venv\Scripts\python.exe -m ruff check .
 .\.venv\Scripts\python.exe -m pytest -q
 .\.venv\Scripts\python.exe scripts/snapshot_cli.py --check
-.\.venv\Scripts\python.exe scripts/check_coverage.py --core ../genesismesh --require-http
+.\.venv\Scripts\python.exe scripts/check_coverage.py --core ../genesismesh --require-http --require-no-gaps
 .\.venv\Scripts\python.exe scripts/render_coverage.py --check
 .\.venv\Scripts\python.exe -m build
 ```
 
-The source check requires the exact revision in `data/compatibility.json`. New core surfaces, changed signatures, invalid aliases and snapshot drift fail the check. `--require-no-gaps` is an additional aspirational gate and currently fails for the explicitly documented orchestration gaps.
+The source check requires the exact revision in `data/compatibility.json`. New core surfaces, changed signatures, invalid aliases, snapshot drift and missing workflow adapters fail CI. `--require-no-gaps` includes incomplete compositions; schemas, references and documented host boundaries remain separate classifications.
 
-Tests include disposable real HTTP authorities, domain success/denial paths, official MCP clients, real stdio processes, signing isolation and filesystem limits. `scripts/smoke_installed.py` must additionally run with a fresh wheel-only virtual environment; an editable-environment stdio test is not clean-wheel evidence. CI is configured for Windows/Linux and Python 3.12/3.14; local results do not establish unrun CI outcomes.
+Tests include disposable real HTTP authorities, Noise peers, guard subprocesses, SQLite stores, domain success/denial paths, official MCP clients, real stdio processes, signing isolation and filesystem limits. Recovery tests exercise missing mutation replies, revoked certificates, changed anchors, corrupt readback and key-history rollback. `scripts/smoke_installed.py` must additionally run with a fresh wheel-only virtual environment; an editable-environment stdio test is not clean-wheel evidence. CI runs Windows/Linux and Python 3.12/3.14.
 
 ## Limits
 
 `max_input_bytes` and `max_output_bytes` default to 1 MiB and 4 MiB. Oversized artifacts are refused, never silently truncated. HTTP responses are read with bounded streaming and redirects/retries disabled. `timeout_seconds` controls socket inactivity and streamed-body elapsed checks; it is not a hard process or CPU deadline. Known quadratic audit/Atlas workloads have separate complexity limits.
 
-Workspace access is read-only and confined to the configured root. The stdio host user is the security boundary: this is not a multi-user hosted authorization service. No production authority was modified to test this implementation.
+General workspace access remains read-only. Workflow writes use separately configured artifact, node, provisioning and proof-store locations. Private workflow/node/provisioning storage cannot overlap readable workspace or artifact roots. The stdio host user is the security boundary: this is not a multi-user hosted authorization service. No production authority was modified to test this implementation.

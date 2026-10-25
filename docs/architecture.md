@@ -26,6 +26,12 @@ flowchart LR
 | `offline/workflows.py` | Typed context, verification and model-construction adapters requiring more than direct function adaptation |
 | `local.py` | Read-only trust-bundle, evidence JSONL and audit-pack verification inside the configured workspace |
 | `workflows.py` | Core bundle export/review and Atlas rendering through restricted adapters |
+| `workflow_config.py`, `runtime_config.py` | Immutable named authorities, fleets, stores, nodes, peers and fixed guard actions |
+| `workflow_support.py` | Configured dependencies, private storage, resource locks and durable mutation journals |
+| `multi_workflows.py`, `multi_support.py` | Root-pinned federation, fleet aggregation/mesh and recognition/revocation proofs |
+| `local_workflows.py` | Audit materialization/archive, held anchors and ordered treaty lifecycle |
+| `runtime_workflows.py` | Verified node state, bounded Noise sends and correlated guard requests/receipts |
+| `provision_workflows.py`, `proof_workflows.py` | Private fleet scaffolding, canary receipt/audit persistence and disposable proof-store maintenance |
 | `catalog.py`, `data/` | Pinned public contract, immutable source provenance, coverage classifications and test evidence |
 
 ## What full reflection means
@@ -48,7 +54,7 @@ Tests do not automatically turn registration counts into behavioral proof. Each 
 
 Operator requests use the core's method/path/query/body/audience signatures. Node requests use dedicated node signing and, for node-scoped routes, purpose and audience binding. Agent descriptor registration and deletion use their distinct core signing formats. Edge enrollment proves executor-key possession before node signing. Public counts and authenticated rosters have separate tools.
 
-Offline signing requires `sign` plus a configured reference explicitly permitted for the named tool. Core cryptography and policy semantics remain unchanged. Signing an oversight artifact is not independent human approval. Root key creation/custody and arbitrary raw signing are not exposed.
+Offline signing requires `sign` plus a configured reference explicitly permitted for the named tool. Core cryptography and policy semantics remain unchanged. Signing an oversight artifact is not independent human approval. Root key creation is confined to explicitly enabled private fleet provisioning; keys are never returned. Production root custody and arbitrary raw signing are not exposed.
 
 `authorized: false`, failed verification, revocation and stale-state outcomes stay structured. An HTTP 200 is not permission. A policy decision, execution receipt, successful external action and independently verified audit trail are different claims. The adapter does not execute arbitrary external capabilities or synthesize evidence claiming that it did.
 

@@ -20,13 +20,17 @@ def render():
     for name, counts in summary["sections"].items():
         status = "; ".join(f"{key}: {value}" for key, value in counts.items() if key != "total")
         lines.append(f"| {name} | {counts['total']} | {status} |")
-    lines += ["", "## Remaining gaps and composed operations", "",
-        "These do not count as implemented end-to-end workflows. Every CLI leaf also has a dedicated reference resource.", "",
-        "| Core surface | Status | Reason |", "| --- | --- | --- |"]
-    for row in report["rows"]:
-        if row["implementation_status"] in {"gap", "components_available"}:
+    gaps = [row for row in report["rows"] if row["implementation_status"] in {"gap", "components_available"}]
+    lines += ["", "## Remaining gaps and composed operations", ""]
+    if gaps:
+        lines += ["These do not count as implemented end-to-end workflows. Every CLI leaf also has a dedicated reference resource.", "",
+                  "| Core surface | Status | Reason |", "| --- | --- | --- |"]
+        for row in gaps:
             reason = row.get("reason", "See packaged coverage.json for mapping details.").replace("|", "\\|").replace("\n", " ")
             lines.append(f"| `{row['id']}` | {row['implementation_status']} | {reason} |")
+    else:
+        lines += ["No unresolved executable gaps or component-only workflows in the pinned contract. "
+                  "[Hosting and custody boundaries](operational-gaps.md) remain explicit; this is not identical CLI flag/process behavior."]
     for section in ("http_routes", "cli_commands", "python", "signed_artifacts"):
         lines += ["", f"## {section}", "", "| Core surface | Status | MCP mapping | Test evidence |",
                   "| --- | --- | --- | --- |"]

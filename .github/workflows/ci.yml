@@ -27,7 +27,7 @@ jobs:
           repository: GenesisMeshLabs/genesismesh
           ref: 9e4d5c01e6ba7a22e73c17388796ec274f73a2fc
           path: temp/core
-      - run: python scripts/check_coverage.py --core temp/core --require-http
+      - run: python scripts/check_coverage.py --core temp/core --require-http --require-no-gaps
       - run: python -m build
       - name: Install wheel and smoke from an isolated environment
         shell: bash

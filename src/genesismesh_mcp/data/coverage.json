@@ -1794,27 +1794,33 @@
       "section": "cli_commands",
       "stability": "beta",
       "intended_surface": "tool",
-      "reason": "Pack creation and archive registration are exposed. The CLI's durable external archive storage, manifest read-back and verification workflow still requires an adapter.",
-      "verification_status": "not_exercised",
-      "tests": [],
+      "reason": "Pack creation, pinned verification of persisted bytes, archive recording and optional pruning, in that order.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_local_workflows.py::test_audit_pack_held_anchors_and_verified_archive_end_to_end"
+      ],
       "components": [
         "http:POST /admin/evidence/audit-pack",
         "http:POST /admin/evidence/archives"
       ],
-      "coverage_scope": "workflow_components"
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:audit pack",
       "section": "cli_commands",
       "stability": "beta",
       "intended_surface": "tool",
-      "reason": "The authority can create and return a pack. The CLI's no-overwrite multi-file materialization, read-back manifest checks and independent held-anchor custody are not reproduced by this request tool.",
-      "verification_status": "not_exercised",
-      "tests": [],
+      "reason": "Complete authority pack retrieval, bounded no-overwrite artifact materialization and manifest readback.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_local_workflows.py::test_audit_pack_held_anchors_and_verified_archive_end_to_end"
+      ],
       "components": [
         "http:POST /admin/evidence/audit-pack"
       ],
-      "coverage_scope": "workflow_components"
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:audit verify",
@@ -1865,14 +1871,17 @@
       "section": "cli_commands",
       "stability": "beta",
       "intended_surface": "tool",
-      "reason": "Anchor listing and creation are exposed. Independent held-anchor persistence, complete pagination and rollback/equivocation comparison are not equivalent to a list request and still require a workflow adapter.",
-      "verification_status": "not_exercised",
-      "tests": [],
+      "reason": "Bounded complete pagination, held-history reconciliation, core anchor verification and serialized persistence.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_local_workflows.py::test_audit_pack_held_anchors_and_verified_archive_end_to_end"
+      ],
       "components": [
         "http:GET /admin/evidence/anchors",
         "http:POST /admin/evidence/anchors"
       ],
-      "coverage_scope": "workflow_components"
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:evidence verify-export",
@@ -1888,45 +1897,65 @@
       "section": "cli_commands",
       "stability": "stable",
       "intended_surface": "tool",
-      "reason": "Requires a complete structured workflow or exact adapter mapping; documentation alone does not implement this command.",
-      "verification_status": "not_exercised",
-      "tests": []
+      "reason": "Root-pinned two-authority preview, issue, persisted relationship verification and partial-operation recovery.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_multi_workflows.py::test_federation_preview_issue_and_completed_replay"
+      ],
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:fleet generate",
       "section": "cli_commands",
       "stability": "beta",
       "intended_surface": "tool",
-      "reason": "Requires a complete structured workflow or exact adapter mapping; documentation alone does not implement this command.",
-      "verification_status": "not_exercised",
-      "tests": []
+      "reason": "Private core key/genesis/config provisioning with atomic publication and usable final paths; no daemon startup.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_provision_workflows.py::test_fleet_generation_writes_usable_final_paths_and_replays"
+      ],
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:fleet mesh",
       "section": "cli_commands",
       "stability": "beta",
       "intended_surface": "tool",
-      "reason": "Requires a complete structured workflow or exact adapter mapping; documentation alone does not implement this command.",
-      "verification_status": "not_exercised",
-      "tests": []
+      "reason": "Configured fleet ordered-pair treaty creation, scope-sensitive reuse, bounded aggregation and durable outcomes.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_multi_workflows.py::test_fleet_status_mesh_verify_and_scope_sensitive_skip"
+      ],
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:fleet status",
       "section": "cli_commands",
       "stability": "beta",
       "intended_surface": "tool",
-      "reason": "Requires a complete structured workflow or exact adapter mapping; documentation alone does not implement this command.",
-      "verification_status": "not_exercised",
-      "tests": []
+      "reason": "Configured fleet health/readiness aggregation with per-member failures and an elapsed request budget.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_multi_workflows.py::test_fleet_status_mesh_verify_and_scope_sensitive_skip"
+      ],
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:fleet verify",
       "section": "cli_commands",
       "stability": "beta",
       "intended_surface": "tool",
-      "reason": "Requires a complete structured workflow or exact adapter mapping; documentation alone does not implement this command.",
-      "verification_status": "not_exercised",
-      "tests": []
+      "reason": "Configured fleet identity review and every ordered trust-path verification.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_multi_workflows.py::test_fleet_status_mesh_verify_and_scope_sensitive_skip"
+      ],
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:genesis create",
@@ -1981,16 +2010,19 @@
       "section": "cli_commands",
       "stability": "stable",
       "intended_surface": "tool",
-      "reason": "Enrollment and supporting HTTP operations exist. The CLI's existing-certificate reuse, local key/config/certificate persistence and optional persistent peer runtime are not implemented by the HTTP enrollment tool.",
-      "verification_status": "not_exercised",
-      "tests": [],
+      "reason": "Configured node enrollment and certificate reuse, root-pinned verification, persistence, policy fetch and heartbeat. Persistent host peer daemon remains a hosting boundary.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_runtime_workflows.py::test_join_persists_reuses_identity_and_reports_local_status"
+      ],
       "components": [
         "http:GET /genesis",
         "http:POST /join",
         "http:GET /policy",
         "http:POST /heartbeat"
       ],
-      "coverage_scope": "workflow_components"
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:keygen network-authority",
@@ -2156,18 +2188,26 @@
       "section": "cli_commands",
       "stability": "beta",
       "intended_surface": "tool",
-      "reason": "Requires a complete structured workflow or exact adapter mapping; documentation alone does not implement this command.",
-      "verification_status": "not_exercised",
-      "tests": []
+      "reason": "Remote proof plus purpose-signed, readback-verified receipt and owned core audit-store event.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_canary_workflows.py::test_canary_signs_persists_and_audits_actual_remote_proof"
+      ],
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:proof cleanup",
       "section": "cli_commands",
       "stability": "beta",
       "intended_surface": "tool",
-      "reason": "Requires a complete structured workflow or exact adapter mapping; documentation alone does not implement this command.",
-      "verification_status": "not_exercised",
-      "tests": []
+      "reason": "Explicitly disposable store only: preview exact entire-table scope, verify exclusive backup, then delete all rows from the four core trust tables.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_proof_workflows.py::test_cleanup_backups_exact_entire_tables_and_preserves_other_data"
+      ],
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:proof inspect",
@@ -2186,18 +2226,26 @@
       "section": "cli_commands",
       "stability": "beta",
       "intended_surface": "tool",
-      "reason": "Requires a complete structured workflow or exact adapter mapping; documentation alone does not implement this command.",
-      "verification_status": "not_exercised",
-      "tests": []
+      "reason": "Real two-authority issue, acceptance, revocation, feed import, rejection and core summary inspection with durable steps.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_multi_workflows.py::test_remote_proof_acceptance_revocation_and_replay"
+      ],
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:send",
       "section": "cli_commands",
       "stability": "beta",
       "intended_surface": "tool",
-      "reason": "Requires a complete structured workflow or exact adapter mapping; documentation alone does not implement this command.",
-      "verification_status": "not_exercised",
-      "tests": []
+      "reason": "Configured Noise peer send with pinned certificate/static-key validation; transport send does not imply recipient delivery.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_runtime_workflows.py::test_real_noise_send_verifies_peer_identity_and_reports_transport_only"
+      ],
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:sovereign inspect",
@@ -2217,15 +2265,18 @@
       "section": "cli_commands",
       "stability": "stable",
       "intended_surface": "tool",
-      "reason": "Authority probes and node count exist. The CLI's local configuration and held node certificate view are not yet combined into one status workflow.",
-      "verification_status": "not_exercised",
-      "tests": [],
+      "reason": "Combined local certificate/policy view and live authority probes, with fresh signed CRL checks.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_runtime_review.py::test_status_reports_current_revocation_and_held_policy"
+      ],
       "components": [
         "http:GET /healthz",
         "http:GET /readyz",
         "http:GET /nodes"
       ],
-      "coverage_scope": "workflow_components"
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:supply-chain verify",
@@ -2283,30 +2334,36 @@
       "section": "cli_commands",
       "stability": "stable",
       "intended_surface": "tool",
-      "reason": "The individual read, issue and revoke operations exist. The CLI's ordered renew workflow, renew_of metadata and partial-failure handling are not orchestrated by one MCP tool.",
-      "verification_status": "not_exercised",
-      "tests": [],
+      "reason": "Ordered linked treaty issuance and old-treaty revocation with durable partial outcomes.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_local_workflows.py::test_treaty_renew_and_replay_create_one_linked_replacement"
+      ],
       "components": [
         "http:GET /recognition-treaties/<treaty_id>",
         "http:POST /admin/recognition-treaties",
         "http:POST /admin/recognition-treaties/<treaty_id>/revoke"
       ],
-      "coverage_scope": "workflow_components"
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:treaty replace",
       "section": "cli_commands",
       "stability": "stable",
       "intended_surface": "tool",
-      "reason": "The individual read, issue and revoke operations exist. Scope replacement, replaced_by linkage and ordered partial-failure handling are not orchestrated by one MCP tool.",
-      "verification_status": "not_exercised",
-      "tests": [],
+      "reason": "Ordered scoped replacement and old-treaty revocation with core linkage metadata and durable partial outcomes.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_local_workflows.py::test_treaty_replace_preserves_linkage_and_changes_scope"
+      ],
       "components": [
         "http:GET /recognition-treaties/<treaty_id>",
         "http:POST /admin/recognition-treaties",
         "http:POST /admin/recognition-treaties/<treaty_id>/revoke"
       ],
-      "coverage_scope": "workflow_components"
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:treaty revoke",
@@ -2799,9 +2856,13 @@
       "section": "cli_commands",
       "stability": "beta",
       "intended_surface": "tool",
-      "reason": "Requires a complete structured workflow or exact adapter mapping; documentation alone does not implement this command.",
-      "verification_status": "not_exercised",
-      "tests": []
+      "reason": "Configured action, purpose-authorized signing, real guard execution and correlated signed receipt; no caller-supplied command.",
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_runtime_workflows.py::test_real_guard_execution_receipt_and_no_repeat_on_same_operation"
+      ],
+      "coverage_scope": "configured_workflow",
+      "verification_scope": "Disposable local services/files/stores using pinned core behavior; this does not prove an external production deployment or identical CLI presentation/flags."
     },
     {
       "id": "cli:trust guard start",

@@ -1,46 +1,34 @@
-# Remaining orchestration work
+# Workflow parity and hosting boundaries
 
-The MCP catalog accounts for the complete pinned core contract. It does **not** claim that every CLI workflow is executable through MCP. A `gap` means the workflow has not been implemented. `components_available` means some required operations exist, but their ordering, state management, or failure handling is still missing. Reference resources do not change either status.
+All 10 previously missing workflows and all 7 component-only compositions now have named configured adapters. `--require-no-gaps` passes against Genesis Mesh 1.8.1, commit `9e4d5c01e6ba7a22e73c17388796ec274f73a2fc`. The catalog separately reports registration, test evidence, availability and hosting boundaries.
 
-This assessment uses Genesis Mesh 1.8.1, commit `9e4d5c01e6ba7a22e73c17388796ec274f73a2fc`. Read `genesis-mesh://coverage` for the current registrations and test evidence.
-
-## Gaps that need runtime or configuration support
-
-| Core CLI workflow | Concrete dependencies and effects | Work needed for an MCP implementation |
+| Core workflow | MCP adapter | Implemented behavior |
 | --- | --- | --- |
-| `federation bootstrap` | Reviews the accepting and issuing sovereigns, optionally reads an issuer trust bundle, previews scope, issues a treaty with the accepting operator's key, then verifies the persisted relationship. A failure after issuance can leave a real treaty in place. | A server-configured authority registry with separate pins/credentials, a structured preview/execute workflow, and explicit partial-success reporting. The single configured authority's HTTP tools do not implement this complete workflow. |
-| `fleet generate` | Creates multiple sovereign directories, root/NA/operator/node key material, signed genesis blocks, per-NA configurations, and a fleet manifest. | A deliberate bootstrap/provisioning implementation with key-custody rules and scoped file writes. No generic CLI launcher or private-key-returning tool is supplied. This remains an implementation gap, not completed coverage. |
-| `fleet mesh` | Reads a manifest and each member configuration; uses each accepting NA's operator identity; creates recognition treaties for ordered sovereign pairs while skipping already active relationships. | Multiple configured authorities, bounded pair counts, per-authority authorization, idempotent discovery, and a persisted per-pair outcome report. A sequence of arbitrary URL calls is not equivalent. |
-| `fleet status` | Reads the fleet manifest and member configurations, then probes every member's `/healthz` and `/readyz`. | A configured fleet registry and a bounded read-only aggregator. The workflow is safe to implement without key generation; it is currently absent because the adapter configuration represents one authority. |
-| `fleet verify` | Resolves each member's sovereign identity and checks `/connectome/trust-path` across every ordered pair. | The same configured fleet registry, bounded pair enumeration, per-pair failures, and a complete report. A single trust-path query is only a component. |
-| `proof remote` | Uses two authority operator identities to issue an attestation and treaty, test acceptance, revoke the attestation, import its revocation feed, and test rejection. It produces a redacted summary and changes both authorities' state. | A named pair of configured authorities, scoped credentials, explicit proof-run authorization, recoverable step tracking, and reporting of partial mutations. Read-only discovery is not a substitute for this proof. |
-| `proof canary` | Runs the remote proof, signs a receipt, atomically writes the receipt file, and records an event in a local NA audit database. | The remote workflow plus a purpose-restricted receipt signer, confined output handling, and a supported audit-store integration. Scheduling or calling individual endpoints does not reproduce this workflow. |
-| `proof cleanup` | Backs up a SQLite database and deletes the selected cross-sovereign proof rows. | A typed maintenance operation with database ownership checks, backup verification, exact selection, explicit destructive-action authorization, and recovery behavior. No database mutation tool is exposed. |
-| `send` | Loads a local node key, held join certificate and genesis configuration; opens a Noise-authenticated WebSocket connection to a reachable peer and transmits a recipient-addressed data message. | A peer-transport adapter with server-configured peer destinations and node state, bounded payloads, lifecycle handling, and a precise distinction between transport send and recipient delivery. NA HTTP enrollment tools do not provide peer messaging. |
-| `trust guard request` | Builds and signs an execution request containing a full invocation token and boundary decision, connects to a running GenesisGuard daemon, and can cause an allowlisted subprocess to execute. | A configured guard connection, named server-side actions, purpose-restricted agent signing, token/decision binding, host execution authorization, and receipt/rejection handling. Offline request assessment and receipt verification do not execute the action. |
+| `federation bootstrap` | `gm_workflow_federation_preview`, `gm_workflow_federation_bootstrap` | Review pinned sovereign identities, bind a preview to scope/identities, issue the treaty, verify the persisted relationship and retain partial outcomes. |
+| `fleet generate` | `gm_workflow_fleet_generate` | Core root/NA/operator key creation, signed genesis, final-path configurations and manifest, privately staged and atomically published. |
+| `fleet mesh` | `gm_workflow_fleet_mesh` | Every ordered pair, scope-aware existing treaty checks, missing treaty issuance and per-pair outcomes. |
+| `fleet status` / `fleet verify` | `gm_workflow_fleet_status`, `gm_workflow_fleet_verify` | Bounded health/readiness aggregation and trust-path checks across a configured fleet. |
+| `proof remote` | `gm_workflow_proof_remote` | Issue attestation/treaty, verify acceptance, revoke, import the signed revocation feed, verify rejection and inspect the proof summary. |
+| `proof canary` | `gm_workflow_proof_canary` | Remote proof, purpose-signed receipt, atomic receipt persistence/readback and an owned core audit-store event. |
+| `proof cleanup` | `gm_workflow_proof_cleanup_preview`, `gm_workflow_proof_cleanup` | Review exact whole-table scope, verify an exclusive backup, then delete all rows from the four selected trust tables in an explicitly disposable database. |
+| `audit pack` / `audit archive` | `gm_workflow_audit_pack`, `gm_workflow_audit_archive` | Materialize and read back signed pack files; archive verifies the pack against configured root/anchors before recording and optional pruning. |
+| `evidence anchors fetch` | `gm_workflow_evidence_anchors_fetch` | Full bounded pagination, comparison against held history, core verification and serialized persistence; anchor refusal remains visible. |
+| `treaty renew` / `treaty replace` | `gm_workflow_treaty_renew`, `gm_workflow_treaty_replace` | Preserve linkage metadata, issue first, revoke the old treaty second, retain created IDs if later steps fail. |
+| `join` / `status` | `gm_workflow_node_join`, `gm_workflow_node_status` | Verified enrollment/reuse, durable certificate/policy/key-history state, heartbeat, live probes and fresh signed revocation checks. |
+| `send` | `gm_workflow_peer_send` | Configured Noise peer transport, pinned peer certificate/static-key binding and bounded payloads; no recipient-delivery claim. |
+| `trust guard request` | `gm_workflow_guard_request` | Submit a signed request for a fixed configured action, preserve guard rejection, and verify receipt signature and request/agent/decision/capability binding. |
 
-Source anchors: [federation](https://github.com/GenesisMeshLabs/genesismesh/blob/9e4d5c01e6ba7a22e73c17388796ec274f73a2fc/genesis_mesh/workflows/federation.py#L30), [fleet](https://github.com/GenesisMeshLabs/genesismesh/blob/9e4d5c01e6ba7a22e73c17388796ec274f73a2fc/genesis_mesh/cli/fleet_ops.py#L135), [remote proof and canary](https://github.com/GenesisMeshLabs/genesismesh/blob/9e4d5c01e6ba7a22e73c17388796ec274f73a2fc/genesis_mesh/workflows/proof.py#L23), [proof cleanup](https://github.com/GenesisMeshLabs/genesismesh/blob/9e4d5c01e6ba7a22e73c17388796ec274f73a2fc/genesis_mesh/workflows/proof.py#L408), [peer send](https://github.com/GenesisMeshLabs/genesismesh/blob/9e4d5c01e6ba7a22e73c17388796ec274f73a2fc/genesis_mesh/cli/ops.py#L622), [guard request](https://github.com/GenesisMeshLabs/genesismesh/blob/9e4d5c01e6ba7a22e73c17388796ec274f73a2fc/genesis_mesh/cli/mediation_ops.py#L39).
+Read [workflow configuration](workflows.md) before enabling these operations. All mutating workflows use operation identifiers and durable journals. An uncertain request outcome is not silently retried. Completed operation replay returns its historical result; use fresh status/verification tools to establish current state.
 
-## Workflows whose components already exist
+## Exact scope limitations
 
-The coverage catalog also lists these incomplete compositions:
+This is executable value/workflow parity for the adapter's pinned public contract, not identical command-line parsing, formatting or every flag. The remaining 18 CLI hosting/custody commands and 6 Python runtime/administrative entry points are explicitly classified as operational boundaries. Schema, reference and low-level helper mappings are not counted as executable behavior.
 
-- `audit pack` and `audit archive`: authority creation/archive operations and local pack verification exist; the CLI's complete fetch, verification, local artifact and archive sequence is not reproduced by one workflow.
-- `evidence anchors fetch`: the authority anchor endpoint exists; maintaining a held anchor file under the CLI's rules is not implemented as a workflow.
-- `join`: enrollment, policy fetch and heartbeat operations exist. Local certificate/key/config persistence, existing-certificate reuse and the optional persistent peer runtime are not orchestrated.
-- `status`: authority probes exist. The CLI's combined local configuration and held-certificate view is absent.
-- `treaty renew` and `treaty replace`: read, issue and revoke operations exist. Their ordered linkage metadata and partial-failure handling need dedicated compositions.
+- NA/guard daemons, persistent peer runtime, deployment and development-stack process supervision remain host-managed. Enrollment reports `runtime_started: false`; peer send opens a bounded connection for that send. Starting a persistent peer daemon is not implied by successful enrollment.
+- General database migration/restore and live-host administration remain outside MCP. Canary initialization is limited to an explicitly owned store; an existing incompatible schema is refused.
+- Fleet generation creates local private key files and the core's placeholder policy hash. It does not move roots into offline custody, replace the policy hash, configure production hosts, or start NAs. Those steps must precede production use. Overwriting existing fleets is deliberately unsupported.
+- Core proof cleanup deletes **all rows** in `imported_sovereign_revocations`, `sovereign_revocation_feeds`, `recognition_treaties`, and `membership_attestations`, including ordinary trust records. The adapter reproduces that scope only for a configured `owned: true`, `disposable: true` store, after preview and backup verification. Other tables remain untouched.
+- Configured archive storage is local storage; it does not claim immutable retention or an external storage-service guarantee.
+- Network delivery, independent human approval and production readiness are not inferred from registration, signature verification or local integration tests. Tests use disposable authorities, peers, guards and stores.
 
-These are ordinary product workflows with remaining implementation work. They are not counted as complete merely because their component tools can be called individually.
-
-## Safe gaps closed during implementation
-
-`gm_offline_key_succession_prove_succession` implements the value operation behind `na succession prove`. It accepts a typed `KeySuccessionRecord` and a server-configured signer reference, verifies that the signer's public key is exactly `record.new_public_key`, and delegates signing to core `sign_succession` using `record.new_key_id`. Its signer must be explicitly authorized for this tool. It returns the core wire form, preserving omitted fields. It does not use a root key, submit the succession, approve its root authorization, or activate the new key.
-
-`gm_offline_proof_inspect_proof_bundle` implements `proof inspect` on structured inputs, including the optional Connectome cross-check. It reports `verification_scope: summary_consistency_only` and `signatures_verified: false`. A valid summary is not evidence that the described live actions occurred.
-
-`gm_offline_mediation_verify_guard_receipt` implements receipt signature verification behind `trust guard verify`. It never starts a subprocess or connects to a guard.
-
-## Completing the remaining work
-
-Add explicit services for configured fleets, peer transport, and guard execution rather than a generic subprocess or arbitrary-URL fallback. Give each workflow a defined state model, bounded operation count, typed inputs/results, and tests against temporary local authorities or daemons. Keep partial success and actual execution separate from verification. Update the coverage row only after the complete behavior is registered and tested.
+The existing succession proof, proof-summary inspection and guard receipt verification tools remain available. Summary inspection checks consistency, not proof that the described remote events actually occurred.

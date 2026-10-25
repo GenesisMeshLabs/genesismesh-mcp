@@ -12,8 +12,8 @@ htmlcov/
 .env.*
 !.env.example
 *.local.json
-temp/
-data/
+/temp/
+/data/
 *.key
 *.pem
 *.seed

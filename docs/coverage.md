@@ -32,8 +32,8 @@ No unresolved executable gaps or component-only workflows in the pinned contract
 | `http:POST /admin/attestations` | implemented | `na_attestations_issue_attestation` | integration_tested |
 | `http:POST /admin/attestations/<attestation_id>/revoke` | implemented | `na_attestations_revoke_attestation` | integration_tested |
 | `http:GET /admin/boundary-policies` | implemented | `na_boundary_policy_list_policies` | unit_tested |
-| `http:POST /admin/boundary-policies` | implemented | `na_boundary_policy_publish_policy` | unit_tested |
-| `http:POST /admin/boundary-policies/<policy_id>/activate` | implemented | `na_boundary_policy_activate_policy` | unit_tested |
+| `http:POST /admin/boundary-policies` | implemented | `na_boundary_policy_publish_policy` | integration_tested |
+| `http:POST /admin/boundary-policies/<policy_id>/activate` | implemented | `na_boundary_policy_activate_policy` | integration_tested |
 | `http:POST /admin/boundary-policies/<policy_id>/deactivate` | implemented | `na_boundary_policy_deactivate_policy` | unit_tested |
 | `http:GET /admin/boundary-policies/<policy_id>/history` | implemented | `na_boundary_policy_policy_history` | unit_tested |
 | `http:GET /admin/boundary-policies/active` | implemented | `na_boundary_policy_active_policies` | unit_tested |
@@ -56,28 +56,28 @@ No unresolved executable gaps or component-only workflows in the pinned contract
 | `http:POST /admin/evidence/break-glass/<break_glass_id>/judge` | implemented | `na_out_of_band_judge_break_glass` | unit_tested |
 | `http:GET /admin/evidence/changes/<path:resource_id>` | implemented | `na_out_of_band_resource_changes` | unit_tested |
 | `http:GET /admin/evidence/executor-keys` | implemented | `na_evidence_store_list_executor_keys` | unit_tested |
-| `http:POST /admin/evidence/executor-keys` | implemented | `na_evidence_store_register_executor_key` | unit_tested |
+| `http:POST /admin/evidence/executor-keys` | implemented | `na_evidence_store_register_executor_key` | integration_tested |
 | `http:POST /admin/evidence/executor-keys/<key_id>/retire` | implemented | `na_evidence_store_retire_executor_key` | unit_tested |
-| `http:GET /admin/evidence/export` | implemented | `na_evidence_store_export` | unit_tested |
+| `http:GET /admin/evidence/export` | implemented | `na_evidence_store_export` | integration_tested |
 | `http:POST /admin/evidence/observations/<observation_id>/judge` | implemented | `na_out_of_band_judge_observation` | unit_tested |
 | `http:GET /admin/evidence/operator-holders` | implemented | `na_out_of_band_operator_holders` | unit_tested |
-| `http:GET /admin/evidence/remediations` | implemented | `na_remediation_due_queue` | unit_tested |
+| `http:GET /admin/evidence/remediations` | implemented | `na_remediation_due_queue` | integration_tested |
 | `http:GET /admin/evidence/remediations/<subject_id>` | implemented | `na_remediation_get_remediation` | unit_tested |
 | `http:POST /admin/evidence/remediations/<subject_id>/notified` | implemented | `na_remediation_record_notice` | unit_tested |
 | `http:GET /admin/evidence/resource-heads/<path:resource_id>` | implemented | `na_evidence_store_resource_head` | unit_tested |
 | `http:GET /admin/evidence/resources/<path:resource_id>` | implemented | `na_evidence_store_resource_history` | unit_tested |
 | `http:POST /admin/evidence/retention/apply` | implemented | `na_evidence_store_apply_retention` | unit_tested |
-| `http:POST /admin/evidence/reviews` | implemented | `na_remediation_request_review` | unit_tested |
+| `http:POST /admin/evidence/reviews` | implemented | `na_remediation_request_review` | integration_tested |
 | `http:GET /admin/evidence/reviews/<review_id>` | implemented | `na_remediation_get_review` | unit_tested |
-| `http:POST /admin/evidence/reviews/<review_id>/decide` | implemented | `na_remediation_decide_review` | unit_tested |
+| `http:POST /admin/evidence/reviews/<review_id>/decide` | implemented | `na_remediation_decide_review` | integration_tested |
 | `http:GET /admin/evidence/status` | implemented | `na_evidence_store_status` | unit_tested |
 | `http:GET /admin/evidence/vendors/<vendor_id>` | implemented | `na_evidence_store_vendor_history` | unit_tested |
 | `http:GET /admin/evidence/verify` | implemented | `na_evidence_store_verify` | unit_tested |
-| `http:GET /admin/grants` | implemented | `na_grants_list_grants` | unit_tested |
-| `http:POST /admin/grants` | implemented | `na_grants_issue_grant` | unit_tested |
-| `http:GET /admin/grants/<grant_id>` | implemented | `na_grants_get_grant` | unit_tested |
-| `http:POST /admin/grants/<grant_id>/revoke` | implemented | `na_grants_revoke_grant` | unit_tested |
-| `http:GET /admin/grants/<grant_id>/uses` | implemented | `na_grants_list_grant_uses` | unit_tested |
+| `http:GET /admin/grants` | implemented | `na_grants_list_grants` | integration_tested |
+| `http:POST /admin/grants` | implemented | `na_grants_issue_grant` | integration_tested |
+| `http:GET /admin/grants/<grant_id>` | implemented | `na_grants_get_grant` | integration_tested |
+| `http:POST /admin/grants/<grant_id>/revoke` | implemented | `na_grants_revoke_grant` | integration_tested |
+| `http:GET /admin/grants/<grant_id>/uses` | implemented | `na_grants_list_grant_uses` | integration_tested |
 | `http:POST /admin/invite` | implemented | `na_admin_create_invite` | integration_tested |
 | `http:POST /admin/na/reissue` | implemented | `na_key_history_reissue` | unit_tested |
 | `http:POST /admin/na/succession` | implemented | `na_key_history_succession` | unit_tested |
@@ -121,14 +121,14 @@ No unresolved executable gaps or component-only workflows in the pinned contract
 | `http:POST /disclosure/verify` | implemented | `na_disclosure_verify` | unit_tested |
 | `http:POST /evidence/break-glass` | implemented | `na_out_of_band_submit_break_glass` | unit_tested |
 | `http:POST /evidence/execution` | implemented | `na_evidence_store_submit_execution` | unit_tested |
-| `http:POST /evidence/grant-executions` | implemented | `na_grants_submit_grant_execution` | unit_tested |
+| `http:POST /evidence/grant-executions` | implemented | `na_grants_submit_grant_execution` | integration_tested |
 | `http:POST /evidence/observations` | implemented | `na_out_of_band_submit_observation` | unit_tested |
 | `http:POST /evidence/observations/batch` | implemented | `na_out_of_band_submit_observations` | unit_tested |
 | `http:POST /evidence/remediations` | implemented | `na_remediation_submit_remediation` | unit_tested |
 | `http:GET /favicon.ico` | internal_boundary | See boundary/reason in catalog | not_exercised |
 | `http:GET /favicon.svg` | internal_boundary | See boundary/reason in catalog | not_exercised |
 | `http:GET /genesis` | implemented | `na_public_get_genesis` | unit_tested |
-| `http:POST /grants/time-tokens` | implemented | `na_grants_time_token` | unit_tested |
+| `http:POST /grants/time-tokens` | implemented | `na_grants_time_token` | integration_tested |
 | `http:GET /health` | implemented | `na_health_health` | unit_tested |
 | `http:GET /healthz` | implemented | `na_health_healthz` | unit_tested |
 | `http:POST /heartbeat` | implemented | `na_enrollment_heartbeat` | integration_tested |
@@ -392,7 +392,7 @@ No unresolved executable gaps or component-only workflows in the pinned contract
 | `python:genesis_mesh.trust.remediation:remediation_plan` | implemented | `gm_offline_remediation_remediation_plan` | not_exercised |
 | `python:genesis_mesh.trust.remediation:check_remediation` | implemented | `gm_offline_remediation_check_remediation` | not_exercised |
 | `python:genesis_mesh.trust.remediation:review_holder_problem` | implemented | `gm_offline_remediation_review_holder_problem` | unit_tested |
-| `python:genesis_mesh.trust.remediation:review_approval_problem` | implemented | `gm_offline_remediation_review_approval_problem` | not_exercised |
+| `python:genesis_mesh.trust.remediation:review_approval_problem` | implemented | `gm_offline_remediation_review_approval_problem` | integration_tested |
 | `python:genesis_mesh.trust.remediation:admin_approval_valid` | implemented | `gm_offline_remediation_admin_approval_valid` | not_exercised |
 | `python:genesis_mesh.trust.remediation:remediation_record_problem` | implemented | `gm_offline_remediation_remediation_record_problem` | not_exercised |
 | `python:genesis_mesh.trust.remediation:review_request_problem` | implemented | `gm_offline_remediation_review_request_problem` | not_exercised |

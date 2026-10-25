@@ -119,14 +119,18 @@ Typed tools expose argument schemas through MCP. Binary arguments/results use st
 
 ```powershell
 .\.venv\Scripts\python.exe -m ruff check .
-.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m coverage run -m pytest -q --evidence-report=temp/coverage/tests.json --junitxml=temp/coverage/junit.xml
+.\.venv\Scripts\python.exe -m coverage json
+.\.venv\Scripts\python.exe -m coverage report
 .\.venv\Scripts\python.exe scripts/snapshot_cli.py --check
-.\.venv\Scripts\python.exe scripts/check_coverage.py --core ../genesismesh --require-http --require-no-gaps
+.\.venv\Scripts\python.exe scripts/check_coverage.py --core ../genesismesh --require-http --require-no-gaps --test-evidence temp/coverage/tests.json --branch-coverage temp/coverage/branches.json
 .\.venv\Scripts\python.exe scripts/render_coverage.py --check
 .\.venv\Scripts\python.exe -m build
 ```
 
 The source check requires the exact revision in `data/compatibility.json`. New core surfaces, changed signatures, invalid aliases, snapshot drift and missing workflow adapters fail CI. `--require-no-gaps` includes incomplete compositions; schemas, references and documented host boundaries remain separate classifications.
+
+CI also requires `--require-clean-evidence`. Every exercised catalog claim must cite tests that were collected and passed, including all matching parameterized cases. Missing, skipped, expected-failure, deselected and stale evidence fails this gate. Branch measurements carry the same source digest. Each Windows/Linux and Python job retains its receipt, branch report, JUnit results and resolved verification report for 14 days. See [verification evidence](docs/verification.md) for scope and interpretation.
 
 Tests include disposable real HTTP authorities, Noise peers, guard subprocesses, SQLite stores, domain success/denial paths, official MCP clients, real stdio processes, signing isolation and filesystem limits. Recovery tests exercise missing mutation replies, revoked certificates, changed anchors, corrupt readback and key-history rollback. `scripts/smoke_installed.py` must additionally run with a fresh wheel-only virtual environment; an editable-environment stdio test is not clean-wheel evidence. CI runs Windows/Linux and Python 3.12/3.14.
 

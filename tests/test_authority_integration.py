@@ -343,12 +343,15 @@ async def test_mcp_review_requires_independent_holders_and_core_verifies_approva
         assert verify_model_signature(review, review.signature, keys["root"].public_key_b64)
         audiences = [keys["root"].public_key_b64]
         assert review_approval_problem(review, audiences) is None
-        for record, pins in ((review, audiences), (review.model_copy(update={"verdict": "uphold"}), audiences),
-                             (review, [keys["reader"].public_key_b64])):
+        for record, pins, valid in ((review, audiences, True),
+                                    (review.model_copy(update={"verdict": "uphold"}), audiences, False),
+                                    (review, [keys["reader"].public_key_b64], False)):
+            expected_problem = review_approval_problem(record, pins)
+            assert (expected_problem is None) == valid
             compared = await decider_client.call_tool("gm_offline_remediation_review_approval_problem",
                                                      {"review": record.to_wire(), "audiences": pins})
             assert not compared.is_error, compared.structured_content
-            assert compared.structured_content == json_value(review_approval_problem(record, pins))
+            assert compared.structured_content == json_value(expected_problem)
         duplicate = await request(decider_client, "/admin/evidence/reviews/<review_id>/decide", expected=409,
                                   path=review_path, body={"verdict": "uphold"})
         assert duplicate["error"]["code"] == "review_already_decided"

@@ -19,10 +19,15 @@ from genesismesh_mcp.test_evidence import load_receipt, source_identity, verify_
 def evidence(tmp_path):
     (tmp_path / "tests").mkdir()
     (tmp_path / "tests/test_case.py").write_text("def test_case(): pass\n", encoding="utf-8")
+    (tmp_path / "src/genesismesh_mcp").mkdir(parents=True)
+    (tmp_path / "src/genesismesh_mcp/__init__.py").write_text("# fixture\n", encoding="utf-8")
     source = source_identity(tmp_path)
+    imported = {"files": {name: digest for name, digest in source["files"].items() if name.startswith("src/")}}
     ids = ["tests/test_case.py::test_case[one]", "tests/test_case.py::test_case[two]"]
     receipt = {"format_version": 1, "exit_status": 0, "source_start": source, "source_end": source,
-               "collected": ids, "outcomes": dict.fromkeys(ids, "passed"), "collection_errors": []}
+               "collected": ids, "outcomes": dict.fromkeys(ids, "passed"), "collection_errors": [],
+               "adapter_start": imported, "adapter_end": imported,
+               "collection_scope": {"args": ["tests"], "restricted": False}}
     catalog = {"rows": [{"id": "example", "verification_status": "unit_tested",
                          "tests": ["tests/test_case.py::test_case"]}]}
     return tmp_path, receipt, catalog
@@ -112,7 +117,9 @@ def test_identity_normalizes_git_crlf_and_tracks_nonignored_sources(tmp_path):
 
 @pytest.fixture
 def child_pytest(tmp_path):
-    shutil.copyfile(Path(__file__).resolve().parents[1] / "conftest.py", tmp_path / "conftest.py")
+    checkout = Path(__file__).resolve().parents[1]
+    shutil.copyfile(checkout / "conftest.py", tmp_path / "conftest.py")
+    shutil.copytree(checkout / "src", tmp_path / "src", ignore=shutil.ignore_patterns("__pycache__", "*.egg-info"))
     (tmp_path / "tests").mkdir()
     (tmp_path / "pyproject.toml").write_text('[tool.pytest.ini_options]\ntestpaths = ["tests"]\n', encoding="utf-8")
 
@@ -141,6 +148,10 @@ def test_skip(): pass
 def test_xfail(): assert False
 @pytest.mark.xfail(reason="unexpected pass")
 def test_xpass(): pass
+@pytest.mark.xfail(reason="")
+def test_xpass_blank(): pass
+@pytest.mark.xfail(reason="")
+def test_xfail_blank(): assert False
 @pytest.fixture
 def broken_setup(): raise RuntimeError("setup")
 def test_setup(broken_setup): pass
@@ -154,6 +165,7 @@ def test_teardown(broken_teardown): pass
     outcomes = {n.split("::")[1]: v for n, v in receipt["outcomes"].items()}
     assert outcomes == {"test_pass[1]": "passed", "test_pass[2]": "passed", "test_fail": "failed",
                         "test_skip": "skipped", "test_xfail": "xfailed", "test_xpass": "xpassed",
+                        "test_xpass_blank": "xpassed", "test_xfail_blank": "xfailed",
                         "test_setup": "failed", "test_teardown": "failed"}
     assert receipt["source_start"] == receipt["source_end"]
 
@@ -178,6 +190,46 @@ def test_real_collection_failure_and_fail_fast_are_recorded(child_pytest):
     assert receipt["outcomes"]["tests/test_case.py::test_two"] == "not_run"
 
 
+@pytest.mark.parametrize("selection", [("tests/test_case.py::test_parameter[1]",), ("-k", "1"),
+                                       ("-m", "selected"), ("--deselect=tests/test_case.py::test_parameter[2]",),
+                                       ("--runxfail",), ("-o", "python_functions=test_parameter")])
+def test_partial_parameter_selection_and_overrides_cannot_support_claim(child_pytest, tmp_path, selection):
+    code, receipt = child_pytest('''import pytest
+@pytest.mark.selected
+@pytest.mark.parametrize("value", [1, 2])
+def test_parameter(value): assert value > 0
+''', *selection)
+    assert code == 0
+    claims = {"rows": [{"id": "parameter", "verification_status": "unit_tested",
+                         "tests": ["tests/test_case.py::test_parameter"]}]}
+    problems, summary = verify_evidence(tmp_path, receipt, claims)
+    assert problems and summary["valid"] is False
+
+
+@pytest.mark.parametrize("changed", ["settings.py", "data/coverage.json"])
+def test_real_imported_adapter_must_match_checkout_code_and_data(child_pytest, tmp_path, changed):
+    path = tmp_path / "src/genesismesh_mcp" / changed
+    path.write_bytes(path.read_bytes() + b"\n ")
+    code, receipt = child_pytest("def test_case(): pass\n")
+    assert code == 0
+    claims = {"rows": [{"id": "changed", "verification_status": "unit_tested",
+                         "tests": ["tests/test_case.py::test_case"]}]}
+    problems, _ = verify_evidence(tmp_path, receipt, claims)
+    assert any("imported adapter does not match" in p for p in problems)
+
+
+def test_runxfail_cannot_turn_an_unexpected_pass_into_evidence(child_pytest, tmp_path):
+    code, receipt = child_pytest('''import pytest
+@pytest.mark.xfail(reason="")
+def test_case(): pass
+''', "--runxfail")
+    assert code == 0
+    assert receipt["outcomes"]["tests/test_case.py::test_case"] == "passed"
+    problems, _ = verify_evidence(tmp_path, receipt, {"rows": [{"id": "xfail", "verification_status": "unit_tested",
+                                               "tests": ["tests/test_case.py::test_case"]}]})
+    assert any("unrestricted" in p for p in problems)
+
+
 def test_receipt_requires_object_and_size_bound(tmp_path):
     path = tmp_path / "receipt.json"
     path.write_text(json.dumps([]), encoding="utf-8")
@@ -190,12 +242,13 @@ def test_receipt_requires_object_and_size_bound(tmp_path):
 
 @pytest.fixture
 def branches(evidence):
-    _, receipt, _ = evidence
+    root, receipt, _ = evidence
     context = "genesismesh-source:" + receipt["source_start"]["content_sha256"]
     receipt["coverage_context"] = context
+    totals = {"num_statements": 10, "covered_lines": 9, "num_branches": 4, "covered_branches": 3}
     report = {"meta": {"branch_coverage": True, "show_contexts": True},
-              "files": {"example.py": {"contexts": {"1": ["", context]}}},
-              "totals": {"num_statements": 10, "covered_lines": 9, "num_branches": 4, "covered_branches": 3}}
+              "files": {str(root / "src/genesismesh_mcp/__init__.py"): {"contexts": {"1": ["", context]}, "summary": totals.copy()}},
+              "totals": totals}
     return receipt, report
 
 
@@ -205,7 +258,7 @@ def test_branch_measurements_require_matching_source_context(branches):
     assert not problems
     assert summary["line_percent"] == 90
     assert summary["branch_percent"] == 75
-    report["files"]["example.py"]["contexts"]["1"] = ["genesismesh-source:stale"]
+    next(iter(report["files"].values()))["contexts"]["1"] = ["genesismesh-source:stale"]
     assert verify_branch_coverage(receipt, report)[0]
     assert verify_branch_coverage(receipt, report)[1]["valid"] is False
 
@@ -224,6 +277,20 @@ def test_uninstrumented_receipt_cannot_claim_branch_measurement(branches):
     receipt, report = branches
     receipt["coverage_context"] = None
     assert verify_branch_coverage(receipt, report)[0]
+
+
+def test_unrelated_files_missing_inventory_and_inconsistent_totals_fail(branches):
+    receipt, report = branches
+    changed = copy.deepcopy(report)
+    changed["files"] = {"unrelated.py": next(iter(changed["files"].values()))}
+    assert verify_branch_coverage(receipt, changed)[0]
+    changed = copy.deepcopy(report)
+    changed["totals"]["covered_lines"] += 1
+    assert verify_branch_coverage(receipt, changed)[0]
+    changed = copy.deepcopy(report)
+    measured_path = Path(next(iter(changed["files"])))
+    measured_path.write_text("# different contents\n", encoding="utf-8")
+    assert verify_branch_coverage(receipt, changed)[0]
 
 
 def test_real_branch_report_is_bound_to_executed_sources(child_pytest, tmp_path):

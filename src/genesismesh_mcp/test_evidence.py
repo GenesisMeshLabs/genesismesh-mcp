@@ -16,6 +16,26 @@ FORMAT_VERSION = 1
 OUTCOMES = frozenset({"passed", "failed", "skipped", "xfailed", "xpassed", "not_run", "deselected"})
 
 
+def file_digest(path: Path) -> str:
+    data = path.read_bytes()
+    try:
+        data = data.decode("utf-8").replace("\r\n", "\n").encode("utf-8")
+    except UnicodeDecodeError:
+        pass
+    return hashlib.sha256(data).hexdigest()
+
+
+def adapter_identity() -> dict:
+    """Inventory the imported adapter, including a noneditable site-packages installation."""
+    import genesismesh_mcp
+
+    root = Path(genesismesh_mcp.__file__).resolve().parent
+    files = {"src/genesismesh_mcp/" + path.relative_to(root).as_posix(): file_digest(path)
+             for path in sorted(root.rglob("*")) if path.is_file() and "__pycache__" not in path.parts
+             and path.suffix in {".py", ".json", ".md"}}
+    return {"package_root": str(root), "files": files}
+
+
 def source_identity(root: Path) -> dict:
     """Bind evidence to tracked and nonignored sources, independent of Git CRLF settings."""
     root = root.resolve()
@@ -42,12 +62,7 @@ def source_identity(root: Path) -> dict:
             continue
         if not path.resolve().is_relative_to(root):
             continue
-        data = path.read_bytes()
-        try:
-            data = data.decode("utf-8").replace("\r\n", "\n").encode("utf-8")
-        except UnicodeDecodeError:
-            pass
-        files[relative.as_posix()] = hashlib.sha256(data).hexdigest()
+        files[relative.as_posix()] = file_digest(path)
     digest = hashlib.sha256(json.dumps(files, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
     return {"revision": revision, "dirty": dirty, "content_sha256": digest, "files": files}
 
@@ -69,6 +84,8 @@ def matching_cases(reference: str, collected: list[str]) -> list[str]:
 def verify_evidence(root: Path, receipt: dict, coverage: dict, *, require_clean: bool = False) -> tuple[list[str], dict]:
     problems = []
     current = source_identity(root)
+    adapter_files = {name: digest for name, digest in current["files"].items()
+                     if name.startswith("src/genesismesh_mcp/") and Path(name).suffix in {".py", ".json", ".md"}}
     if receipt.get("format_version") != FORMAT_VERSION:
         problems.append("Unsupported test evidence format")
     for label in ("source_start", "source_end"):
@@ -80,6 +97,12 @@ def verify_evidence(root: Path, receipt: dict, coverage: dict, *, require_clean:
             problems.append(f"Test evidence {label} must describe a clean Git checkout")
     if require_clean and (current["dirty"] is not False or not current["revision"]):
         problems.append("Test evidence gate requires a clean Git checkout")
+    for label in ("adapter_start", "adapter_end"):
+        imported = receipt.get(label)
+        if not adapter_files or not isinstance(imported, dict) or imported.get("files") != adapter_files:
+            problems.append(f"Test evidence {label} imported adapter does not match the checkout sources")
+    if receipt.get("collection_scope") != {"args": ["tests"], "restricted": False}:
+        problems.append("Test evidence requires unrestricted tests/ collection; positional subsets and selection overrides are refused")
     if receipt.get("exit_status") != 0 or receipt.get("collection_errors") != []:
         problems.append("Test session did not finish successfully without collection errors")
     collected, outcomes = receipt.get("collected"), receipt.get("outcomes")
@@ -132,7 +155,7 @@ def load_receipt(path: Path) -> dict:
     return receipt
 
 
-def verify_branch_coverage(receipt: dict, report: dict) -> tuple[list[str], dict]:
+def verify_branch_coverage(receipt: dict, report: dict, *, root: Path | None = None) -> tuple[list[str], dict]:
     """Reject stale or statement-only measurements; retain the raw report for inspection."""
     problems = []
     source = receipt.get("source_start", {})
@@ -145,10 +168,32 @@ def verify_branch_coverage(receipt: dict, report: dict) -> tuple[list[str], dict
         problems.append("Coverage report must include branches and measurement contexts")
     files = report.get("files", {})
     contexts = set()
+    expected_files = {name: digest for name, digest in source.get("files", {}).items()
+                      if name.startswith("src/genesismesh_mcp/") and name.endswith(".py")} if isinstance(source, dict) else {}
+    measured_files, tallies = set(), Counter()
+    fields = ("num_statements", "covered_lines", "num_branches", "covered_branches")
     if not isinstance(files, dict) or not files:
         problems.append("Coverage report has no measured files")
         files = {}
     for filename, measured in files.items():
+        parts = PurePosixPath(filename.replace("\\", "/")).parts
+        canonical = "src/" + "/".join(parts[parts.index("genesismesh_mcp"):]) if "genesismesh_mcp" in parts else None
+        if canonical not in expected_files or canonical in measured_files:
+            problems.append(f"Unexpected or duplicate measured adapter file: {filename}")
+        else:
+            measured_files.add(canonical)
+            actual = Path(filename)
+            if not actual.is_absolute():
+                actual = (root or Path.cwd()) / actual
+            if not actual.is_file() or file_digest(actual) != expected_files[canonical]:
+                problems.append(f"Measured adapter file contents do not match the receipt: {filename}")
+        per_file = measured.get("summary", {}) if isinstance(measured, dict) else {}
+        if (any(type(per_file.get(k)) is not int or per_file[k] < 0 for k in fields)
+                or per_file["covered_lines"] > per_file["num_statements"]
+                or per_file["covered_branches"] > per_file["num_branches"]):
+            problems.append(f"Per-file coverage totals are invalid: {filename}")
+        else:
+            tallies.update({key: per_file[key] for key in fields})
         line_contexts = measured.get("contexts", {}) if isinstance(measured, dict) else None
         if not isinstance(line_contexts, dict):
             problems.append(f"Coverage contexts are malformed: {filename}")
@@ -160,13 +205,16 @@ def verify_branch_coverage(receipt: dict, report: dict) -> tuple[list[str], dict
                 contexts.update(values)
     if expected not in contexts or contexts - {"", expected}:
         problems.append("Coverage measurements do not match the test receipt's source context")
+    if not expected_files or measured_files != expected_files.keys():
+        problems.append("Coverage report must inventory every checkout adapter Python file")
     totals = report.get("totals", {})
-    fields = ("num_statements", "covered_lines", "num_branches", "covered_branches")
     if (not isinstance(totals, dict) or any(type(totals.get(k)) is not int or totals[k] < 0 for k in fields)
             or not totals.get("num_statements") or not totals.get("num_branches")
             or totals["covered_lines"] > totals["num_statements"] or totals["covered_branches"] > totals["num_branches"]):
         problems.append("Coverage totals are missing or invalid")
         totals = {}
+    elif any(totals[key] != tallies[key] for key in fields):
+        problems.append("Coverage totals do not match per-file measurements")
     summary = {"valid": not problems, "coverage_context": context, "measured_files": len(files),
                **{key: totals.get(key) for key in fields}}
     if totals:

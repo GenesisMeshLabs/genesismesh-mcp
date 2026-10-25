@@ -8,7 +8,10 @@ import json
 import sys
 from pathlib import Path
 
-from genesismesh_mcp.catalog import (
+# This is a checkout verifier. Never validate new sources with a stale installed checker/catalog.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from genesismesh_mcp.catalog import (  # noqa: E402
     CatalogError,
     build_catalog,
     load_coverage,
@@ -16,7 +19,7 @@ from genesismesh_mcp.catalog import (
     verify_installed_core,
     verify_packaged_snapshot,
 )
-from genesismesh_mcp.settings import Settings
+from genesismesh_mcp.settings import Settings  # noqa: E402
 
 
 def main() -> int:
@@ -45,7 +48,8 @@ def main() -> int:
             problems.extend(evidence_problems)
             evidence["receipt_sha256"] = hashlib.sha256(args.test_evidence.read_bytes()).hexdigest()
             if args.branch_coverage:
-                branch_problems, branch_summary = verify_branch_coverage(receipt, load_receipt(args.branch_coverage))
+                branch_problems, branch_summary = verify_branch_coverage(
+                    receipt, load_receipt(args.branch_coverage), root=args.test_root)
                 problems.extend(branch_problems)
                 branch_summary["report_sha256"] = hashlib.sha256(args.branch_coverage.read_bytes()).hexdigest()
                 evidence["branch_coverage"] = branch_summary

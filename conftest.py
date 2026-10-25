@@ -8,7 +8,9 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from genesismesh_mcp.test_evidence import FORMAT_VERSION, source_identity
+import pytest
+
+from genesismesh_mcp.test_evidence import FORMAT_VERSION, adapter_identity, source_identity
 
 
 def pytest_addoption(parser):
@@ -18,13 +20,20 @@ def pytest_addoption(parser):
 def pytest_configure(config):
     destination = config.getoption("--evidence-report")
     if destination:
-        config.pluginmanager.register(ExecutionReceipt(config.rootpath, destination), "execution-receipt")
+        config.pluginmanager.register(ExecutionReceipt(config, destination), "execution-receipt")
 
 
 class ExecutionReceipt:
-    def __init__(self, root, destination):
-        self.root, self.destination = root, destination
-        self.start = source_identity(root)
+    def __init__(self, config, destination):
+        self.root, self.destination = config.rootpath, destination
+        self.start = source_identity(self.root)
+        self.adapter_start = adapter_identity()
+        restricted = any(getattr(config.option, name, False) for name in (
+            "keyword", "markexpr", "deselect", "ignore", "ignore_glob", "pyargs", "override_ini",
+            "lf", "stepwise", "stepwise_skip", "stepwise_reset", "collectonly", "keepduplicates", "noconftest", "confcutdir",
+            "runxfail", "plugins", "inifilename", "rootdir"))
+        self.scope = {"args": list(config.args), "restricted": restricted}
+        self.plugins = sorted({f"{dist.project_name}=={dist.version}" for _, dist in config.pluginmanager.list_plugin_distinfo()})
         self.coverage_context = None
         coverage = sys.modules.get("coverage")
         measurement = coverage.Coverage.current() if coverage is not None else None
@@ -54,9 +63,9 @@ class ExecutionReceipt:
             phases = self.reports.get(nodeid, [])
             if any(outcome == "failed" for _, outcome, _ in phases):
                 result = "failed"
-            elif any(outcome == "skipped" and xfail for _, outcome, xfail in phases):
+            elif any(outcome == "skipped" and xfail is not None for _, outcome, xfail in phases):
                 result = "xfailed"
-            elif any(outcome == "passed" and xfail for _, outcome, xfail in phases):
+            elif any(outcome == "passed" and xfail is not None for _, outcome, xfail in phases):
                 result = "xpassed"
             elif any(outcome == "skipped" for _, outcome, _ in phases):
                 result = "skipped"
@@ -71,5 +80,8 @@ class ExecutionReceipt:
                    "collected": self.collected + self.deselected, "outcomes": outcomes,
                    "collection_errors": self.collection_errors}
         receipt["coverage_context"] = self.coverage_context
+        receipt["adapter_start"], receipt["adapter_end"] = self.adapter_start, adapter_identity()
+        receipt["collection_scope"] = self.scope
+        receipt["pytest_version"], receipt["plugins"] = pytest.__version__, self.plugins
         self.destination.parent.mkdir(parents=True, exist_ok=True)
         self.destination.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")

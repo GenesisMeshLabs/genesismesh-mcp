@@ -62,9 +62,11 @@
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
         "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
         "tests/test_authority_integration.py::test_operator_tiers_signed_reads_and_attestation_lifecycle",
-        "tests/test_authority_integration.py::test_signed_policy_denial_and_evidence_store_are_preserved"
+        "tests/test_authority_integration.py::test_signed_policy_denial_and_evidence_store_are_preserved",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval"
       ],
-      "verification_scope": "Behavior exercised against a disposable real Network Authority over HTTP; only the cited scenarios are established."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:POST /admin/attestations/<attestation_id>/revoke",
@@ -99,12 +101,14 @@
       "stability": "stable",
       "intended_surface": "tool",
       "reason": "Requires an explicitly registered authority operation; registration and behavior verification are counted separately.",
-      "verification_status": "unit_tested",
+      "verification_status": "integration_tested",
       "tests": [
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
-        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth"
+        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval"
       ],
-      "verification_scope": "Mocked HTTP wire dispatch and profile enforcement; not per-route authority semantics."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:POST /admin/boundary-policies/<policy_id>/activate",
@@ -112,12 +116,14 @@
       "stability": "stable",
       "intended_surface": "tool",
       "reason": "Requires an explicitly registered authority operation; registration and behavior verification are counted separately.",
-      "verification_status": "unit_tested",
+      "verification_status": "integration_tested",
       "tests": [
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
-        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth"
+        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval"
       ],
-      "verification_scope": "Mocked HTTP wire dispatch and profile enforcement; not per-route authority semantics."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:POST /admin/boundary-policies/<policy_id>/deactivate",
@@ -194,9 +200,10 @@
       "tests": [
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
         "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
-        "tests/test_authority_integration.py::test_signed_policy_denial_and_evidence_store_are_preserved"
+        "tests/test_authority_integration.py::test_signed_policy_denial_and_evidence_store_are_preserved",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval"
       ],
-      "verification_scope": "Behavior exercised against a disposable real Network Authority over HTTP; only the cited scenarios are established."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:POST /admin/consensus/proof",
@@ -415,12 +422,13 @@
       "stability": "stable",
       "intended_surface": "tool",
       "reason": "Requires an explicitly registered authority operation; registration and behavior verification are counted separately.",
-      "verification_status": "unit_tested",
+      "verification_status": "integration_tested",
       "tests": [
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
-        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth"
+        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
       ],
-      "verification_scope": "Mocked HTTP wire dispatch and profile enforcement; not per-route authority semantics."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:POST /admin/evidence/executor-keys/<key_id>/retire",
@@ -441,12 +449,14 @@
       "stability": "stable",
       "intended_surface": "tool",
       "reason": "Requires an explicitly registered authority operation; registration and behavior verification are counted separately.",
-      "verification_status": "unit_tested",
+      "verification_status": "integration_tested",
       "tests": [
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
-        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth"
+        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval"
       ],
-      "verification_scope": "Mocked HTTP wire dispatch and profile enforcement; not per-route authority semantics."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:POST /admin/evidence/observations/<observation_id>/judge",
@@ -480,12 +490,13 @@
       "stability": "stable",
       "intended_surface": "tool",
       "reason": "Requires an explicitly registered authority operation; registration and behavior verification are counted separately.",
-      "verification_status": "unit_tested",
+      "verification_status": "integration_tested",
       "tests": [
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
-        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth"
+        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval"
       ],
-      "verification_scope": "Mocked HTTP wire dispatch and profile enforcement; not per-route authority semantics."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:GET /admin/evidence/remediations/<subject_id>",
@@ -558,12 +569,13 @@
       "stability": "stable",
       "intended_surface": "tool",
       "reason": "Requires an explicitly registered authority operation; registration and behavior verification are counted separately.",
-      "verification_status": "unit_tested",
+      "verification_status": "integration_tested",
       "tests": [
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
-        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth"
+        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval"
       ],
-      "verification_scope": "Mocked HTTP wire dispatch and profile enforcement; not per-route authority semantics."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:GET /admin/evidence/reviews/<review_id>",
@@ -584,12 +596,13 @@
       "stability": "stable",
       "intended_surface": "tool",
       "reason": "Requires an explicitly registered authority operation; registration and behavior verification are counted separately.",
-      "verification_status": "unit_tested",
+      "verification_status": "integration_tested",
       "tests": [
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
-        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth"
+        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval"
       ],
-      "verification_scope": "Mocked HTTP wire dispatch and profile enforcement; not per-route authority semantics."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:GET /admin/evidence/status",
@@ -636,12 +649,13 @@
       "stability": "beta",
       "intended_surface": "tool",
       "reason": "Requires an explicitly registered authority operation; registration and behavior verification are counted separately.",
-      "verification_status": "unit_tested",
+      "verification_status": "integration_tested",
       "tests": [
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
-        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth"
+        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
       ],
-      "verification_scope": "Mocked HTTP wire dispatch and profile enforcement; not per-route authority semantics."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:POST /admin/grants",
@@ -649,12 +663,13 @@
       "stability": "beta",
       "intended_surface": "tool",
       "reason": "Requires an explicitly registered authority operation; registration and behavior verification are counted separately.",
-      "verification_status": "unit_tested",
+      "verification_status": "integration_tested",
       "tests": [
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
-        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth"
+        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
       ],
-      "verification_scope": "Mocked HTTP wire dispatch and profile enforcement; not per-route authority semantics."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:GET /admin/grants/<grant_id>",
@@ -662,12 +677,13 @@
       "stability": "beta",
       "intended_surface": "tool",
       "reason": "Requires an explicitly registered authority operation; registration and behavior verification are counted separately.",
-      "verification_status": "unit_tested",
+      "verification_status": "integration_tested",
       "tests": [
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
-        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth"
+        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
       ],
-      "verification_scope": "Mocked HTTP wire dispatch and profile enforcement; not per-route authority semantics."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:POST /admin/grants/<grant_id>/revoke",
@@ -675,12 +691,13 @@
       "stability": "beta",
       "intended_surface": "tool",
       "reason": "Requires an explicitly registered authority operation; registration and behavior verification are counted separately.",
-      "verification_status": "unit_tested",
+      "verification_status": "integration_tested",
       "tests": [
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
-        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth"
+        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
       ],
-      "verification_scope": "Mocked HTTP wire dispatch and profile enforcement; not per-route authority semantics."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:GET /admin/grants/<grant_id>/uses",
@@ -688,12 +705,13 @@
       "stability": "beta",
       "intended_surface": "tool",
       "reason": "Requires an explicitly registered authority operation; registration and behavior verification are counted separately.",
-      "verification_status": "unit_tested",
+      "verification_status": "integration_tested",
       "tests": [
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
-        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth"
+        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
       ],
-      "verification_scope": "Mocked HTTP wire dispatch and profile enforcement; not per-route authority semantics."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:POST /admin/invite",
@@ -1244,12 +1262,13 @@
       "stability": "beta",
       "intended_surface": "tool",
       "reason": "Requires an explicitly registered authority operation; registration and behavior verification are counted separately.",
-      "verification_status": "unit_tested",
+      "verification_status": "integration_tested",
       "tests": [
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
-        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth"
+        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
       ],
-      "verification_scope": "Mocked HTTP wire dispatch and profile enforcement; not per-route authority semantics."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:POST /evidence/observations",
@@ -1327,12 +1346,13 @@
       "stability": "beta",
       "intended_surface": "tool",
       "reason": "Requires an explicitly registered authority operation; registration and behavior verification are counted separately.",
-      "verification_status": "unit_tested",
+      "verification_status": "integration_tested",
       "tests": [
         "tests/test_authority.py::test_direct_handler_enforces_every_required_profile",
-        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth"
+        "tests/test_authority.py::test_every_operation_dispatches_once_with_its_declared_auth",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
       ],
-      "verification_scope": "Mocked HTTP wire dispatch and profile enforcement; not per-route authority semantics."
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "http:GET /health",
@@ -4171,8 +4191,11 @@
       "stability": "beta",
       "intended_surface": "tool",
       "reason": "Requires a callable adapter preserving the core function's domain semantics.",
-      "verification_status": "not_exercised",
-      "tests": []
+      "verification_status": "integration_tested",
+      "tests": [
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval"
+      ],
+      "verification_scope": "Only the cited cases: official MCP client, disposable real HTTP authority, and independent pinned-core verification. No production or CLI process claim."
     },
     {
       "id": "python:genesis_mesh.trust.remediation:admin_approval_valid",

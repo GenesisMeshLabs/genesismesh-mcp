@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "genesismesh-mcp"
+version = "0.1.0.dev0"
+description = "Model Context Protocol adapter for Genesis Mesh portable trust."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+dependencies = ["genesis-mesh==1.8.1", "mcp==2.3.0", "jsonschema>=4.26,<5"]
+
+[project.optional-dependencies]
+dev = ["pytest>=9,<10", "pytest-asyncio>=1.4,<2", "ruff>=0.17,<0.18", "build>=1.4,<2"]
+
+[project.scripts]
+genesismesh-mcp = "genesismesh_mcp.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+genesismesh_mcp = ["data/*.json", "data/*.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]

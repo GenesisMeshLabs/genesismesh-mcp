@@ -57,6 +57,27 @@ async def test_hidden_mutation_cannot_be_invoked_directly(server):
         assert result.structured_content["error"]["code"] == "profile_required"
 
 
+async def test_initial_tool_listing_includes_later_workflows_without_pagination():
+    settings = Settings()
+    expected = {tool.name for tool in build_tools(settings) if tool.profiles <= settings.profiles}
+    assert len(expected) > 25
+    async with Client(create_server(settings)) as client:
+        result = await client.list_tools()
+        assert result.next_cursor is None
+        assert {tool.name for tool in result.tools} == expected
+        assert "gm_workflow_fleet_status" in expected
+
+
+async def test_explicit_tool_pagination_preserves_complete_discovery():
+    settings = Settings(tool_page_size=25)
+    expected = {tool.name for tool in build_tools(settings) if tool.profiles <= settings.profiles}
+    async with Client(create_server(settings)) as client:
+        first = await client.list_tools()
+        assert len(first.tools) == 25
+        assert first.next_cursor == "tools:25"
+        assert {tool.name for tool in await all_tools(client)} == expected
+
+
 async def test_denials_remain_structured_and_errors_do_not_echo_inputs():
     def exception(args):
         raise ValueError("do-not-leak-secret-seed")

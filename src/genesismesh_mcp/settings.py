@@ -35,6 +35,7 @@ class Settings:
     timeout_seconds: float = 15.0
     max_input_bytes: int = 1_048_576
     max_output_bytes: int = 4_194_304
+    tool_page_size: int | None = None
     authorities: Mapping[str, Any] = field(default_factory=dict, repr=False)
     fleets: Mapping[str, tuple[str, ...]] = field(default_factory=dict)
     workflow_state_dir: Path | None = None
@@ -65,6 +66,8 @@ class Settings:
         for value in (self.max_input_bytes, self.max_output_bytes):
             if type(value) is not int or not 1024 <= value <= 67_108_864:
                 raise ValueError("Byte limits must be integers between 1024 and 67108864")
+        if self.tool_page_size is not None and (type(self.tool_page_size) is not int or not 1 <= self.tool_page_size <= 1000):
+            raise ValueError("tool_page_size must be null or an integer between 1 and 1000")
         if self.operator_key_file is not None and not self.operator_key_id:
             raise ValueError("operator_key_id is required with operator_key_file")
         if self.authority_url:
@@ -195,4 +198,5 @@ class Settings:
                 "proof_stores": sorted(self.proof_stores), "node_runtimes": sorted(self.node_runtimes),
                 "peers": sorted(self.peers), "guard_actions": sorted(self.guard_actions),
                 "workflow_state_configured": self.workflow_state_dir is not None,
+                "tool_page_size": self.tool_page_size,
                 "max_input_bytes": self.max_input_bytes, "max_output_bytes": self.max_output_bytes}

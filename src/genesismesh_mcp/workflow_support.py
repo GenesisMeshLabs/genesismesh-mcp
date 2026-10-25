@@ -20,6 +20,17 @@ from .types import ToolError, ToolSpec
 from .workflow_config import reference
 
 
+def normalize_roles(roles):
+    """Use the same aliases and validation as the pinned core CLI workflows."""
+    from click import ClickException
+    from genesis_mesh.cli.support import _validate_cli_roles
+
+    try:
+        return _validate_cli_roles(roles)
+    except (ClickException, AttributeError, TypeError):
+        raise ToolError("invalid_roles", "Use core roles such as client, role:client, or service:<name>.") from None
+
+
 def select_authority(settings: Settings, alias: str, tool_name: str) -> Settings:
     config = settings.authorities.get(alias)
     if config is None:
@@ -269,7 +280,7 @@ class WorkflowJournal:
         return result
 
     def summary(self):
-        return {"operation_id": self.operation_id, "complete": self.data.get("complete", False),
+        return {"workflow": self.tool_name, "operation_id": self.operation_id, "complete": self.data.get("complete", False),
                 "steps": _step_summaries(self.data.get("steps", {}))}
 
 
@@ -298,7 +309,8 @@ def build_tools(settings: Settings) -> list[ToolSpec]:
             result["result_sha256"] = hashlib.sha256(json.dumps(data["result"], sort_keys=True).encode()).hexdigest()
         return result
     return [ToolSpec("gm_workflow_operation_status", "Inspect a durable workflow and any uncertain mutation outcomes.",
-                     {"type": "object", "properties": {"workflow": {"type": "string"},
+                     {"type": "object", "properties": {"workflow": {"type": "string", "pattern": "^gm_workflow_",
+                      "description": "Exact MCP tool name from the operation's workflow field, e.g. gm_workflow_federation_bootstrap."},
                       "operation_id": {"type": "string"}}, "required": ["workflow", "operation_id"],
                       "additionalProperties": False}, status, frozenset({"local", "read"}), read_only=True,
                      idempotent=True)]

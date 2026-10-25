@@ -140,7 +140,7 @@ def create_server(settings: Settings | None = None, *, tools: list[ToolSpec] | N
     validators = {tool.name: Draft202012Validator(tool.input_schema) for tool in definitions}
     resources = build_resources(definitions, settings)
 
-    def page(items, params, prefix: str):
+    def page(items, params, prefix: str, size: int | None = 25):
         cursor = params.cursor if params and params.cursor else None
         start = 0
         if cursor:
@@ -149,12 +149,12 @@ def create_server(settings: Settings | None = None, *, tools: list[ToolSpec] | N
             start = int(cursor[len(prefix):])
             if start > len(items):
                 raise ValueError("Invalid pagination cursor")
-        end = min(start + 25, len(items))
+        end = len(items) if size is None else min(start + size, len(items))
         return items[start:end], prefix + str(end) if end < len(items) else None
 
     async def list_tools(ctx, params):
         enabled = [tool for tool in definitions if tool.profiles <= settings.profiles]
-        entries, cursor = page(enabled, params, "tools:")
+        entries, cursor = page(enabled, params, "tools:", settings.tool_page_size)
         return mt.ListToolsResult(tools=[mt.Tool(name=t.name, description=t.description, inputSchema=t.input_schema,
             annotations=mt.ToolAnnotations(readOnlyHint=t.read_only, destructiveHint=t.destructive,
                                            idempotentHint=t.idempotent,

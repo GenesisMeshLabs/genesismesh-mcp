@@ -32,6 +32,7 @@ def main() -> int:
     parser.add_argument("--test-root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--branch-coverage", type=Path, help="Require source-bound coverage.py branch measurements")
     parser.add_argument("--require-clean-evidence", action="store_true", help="Require evidence from a clean Git revision")
+    parser.add_argument("--require-full-behavior", action="store_true", help="Require reviewed scenarios for every registered tool and implemented row")
     args = parser.parse_args()
     problems = verify_packaged_snapshot() + verify_installed_core(signatures=True)
     if args.core:
@@ -55,17 +56,27 @@ def main() -> int:
                 evidence["branch_coverage"] = branch_summary
         except (OSError, ValueError, TypeError, KeyError) as exc:
             problems.append(f"Cannot validate test execution evidence: {exc}")
-    elif args.require_clean_evidence or args.branch_coverage:
-        problems.append("--require-clean-evidence and --branch-coverage require --test-evidence")
+    elif args.require_clean_evidence or args.branch_coverage or args.require_full_behavior:
+        problems.append("--require-clean-evidence, --branch-coverage and --require-full-behavior require --test-evidence")
     try:
         from genesismesh_mcp.server import build_resource_targets, build_tools
 
         settings = Settings()
-        catalog = build_catalog(build_tools(settings), resources=build_resource_targets(), profiles=settings.profiles)
+        tools = build_tools(settings)
+        catalog = build_catalog(tools, resources=build_resource_targets(), profiles=settings.profiles)
     except (CatalogError, ImportError, AttributeError) as exc:
         problems.append(f"Cannot verify actual MCP registrations: {exc}")
         catalog = None
     if catalog:
+        if args.require_full_behavior and args.test_evidence and evidence is not None:
+            from genesismesh_mcp.tool_evidence import load_tool_evidence, verify_tool_evidence
+
+            try:
+                behavioral_problems, behavioral_summary = verify_tool_evidence(receipt, tools, load_tool_evidence(), catalog)
+                problems.extend(behavioral_problems)
+                evidence["tool_behavior"] = behavioral_summary
+            except (OSError, ValueError, TypeError, KeyError) as exc:
+                problems.append(f"Cannot validate tool behavior evidence: {exc}")
         gaps = [row for row in catalog["rows"] if row["implementation_status"] in {"gap", "components_available"}]
         if args.require_no_gaps:
             problems.extend(f"Unimplemented source capability: {row['id']}" for row in gaps)

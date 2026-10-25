@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import os
 import shutil
@@ -12,7 +13,13 @@ from pathlib import Path
 
 import pytest
 
-from genesismesh_mcp.test_evidence import load_receipt, source_identity, verify_branch_coverage, verify_evidence
+from genesismesh_mcp.test_evidence import (
+    file_digest,
+    load_receipt,
+    source_identity,
+    verify_branch_coverage,
+    verify_evidence,
+)
 
 
 @pytest.fixture
@@ -70,7 +77,7 @@ def test_source_changes_and_revision_mismatches_invalidate_evidence(evidence):
 
 
 @pytest.mark.parametrize("key,value", [("format_version", 2), ("exit_status", 1), ("collection_errors", ["tests/bad.py"]),
-                                      ("collected", []), ("collected", [False]), ("outcomes", {}),
+                                      ("collected", []), ("collected", [False]), ("outcomes", {}), ("outcomes", None),
                                       ("source_start", None), ("source_end", [])])
 def test_invalid_or_incomplete_session_fails(evidence, key, value):
     root, receipt, catalog = evidence
@@ -309,3 +316,197 @@ def test_real_code():
     assert summary["num_branches"] > summary["covered_branches"]
     assert not verify_evidence(tmp_path, receipt, {"rows": [{"id": "real", "verification_status": "unit_tested",
                                   "tests": ["tests/test_case.py::test_real_code"]}]})[0]
+
+
+def test_real_receipt_observes_handler_calls_without_payloads(child_pytest):
+    code, receipt = child_pytest('''from genesismesh_mcp.types import ToolSpec
+from genesismesh_mcp.settings import Settings
+from genesismesh_mcp.offline import build_tools
+def test_case():
+    settings = Settings()
+    tools = {tool.name: tool for tool in build_tools(settings)}
+    result = tools["gm_offline_context_gate_types"].handler({})
+    assert result
+    def fail(arguments): raise ValueError("sensitive-never-record")
+    tool = ToolSpec("failure", "probe", {"type": "object"}, fail)
+    try: tool.handler({"secret": "sensitive-never-record"})
+    except ValueError: pass
+''')
+    assert code == 0
+    calls = receipt["tool_calls"]
+    assert any(call["tool"] == "gm_offline_context_gate_types" and call["schema_valid"]
+               and call["outcome"] == "returned" for call in calls)
+    assert any(call["tool"] == "failure" and call["outcome"] == "ValueError" for call in calls)
+    assert "sensitive-never-record" not in json.dumps(receipt)
+
+
+def test_late_thread_calls_cannot_be_attributed_to_the_next_test(child_pytest):
+    code, receipt = child_pytest('''import contextvars
+import threading
+from genesismesh_mcp.types import ToolSpec
+release, started = threading.Event(), threading.Event()
+worker = None
+def test_first():
+    global worker
+    tool = ToolSpec("late", "probe", {"type": "object"}, lambda args: {"ok": True})
+    def later():
+        started.set()
+        release.wait(5)
+        tool.handler({})
+    context = contextvars.copy_context()
+    worker = threading.Thread(target=context.run, args=(later,))
+    worker.start()
+    assert started.wait(2)
+def test_second():
+    release.set()
+    worker.join(2)
+    assert not worker.is_alive()
+    ToolSpec("current", "probe", {"type": "object"}, lambda args: True).handler({})
+''')
+    assert code == 0
+    assert not any(call["tool"] == "late" for call in receipt["tool_calls"])
+    assert any(call["tool"] == "current" and call["test"].endswith("::test_second")
+               and call["phase"] == "call" for call in receipt["tool_calls"])
+
+
+def test_decorated_http_mock_remains_marked_as_mocked(child_pytest):
+    code, receipt = child_pytest('''from functools import wraps
+import requests
+from genesismesh_mcp.types import ToolSpec
+def test_case(monkeypatch):
+    @wraps(requests.Session.request)
+    def substitute(*args, **kwargs): return None
+    monkeypatch.setattr(requests.Session, "request", substitute)
+    ToolSpec("workflow", "probe", {"type": "object"}, lambda args: {"verified": True}).handler({})
+''')
+    assert code == 0
+    assert receipt["tool_calls"][0]["transport_mocked"] is True
+
+
+def test_binary_sources_are_hashed_without_text_coercion(tmp_path):
+    path = tmp_path / "binary.dat"
+    raw = b"\xff\x00\xfe\r\n"
+    path.write_bytes(raw)
+    assert file_digest(path) == hashlib.sha256(raw).hexdigest()
+
+
+def test_subdirectory_cannot_borrow_its_parent_repository_identity(tmp_path):
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    child = tmp_path / "child"
+    child.mkdir()
+    identity = source_identity(child)
+    assert identity["revision"] is None and identity["dirty"] is None
+
+
+def test_tracked_file_replaced_by_symlink_parent_never_hashes_outside_source(tmp_path):
+    root, outside = tmp_path / "repo", tmp_path / "outside"
+    root.mkdir()
+    outside.mkdir()
+    (outside / "record.py").write_text("outside-private-material", encoding="utf-8")
+    nested = root / "nested"
+    nested.mkdir()
+    (nested / "record.py").write_text("tracked", encoding="utf-8")
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    subprocess.run(["git", "-C", str(root), "add", "."], check=True)
+    subprocess.run(["git", "-C", str(root), "-c", "user.name=Test", "-c", "user.email=test@example.org",
+                    "-c", "commit.gpgsign=false", "commit", "-qm", "fixture"], check=True)
+    (nested / "record.py").unlink()
+    nested.rmdir()
+    try:
+        nested.symlink_to(outside, target_is_directory=True)
+    except OSError:
+        return  # This attack path requires symlink support; Linux CI supplies it.
+    identity = source_identity(root)
+    assert "nested/record.py" not in identity["files"]
+
+
+def test_malformed_inventory_paths_are_ignored_before_reading_files(tmp_path, monkeypatch):
+    outside = tmp_path.parent / "outside-probe"
+
+    def git(arguments, **kwargs):
+        if "--show-toplevel" in arguments:
+            return str(tmp_path).encode()
+        if "ls-files" in arguments:
+            return (str(outside) + "\0../outside-probe\0missing.py\0").encode()
+        return b"revision" if "rev-parse" in arguments else b""
+
+    monkeypatch.setattr("genesismesh_mcp.test_evidence.subprocess.check_output", git)
+    assert source_identity(tmp_path)["files"] == {}
+
+
+def test_coverage_rejects_malformed_contexts_for_an_actual_package_file(branches):
+    receipt, report = branches
+    next(iter(report["files"].values()))["contexts"] = []
+    assert verify_branch_coverage(receipt, report)[0]
+
+
+@pytest.mark.parametrize("explicit_root", [True, False])
+def test_relative_measured_paths_are_checked_against_producing_root(branches, monkeypatch, explicit_root):
+    receipt, report = branches
+    filename, measurement = next(iter(report["files"].items()))
+    root = Path(filename).parents[2]
+    report["files"] = {"src/genesismesh_mcp/__init__.py": measurement}
+    monkeypatch.chdir(root)
+    assert not verify_branch_coverage(receipt, report, root=root if explicit_root else None)[0]
+
+
+def test_receipt_distinguishes_domain_refusal_from_success_and_historical_records(child_pytest):
+    code, receipt = child_pytest('''from genesismesh_mcp.types import ToolSpec
+def test_case():
+    results = {
+        "false_predicate": False,
+        "http_denied": {"http_ok": True, "result": {"authorized": False}},
+        "http_invalid": {"http_ok": True, "result": {"verified": False}},
+        "http_allowed": {"http_ok": True, "result": {"authorized": True}},
+        "decision_denied": {"decision": {"authorized": False}, "executed": False},
+        "decision_allowed": {"decision": {"authorized": True}, "executed": False},
+        "historical_deny": {"http_ok": True, "result": {"record": {"verdict": "deny"}, "verified": True}},
+    }
+    for name, result in results.items():
+        ToolSpec(name, "probe", {"type": "object"}, lambda args, result=result: result).handler({})
+''')
+    assert code == 0
+    observed = {call["tool"]: call["domain_denial"] for call in receipt["tool_calls"]}
+    assert observed == {"false_predicate": True, "http_denied": True, "http_invalid": True,
+                        "http_allowed": False, "decision_denied": True, "decision_allowed": False,
+                        "historical_deny": False}
+
+
+def test_signed_rejection_constructor_success_is_distinct_from_a_refused_call(child_pytest):
+    code, receipt = child_pytest('''import base64
+from pathlib import Path
+from datetime import datetime, timezone
+from nacl.signing import SigningKey
+from genesis_mesh.crypto import verify_model_signature
+from genesis_mesh.models.oversight import HumanApprovalResponse
+from genesismesh_mcp.offline import build_tools
+from genesismesh_mcp.settings import Settings
+from genesismesh_mcp.types import ToolError
+def test_case():
+    names = {"gm_offline_oversight_propose_commitment", "gm_offline_oversight_reject_commitment"}
+    key = SigningKey.generate()
+    path = Path("signer.key")
+    path.write_text(base64.b64encode(bytes(key)).decode())
+    settings = Settings(profiles=frozenset({"read", "verify", "sign"}), signer_files={"reviewer": path.resolve()},
+                        signer_permissions={"reviewer": frozenset(names)})
+    tools = {tool.name: tool for tool in build_tools(settings)}
+    now = datetime.now(timezone.utc).isoformat()
+    policy = {"policy_id": "p", "agreement_id": "a", "human_sovereign_id": "human",
+              "allowed_capabilities": ["write"], "value_threshold": 10, "created_at": now}
+    request, _ = tools["gm_offline_oversight_propose_commitment"].handler({"policy": policy,
+        "proposed_action": {"capability": "write", "value": 100}, "requesting_sovereign_id": "alpha",
+        "agent_signer_ref": "reviewer", "issued_by": "alpha", "now": now})
+    response = tools["gm_offline_oversight_reject_commitment"].handler({"request": request, "policy": policy,
+        "human_signer_ref": "reviewer", "issued_by": "human", "note": "Refused", "now": now})
+    model = HumanApprovalResponse.model_validate(response)
+    assert model.approved is False
+    assert verify_model_signature(model, model.human_signature, base64.b64encode(bytes(key.verify_key)).decode())
+    disabled = {tool.name: tool for tool in build_tools(Settings())}
+    try: disabled["gm_offline_oversight_reject_commitment"].handler({})
+    except ToolError as error: assert error.code == "profile_required"
+    else: raise AssertionError("disabled signing tool ran")
+''')
+    assert code == 0
+    calls = [event for event in receipt["tool_calls"] if event["tool"] == "gm_offline_oversight_reject_commitment"]
+    assert any(event["outcome"] == "returned" and event["schema_valid"] and not event["domain_denial"] for event in calls)
+    assert any(event["outcome"] == "ToolError" for event in calls)

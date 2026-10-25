@@ -56,7 +56,7 @@ OPERATIONS = {
     "trust.evidence_store": {
         "check_metadata_only": (), "validate_execution": (),
         "verify_retention_checkpoint": (), "verify_evidence_events": (),
-        "verify_store_anchors": (), "parse_export_lines": (),
+        "verify_store_anchors": (),
     },
     "trust.selective_disclosure": {
         "commit_capabilities": ("trust disclose commit",),

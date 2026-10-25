@@ -14,10 +14,11 @@ import json
 import types
 from datetime import date, datetime, timedelta
 from enum import Enum
-from typing import Any, Union, get_args, get_origin, get_type_hints
+from typing import Annotated, Any, Union, get_args, get_origin, get_type_hints
 
+from genesis_mesh.models.evidence_store import EvidenceEvent
 from jsonschema import Draft202012Validator
-from pydantic import BaseModel, ConfigDict, Field, TypeAdapter, create_model
+from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, TypeAdapter, create_model
 
 from genesismesh_mcp.types import ToolSpec
 
@@ -37,8 +38,11 @@ def json_value(value: Any) -> Any:
             return json_value(to_wire())
         # Honor core Field(exclude_if=...) and serializer field selection, but
         # retain nested model types long enough to honor their wire methods.
-        dumped = value.model_dump(mode="python")
-        return {name: json_value(getattr(value, name, raw)) for name, raw in dumped.items()}
+        dumped = value.model_dump(mode="python", by_alias=True)
+        fields = {field.serialization_alias or field.alias or name: name
+                  for name, field in type(value).model_fields.items()}
+        return {name: json_value(getattr(value, fields[name]) if name in fields else raw)
+                for name, raw in dumped.items()}
     if dataclasses.is_dataclass(value) and not isinstance(value, type):
         return {f.name: json_value(getattr(value, f.name)) for f in dataclasses.fields(value)}
     if isinstance(value, Enum):
@@ -59,9 +63,18 @@ def json_value(value: Any) -> Any:
     raise TypeError("Core returned an unsupported result type")
 
 
+def _received_evidence_event(value: Any) -> EvidenceEvent:
+    """Let core validate and retain the envelope digest before Pydantic normalization."""
+    from genesis_mesh.trust.evidence_store import parse_export_lines
+
+    return parse_export_lines([json.dumps(value, ensure_ascii=False, allow_nan=False)])[0]
+
+
 def wire_type(annotation: Any) -> Any:
     """Use eager JSON collections instead of lazy generators for validation."""
     origin, args = get_origin(annotation), get_args(annotation)
+    if annotation is EvidenceEvent:
+        return Annotated[EvidenceEvent, BeforeValidator(_received_evidence_event)]
     if annotation is bytes:
         return str
     if origin in (collections.abc.Iterable, collections.abc.Sequence):

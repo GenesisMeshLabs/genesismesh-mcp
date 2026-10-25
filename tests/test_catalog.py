@@ -55,7 +55,13 @@ def test_contract_documentation_never_counts_as_executable_coverage() -> None:
     assert catalog["summary"]["accounted"] == catalog["summary"]["total"]
 
 
-def test_registered_tool_is_not_implicitly_behavior_tested() -> None:
+def test_registered_tool_is_not_implicitly_behavior_tested(monkeypatch) -> None:
+    # Use an explicitly uncited declaration so this invariant is independent of
+    # the real adapter gaining reviewed behavioral evidence over time.
+    coverage = copy.deepcopy(load_coverage())
+    declaration = next(item for item in coverage["rows"] if item["id"] == TARGET)
+    declaration["verification_status"], declaration["tests"] = "not_exercised", []
+    monkeypatch.setattr("genesismesh_mcp.catalog.load_coverage", lambda: coverage)
     catalog = build_catalog([tool(TARGET)], profiles={"read"})
     item = row(catalog, TARGET)
     assert item["implementation_status"] == "implemented"

@@ -101,10 +101,12 @@ def _json(value: Any) -> str:
 
 def build_resources(tools: list[ToolSpec], settings: Settings) -> dict[str, str]:
     from .catalog import build_catalog, load_compatibility, load_contract
+    from .tool_evidence import load_tool_evidence
 
     contract = load_contract()
     resources = {PREFIX + "contract": _json(contract), PREFIX + "errors": _json(contract["error_codes"]),
                  PREFIX + "packages": _json(contract["packages"]), PREFIX + "rules": _json(contract["rules"]),
+                 PREFIX + "tool-evidence": _json(load_tool_evidence()),
                  PREFIX + "compatibility": _json({**load_compatibility(), "installed_core": version("genesis-mesh"),
                                                  "compatible": version("genesis-mesh") == CORE_VERSION}),
                  PREFIX + "configuration": _json(settings.public_status())}
@@ -178,7 +180,10 @@ def create_server(settings: Settings | None = None, *, tools: list[ToolSpec] | N
             if len(encoded.encode("utf-8")) > settings.max_output_bytes:
                 raise ToolError("output_too_large", "The result exceeds the output limit; no partial artifact is returned.")
             logger.info("tool=%s outcome=completed", tool.name)
-            return mt.CallToolResult(content=[mt.TextContent(type="text", text=encoded)], structuredContent=result,
+            # MCP structuredContent is an object. Preserve the exact JSON value
+            # in text, and wrap non-object core results without changing them.
+            structured = result if isinstance(result, dict) else {"result": result}
+            return mt.CallToolResult(content=[mt.TextContent(type="text", text=encoded)], structuredContent=structured,
                                      isError=isinstance(result, dict) and (result.get("http_ok") is False
                                          or result.get("completed") is False
                                          or result.get("complete") is False

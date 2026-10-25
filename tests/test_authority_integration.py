@@ -203,7 +203,7 @@ async def test_mcp_grant_lifecycle_matches_core_and_verifies_export(authority):
         assert [(p.policy_id, p.version) for p in grant.policy_binding.policies] == [("lifetime", policy["version"])]
         horizon = await client.call_tool("gm_offline_grants_grant_horizon", {"grant": grant.to_wire()})
         assert not horizon.is_error
-        assert horizon.structured_content == json_value(grant_horizon(grant))
+        assert horizon.structured_content == {"result": json_value(grant_horizon(grant))}
 
         def signed_use(sequence, previous=None, days=30, time_token=None):
             record = GrantExecutionEvidence(grant_id=grant.grant_id, grant_digest=grant.digest(),
@@ -228,7 +228,7 @@ async def test_mcp_grant_lifecycle_matches_core_and_verifies_export(authority):
             assert (expected_problem[0] if expected_problem else None) == expected_code
             compared = await client.call_tool("gm_offline_grants_use_problem", json_value({"use": use, **options}))
             assert not compared.is_error
-            assert compared.structured_content == json_value(expected_problem)
+            assert compared.structured_content == {"result": json_value(expected_problem)}
         admitted = await request("/evidence/grant-executions", expected=201, body={"evidence": first.to_wire()})
         assert admitted["status"] == "recorded" and admitted["resource_sequence"] == 1
         duplicate = await request("/evidence/grant-executions", body={"evidence": first.to_wire()})
@@ -244,7 +244,7 @@ async def test_mcp_grant_lifecycle_matches_core_and_verifies_export(authority):
         problem = use_problem(outside, **comparison_args)
         compared = await client.call_tool("gm_offline_grants_use_problem", json_value({"use": outside, **comparison_args}))
         assert not compared.is_error
-        assert compared.structured_content == json_value(problem)
+        assert compared.structured_content == {"result": json_value(problem)}
         refused = await request("/evidence/grant-executions", expected=422, body={"evidence": outside.to_wire()})
         assert refused["error"]["code"] == problem[0] == "grant_envelope_mismatch"
         assert refused["error"]["details"]["quarantine_id"]
@@ -351,7 +351,7 @@ async def test_mcp_review_requires_independent_holders_and_core_verifies_approva
             compared = await decider_client.call_tool("gm_offline_remediation_review_approval_problem",
                                                      {"review": record.to_wire(), "audiences": pins})
             assert not compared.is_error, compared.structured_content
-            assert compared.structured_content == json_value(expected_problem)
+            assert compared.structured_content == {"result": json_value(expected_problem)}
         duplicate = await request(decider_client, "/admin/evidence/reviews/<review_id>/decide", expected=409,
                                   path=review_path, body={"verdict": "uphold"})
         assert duplicate["error"]["code"] == "review_already_decided"

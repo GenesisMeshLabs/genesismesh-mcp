@@ -45,6 +45,8 @@ Use the installed interpreter's absolute path. A typical MCP host configuration 
 
 The server runs over **stdio**. stdout carries MCP only. There is no unauthenticated remote HTTP listener. Offline verification works without a Network Authority.
 
+Tool discovery returns every profile-enabled tool in the initial response so chat hosts that read only one listing can discover the full interface. Set `tool_page_size` to a positive integer only for a client that follows MCP pagination; the default is `null` (one complete listing). Resource discovery remains paginated.
+
 To use an authority, create a gitignored `config.local.json`:
 
 ```json

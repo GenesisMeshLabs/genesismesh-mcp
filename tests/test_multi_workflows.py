@@ -100,6 +100,26 @@ def test_federation_preview_issue_and_completed_replay(pair):
         federation_bootstrap(settings, {**arguments, "roles": ["role:operator"]})
 
 
+def test_chat_role_alias_is_normalized_before_preview_and_execution(pair):
+    settings, _ = pair
+    preview = federation_preview(settings, {"acceptor": "alpha", "issuer": "beta", "roles": ["client"]})
+    canonical = federation_preview(settings, {"acceptor": "alpha", "issuer": "beta", "roles": ["role:client"]})
+    assert preview["treaty_preview"]["scope"]["allowed_roles"] == ["role:client"]
+    assert preview["preview_digest"] == canonical["preview_digest"]
+    assert preview["execution_tool"] == "gm_workflow_federation_bootstrap"
+    result = federation_bootstrap(settings, {"acceptor": "alpha", "issuer": "beta", "roles": ["client"],
+                                           "preview_digest": preview["preview_digest"], "operation_id": "chat-alias"})
+    assert result["status"] == "completed", result
+    assert result["steps"]["workflow"] == "gm_workflow_federation_bootstrap"
+
+
+def test_invalid_role_cannot_be_presented_as_executable_preview(pair):
+    settings, _ = pair
+    with pytest.raises(ToolError, match="core roles"):
+        federation_preview(settings, {"acceptor": "alpha", "issuer": "beta", "roles": ["not-a-core-role"]})
+    assert treaties(settings) == []
+
+
 def test_preview_binds_scope_and_does_not_issue_on_mismatch(pair):
     settings, _ = pair
     arguments = bootstrap_args(settings)

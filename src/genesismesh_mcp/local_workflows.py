@@ -19,7 +19,14 @@ from genesis_mesh.workflows.audit_pack import verify_audit_pack
 from .authority import invoke, operations
 from .settings import Settings
 from .types import ToolError, ToolSpec
-from .workflow_support import WorkflowJournal, artifact_root, pinned_root, resource_lock, select_authority
+from .workflow_support import (
+    WorkflowJournal,
+    artifact_root,
+    normalize_roles,
+    pinned_root,
+    resource_lock,
+    select_authority,
+)
 
 MAX_ANCHORS = 10_000
 MAX_PAGES = 32
@@ -353,7 +360,7 @@ def _treaty(settings: Settings, args: dict[str, Any], action: str):
         old = old_row["treaty"]
         scope = old.get("scope", {})
         body = {"subject_sovereign_id": old["subject_sovereign_id"], "subject_public_keys": old["subject_public_keys"],
-                "scope": {"allowed_roles": args.get("roles", scope.get("allowed_roles", [])),
+                "scope": {"allowed_roles": normalize_roles(args.get("roles", scope.get("allowed_roles", []))),
                           "accepted_statuses": args.get("accepted_statuses", scope.get("accepted_statuses", ["active"])),
                           "claims": args.get("claims", scope.get("claims", {}))},
                 "validity_hours": args.get("validity_hours", 24),

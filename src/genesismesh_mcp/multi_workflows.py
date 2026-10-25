@@ -19,7 +19,7 @@ from .authority_schemas import obj
 from .multi_support import Client, Deadline, WorkflowFailure, checked, digest, distinct_pair, review, safe_error
 from .settings import Settings
 from .types import ToolError, ToolSpec
-from .workflow_support import WorkflowJournal, fleet_members
+from .workflow_support import WorkflowJournal, fleet_members, normalize_roles
 
 READ = frozenset({"read"})
 WRITE = frozenset({"read", "verify", "operator", "write", "local"})
@@ -27,7 +27,8 @@ NAME = {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,79}$"}
 TEXT = {"type": "string", "minLength": 1, "maxLength": 1024}
 CLAIMS = {"type": "object", "additionalProperties": {"type": "string", "maxLength": 4096}, "maxProperties": 100}
 SCOPE = {
-    "roles": {"type": "array", "items": TEXT, "maxItems": 100, "uniqueItems": True},
+    "roles": {"type": "array", "items": {**TEXT, "description": "Core role or CLI alias, e.g. role:client, client, service:<name>."},
+              "maxItems": 100, "uniqueItems": True},
     "accepted_statuses": {"type": "array", "items": {"enum": ["active", "suspended", "revoked"]},
                           "minItems": 1, "maxItems": 3, "uniqueItems": True},
     "claims": CLAIMS,
@@ -37,8 +38,8 @@ PAIR = {"acceptor": NAME, "issuer": NAME}
 
 
 def _scope(args, *, fleet=False):
-    return {"roles": args.get("roles", ["role:anchor", "role:bridge", "role:operator", "role:client"] if fleet
-                              else ["role:client"]),
+    return {"roles": normalize_roles(args.get("roles", ["role:anchor", "role:bridge", "role:operator", "role:client"] if fleet
+                              else ["role:client"])),
             "accepted_statuses": args.get("accepted_statuses", ["active"]),
             "claims": args.get("claims", {}), "validity_hours": args.get("validity_hours", 8760 if fleet else 24)}
 
@@ -68,13 +69,14 @@ def _preview(acceptor: Client, issuer: Client, args: dict):
                 "acceptor_sovereign_id": acceptor_review["sovereign_id"], "treaty": body,
                 "issuer_bundle": args.get("issuer_bundle")}
     return {"workflow": "federation-bootstrap", "dry_run": True, "preview_digest": digest(material),
+            "execution_tool": "gm_workflow_federation_bootstrap",
             "acceptor": _public_review_summary(acceptor_review), "issuer": _public_review_summary(issuer_review),
             "genesis_signatures_verified": True, "treaty_preview": _redacted_treaty_preview(body),
             "issuer_bundle_validation": bundle_report}, acceptor_review, issuer_review, body
 
 
 def _partial(journal, error: Exception, *, extra=None):
-    return {"status": "partial", "operation_id": journal.operation_id, "error": safe_error(error),
+    return {"status": "partial", "workflow": journal.tool_name, "operation_id": journal.operation_id, "error": safe_error(error),
             "recovery": "Inspect recorded results before retrying; uncertain mutations are never replayed.",
             "steps": journal.summary(), **(extra or {})}
 
@@ -313,7 +315,7 @@ def run_proof(settings, args, tool_name="gm_workflow_proof_remote"):
         try:
             a, i = review(acceptor), review(issuer)
             distinct_pair(acceptor, issuer, (a, i))
-            role = args.get("role", "role:client")
+            role = normalize_roles([args.get("role", "role:client")])[0]
             claims = args.get("claims", {})
             validity = args.get("validity_hours", 24)
             body = {"subject_id": args.get("subject_id", "proof-" + args["operation_id"]),

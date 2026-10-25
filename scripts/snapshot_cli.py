@@ -1,6 +1,7 @@
 """Generate the reference for every core CLI command; never execute commands."""
 
 import argparse
+import inspect
 import json
 from pathlib import Path
 
@@ -10,7 +11,7 @@ from genesis_mesh.cli.main import cli
 OUTPUT = Path(__file__).resolve().parents[1] / "src/genesismesh_mcp/data/cli-reference.json"
 
 
-def snapshot():
+def snapshot(root=cli):
     found = {}
 
     def walk(command, prefix):
@@ -24,11 +25,14 @@ def snapshot():
                                "type": parameter.type.name, "required": parameter.required,
                                "multiple": getattr(parameter, "multiple", False),
                                "help": getattr(parameter, "help", None)})
+        # Python 3.13+ dedents compiled docstrings; earlier runtimes retain
+        # source indentation. Preserve prose/example indentation, not that
+        # compiler-dependent leading margin or surrounding blank lines.
         found[" ".join(prefix)] = {"command": "genesis-mesh " + " ".join(prefix),
-                                 "description": command.help or "", "parameters": parameters,
+                                 "description": inspect.cleandoc(command.help or ""), "parameters": parameters,
                                  "execution": "CLI reference only. Check the coverage resource for MCP equivalents."}
 
-    walk(cli, [])
+    walk(root, [])
     return json.dumps(found, ensure_ascii=False, indent=2) + "\n"
 
 

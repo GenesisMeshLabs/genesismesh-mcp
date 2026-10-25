@@ -78,7 +78,7 @@
   },
   "admin invite": {
     "command": "genesis-mesh admin invite",
-    "description": "Create a single-use invite token and print it.\n\nWith --node-sovereign-id and --executor-resource-prefix (beta), the token\nis an edge invite: the edge agent that redeems it registers its executor\nkey for that sovereign ID and prefix.\n",
+    "description": "Create a single-use invite token and print it.\n\nWith --node-sovereign-id and --executor-resource-prefix (beta), the token\nis an edge invite: the edge agent that redeems it registers its executor\nkey for that sovereign ID and prefix.",
     "parameters": [
       {
         "name": "config_path",
@@ -252,7 +252,7 @@
   },
   "admin revoke-operator-key": {
     "command": "genesis-mesh admin revoke-operator-key",
-    "description": "Switch an operator key off immediately, without restarting the service.\n\nTerminal: a revoked key stays revoked for the life of the deployment.\nRefuses to revoke the last usable operator key.\n",
+    "description": "Switch an operator key off immediately, without restarting the service.\n\nTerminal: a revoked key stays revoked for the life of the deployment.\nRefuses to revoke the last usable operator key.",
     "parameters": [
       {
         "name": "target_key_id",
@@ -319,7 +319,7 @@
   },
   "atlas build": {
     "command": "genesis-mesh atlas build",
-    "description": "Build a self-contained static Atlas from a recognition graph export.\n\nWrites atlas.json (canonical data) and atlas.html (standalone HTML) to\nthe output directory. Supply --evidence to overlay TrustEvidence records\nagainst the graph; supply --public-key for each issuer public key to\nverify signatures.\n\nExit codes:\n  0  Build succeeded.\n  1  One or more evidence files could not be parsed or verified.\n",
+    "description": "Build a self-contained static Atlas from a recognition graph export.\n\nWrites atlas.json (canonical data) and atlas.html (standalone HTML) to\nthe output directory. Supply --evidence to overlay TrustEvidence records\nagainst the graph; supply --public-key for each issuer public key to\nverify signatures.\n\nExit codes:\n  0  Build succeeded.\n  1  One or more evidence files could not be parsed or verified.",
     "parameters": [
       {
         "name": "graph_path",
@@ -721,7 +721,7 @@
   },
   "attestation verify-with-treaty": {
     "command": "genesis-mesh attestation verify-with-treaty",
-    "description": "Ask the accepting NA whether its treaty accepts the attestation.\n\nExits 0 when accepted, 1 otherwise. The answer names its trust basis.\n",
+    "description": "Ask the accepting NA whether its treaty accepts the attestation.\n\nExits 0 when accepted, 1 otherwise. The answer names its trust basis.",
     "parameters": [
       {
         "name": "na_endpoint",
@@ -758,7 +758,7 @@
   },
   "audit archive": {
     "command": "genesis-mesh audit archive",
-    "description": "Archive the store: write a pack to immutable storage, read it back, verify it, record it, prune through it.\n\nThe pack runs from the end of the last archive (or the store's start) to\nthe last anchor. Nothing is recorded or pruned unless every file was\nwritten and read back matching the manifest the NA signed, and the pack\nread back verifies (``audit verify``, with the NA's anchors and executor\nkeys; ``--force`` records it anyway). Needs a privileged key.\n",
+    "description": "Archive the store: write a pack to immutable storage, read it back, verify it, record it, prune through it.\n\nThe pack runs from the end of the last archive (or the store's start) to\nthe last anchor. Nothing is recorded or pruned unless every file was\nwritten and read back matching the manifest the NA signed, and the pack\nread back verifies (``audit verify``, with the NA's anchors and executor\nkeys; ``--force`` records it anyway). Needs a privileged key.",
     "parameters": [
       {
         "name": "na_endpoint",
@@ -875,7 +875,7 @@
   },
   "audit pack": {
     "command": "genesis-mesh audit pack",
-    "description": "Write an audit pack: one range of the store between two anchors (a read-tier key is enough).\n\n\b\n    genesis-mesh audit pack --na https://na.example --since 2026-01-01T00:00:00Z \\\n        --until 2027-01-01T00:00:00Z --out pack-2026 \\\n        --operator-key auditor.key --operator-key-id auditor\n",
+    "description": "Write an audit pack: one range of the store between two anchors (a read-tier key is enough).\n\n\b\n    genesis-mesh audit pack --na https://na.example --since 2026-01-01T00:00:00Z \\\n        --until 2027-01-01T00:00:00Z --out pack-2026 \\\n        --operator-key auditor.key --operator-key-id auditor",
     "parameters": [
       {
         "name": "na_endpoint",
@@ -972,7 +972,7 @@
   },
   "audit verify": {
     "command": "genesis-mesh audit verify",
-    "description": "Verify an audit pack offline, from the root key and the anchors you hold.\n\nNo network, no private key. Every NA signature is checked against the\nkey valid at the record's own time, from the root key down; executor\nkeys only from registry records the NA signed (or --executor-keys).\nDecisions are judged as of their own time. Exits 1 when a check fails\nor a change from --changes has no record.\n\nThe entries a pack cites (cited.jsonl) are checked by their signatures;\ngive the packs you verified before (--prior) or anchors at their\npositions to tie them to the store. Each one neither covers is a\nwarning (cited_entry_unanchored).\n\n\b\n    genesis-mesh audit verify pack-2026 --anchor root.pub \\\n        --known-anchors /audit/anchors --changes cloud-log.csv\n",
+    "description": "Verify an audit pack offline, from the root key and the anchors you hold.\n\nNo network, no private key. Every NA signature is checked against the\nkey valid at the record's own time, from the root key down; executor\nkeys only from registry records the NA signed (or --executor-keys).\nDecisions are judged as of their own time. Exits 1 when a check fails\nor a change from --changes has no record.\n\nThe entries a pack cites (cited.jsonl) are checked by their signatures;\ngive the packs you verified before (--prior) or anchors at their\npositions to tie them to the store. Each one neither covers is a\nwarning (cited_entry_unanchored).\n\n\b\n    genesis-mesh audit verify pack-2026 --anchor root.pub \\\n        --known-anchors /audit/anchors --changes cloud-log.csv",
     "parameters": [
       {
         "name": "pack_dir",
@@ -1148,7 +1148,7 @@
   },
   "evidence anchors fetch": {
     "command": "genesis-mesh evidence anchors fetch",
-    "description": "Copy the NA's anchors into a directory you control.\n\nEvery run reads all anchors the NA serves and compares each one with the\ncopy you hold: if the NA serves a different anchor at any position you\nhold, or no longer serves one, nothing is written and the command fails.\nThe NA's anchor history was rewritten or removed, and your copy is the\nevidence. Otherwise the whole set is checked (NA signature, unbroken\nchain) and missing positions are written, one file each; existing files\nare never replaced.\n\nRun it on a schedule with --anchor-now from a machine and storage the\nNA's operators cannot change: the schedule bounds how long a new record\ncan be removed without detection.\n\n\b\n    genesis-mesh evidence anchors fetch --na https://na.example \\\n        --na-public-key na.pub --out /audit/anchors --anchor-now \\\n        --operator-key auditor.key --operator-key-id auditor\n",
+    "description": "Copy the NA's anchors into a directory you control.\n\nEvery run reads all anchors the NA serves and compares each one with the\ncopy you hold: if the NA serves a different anchor at any position you\nhold, or no longer serves one, nothing is written and the command fails.\nThe NA's anchor history was rewritten or removed, and your copy is the\nevidence. Otherwise the whole set is checked (NA signature, unbroken\nchain) and missing positions are written, one file each; existing files\nare never replaced.\n\nRun it on a schedule with --anchor-now from a machine and storage the\nNA's operators cannot change: the schedule bounds how long a new record\ncan be removed without detection.\n\n\b\n    genesis-mesh evidence anchors fetch --na https://na.example \\\n        --na-public-key na.pub --out /audit/anchors --anchor-now \\\n        --operator-key auditor.key --operator-key-id auditor",
     "parameters": [
       {
         "name": "na_endpoint",
@@ -1235,7 +1235,7 @@
   },
   "evidence verify-export": {
     "command": "genesis-mesh evidence verify-export",
-    "description": "Verify an evidence export: envelopes, store chain, signatures and chains.\n\nWith --known-anchors, the export is also checked against anchors kept\noutside the Network Authority: a record removed or rewritten before an\nanchored position, or an export that stops before the newest anchor,\nfails. The export must start at entry 1 or, after retention, contain the\nretention checkpoint that removed the entries before it; --from-anchor\naccepts an export that starts right after a held anchor instead.\n\nExample:\n\n\b\n    genesis-mesh evidence verify-export \\\n        --file export.jsonl --na-public-key <base64> \\\n        --executor-keys executor-keys.json --known-anchors anchors/\n",
+    "description": "Verify an evidence export: envelopes, store chain, signatures and chains.\n\nWith --known-anchors, the export is also checked against anchors kept\noutside the Network Authority: a record removed or rewritten before an\nanchored position, or an export that stops before the newest anchor,\nfails. The export must start at entry 1 or, after retention, contain the\nretention checkpoint that removed the entries before it; --from-anchor\naccepts an export that starts right after a held anchor instead.\n\nExample:\n\n\b\n    genesis-mesh evidence verify-export \\\n        --file export.jsonl --na-public-key <base64> \\\n        --executor-keys executor-keys.json --known-anchors anchors/",
     "parameters": [
       {
         "name": "file_path",
@@ -2302,7 +2302,7 @@
   },
   "managed restore": {
     "command": "genesis-mesh managed restore",
-    "description": "Restore a Network Authority database from a backup file.\n\nStop the Network Authority before running this command. The helper refuses\nto run without --yes because replacing a live DB file is destructive.\n",
+    "description": "Restore a Network Authority database from a backup file.\n\nStop the Network Authority before running this command. The helper refuses\nto run without --yes because replacing a live DB file is destructive.",
     "parameters": [
       {
         "name": "db_path",
@@ -2349,7 +2349,7 @@
   },
   "na doctor": {
     "command": "genesis-mesh na doctor",
-    "description": "Check an NA host against its settings: root key custody, the NA key, archives.\n\nFails when the root private key is found where the NA's files live (the\ndirectories of the genesis block, the NA key, the database and this\nsettings file, their parent and three levels below, and the settings'\nvariables), or when the NA key cannot sign now. Warns when the\nkey stops signing within 30 days, when records of a succeeded key are\nnot yet re-issued (1.8.0), and when retention may prune what was not\narchived (NA_RETENTION_REQUIRE_ARCHIVE=off).\n",
+    "description": "Check an NA host against its settings: root key custody, the NA key, archives.\n\nFails when the root private key is found where the NA's files live (the\ndirectories of the genesis block, the NA key, the database and this\nsettings file, their parent and three levels below, and the settings'\nvariables), or when the NA key cannot sign now. Warns when the\nkey stops signing within 30 days, when records of a succeeded key are\nnot yet re-issued (1.8.0), and when retention may prune what was not\narchived (NA_RETENTION_REQUIRE_ARCHIVE=off).",
     "parameters": [
       {
         "name": "env_file",
@@ -2376,7 +2376,7 @@
   },
   "na migrate-db": {
     "command": "genesis-mesh na migrate-db",
-    "description": "Copy an NA SQLite database into an empty PostgreSQL database and verify it.\n\nStop the NA first. The SQLite file is opened read-only and left untouched.\n",
+    "description": "Copy an NA SQLite database into an empty PostgreSQL database and verify it.\n\nStop the NA first. The SQLite file is opened read-only and left untouched.",
     "parameters": [
       {
         "name": "source",
@@ -2423,7 +2423,7 @@
   },
   "na reissue": {
     "command": "genesis-mesh na reissue",
-    "description": "Re-issue the records of a succeeded NA key now (1.8.0).\n\nAfter a succession takes effect, the NA re-issues under the new key the\nattestations and treaties the old key signed that are still valid past\nthe old key's vouching horizon, and signs the active policy manifest\nagain. It does this on its own, in batches; this command runs it at once\nand reports what is still due.\n",
+    "description": "Re-issue the records of a succeeded NA key now (1.8.0).\n\nAfter a succession takes effect, the NA re-issues under the new key the\nattestations and treaties the old key signed that are still valid past\nthe old key's vouching horizon, and signs the active policy manifest\nagain. It does this on its own, in batches; this command runs it at once\nand reports what is still due.",
     "parameters": [
       {
         "name": "na_endpoint",
@@ -2564,7 +2564,7 @@
   },
   "na succession prove": {
     "command": "genesis-mesh na succession prove",
-    "description": "Sign the succession with the new NA key: the proof that the new key exists and is held.\n\nRun it where the new key lives (a key file, or the key provider of the\nNA settings that will use it). The NA refuses a succession without it.\n",
+    "description": "Sign the succession with the new NA key: the proof that the new key exists and is held.\n\nRun it where the new key lives (a key file, or the key provider of the\nNA settings that will use it). The NA refuses a succession without it.",
     "parameters": [
       {
         "name": "file_path",
@@ -2611,7 +2611,7 @@
   },
   "na succession sign": {
     "command": "genesis-mesh na succession sign",
-    "description": "Prepare the NA's next key and sign it with the root key, offline.\n\nThe saved history is verified from the root key first: a history that\ndoes not verify, or a root key that is not the genesis block's, is\nrefused. Submit the output with 'na succession submit'; the NA signs it\nwith its current key and the new key takes effect at --effective-at.\n\n\b\n    genesis-mesh na succession sign --history history.json \\\n        --root-key root.key --new-public-key na-2.pub --new-key-id na-2027 \\\n        --effective-at 2026-11-01T09:00:00Z --valid-days 365 --out succession.json\n",
+    "description": "Prepare the NA's next key and sign it with the root key, offline.\n\nThe saved history is verified from the root key first: a history that\ndoes not verify, or a root key that is not the genesis block's, is\nrefused. Submit the output with 'na succession submit'; the NA signs it\nwith its current key and the new key takes effect at --effective-at.\n\n\b\n    genesis-mesh na succession sign --history history.json \\\n        --root-key root.key --new-public-key na-2.pub --new-key-id na-2027 \\\n        --effective-at 2026-11-01T09:00:00Z --valid-days 365 --out succession.json",
     "parameters": [
       {
         "name": "history_path",
@@ -2708,7 +2708,7 @@
   },
   "na succession submit": {
     "command": "genesis-mesh na succession submit",
-    "description": "Record a root-signed succession: the NA countersigns it with its current key.\n\nRestart the NA with the new key at the time the record names (set\nNA_PRIVATE_KEY_FILE and NA_KEY_ID): from then on the old key signs\nnothing, and the NA refuses to start with it.\n",
+    "description": "Record a root-signed succession: the NA countersigns it with its current key.\n\nRestart the NA with the new key at the time the record names (set\nNA_PRIVATE_KEY_FILE and NA_KEY_ID): from then on the old key signs\nnothing, and the NA refuses to start with it.",
     "parameters": [
       {
         "name": "na_endpoint",
@@ -2775,7 +2775,7 @@
   },
   "na verify-db": {
     "command": "genesis-mesh na verify-db",
-    "description": "Verify an NA database: policy digests, CRL continuity, evidence chains.\n\nUse after a restore or a migration. Exits non-zero when any check fails.\n",
+    "description": "Verify an NA database: policy digests, CRL continuity, evidence chains.\n\nUse after a restore or a migration. Exits non-zero when any check fails.",
     "parameters": [
       {
         "name": "database_url",
@@ -3469,7 +3469,7 @@
   },
   "treaty import-feed": {
     "command": "genesis-mesh treaty import-feed",
-    "description": "Import an issuer's signed revocation feed into the accepting NA.\n\nThe accepting NA verifies the feed under the keys its own treaty pinned for\nthe issuer; this command never supplies a key of its own.\n",
+    "description": "Import an issuer's signed revocation feed into the accepting NA.\n\nThe accepting NA verifies the feed under the keys its own treaty pinned for\nthe issuer; this command never supplies a key of its own.",
     "parameters": [
       {
         "name": "na_endpoint",
@@ -3901,7 +3901,7 @@
   },
   "trust agree accept": {
     "command": "genesis-mesh trust agree accept",
-    "description": "Accept an Offer or Counter-offer, producing an AgreementRecord.\n\nTwo modes:\n\n\b\n  Direct acceptance (responder, no counter):\n    --offer offer.json --graph responder-graph.json --signing-key responder.key\n\n  Counter acceptance (offerer accepts counter):\n    --counter counter.json --offer offer.json --signing-key offerer.key\n\nCounter acceptance produces a DUAL-signed record immediately.\nDirect acceptance produces a half-signed record; the offerer must run\n``trust agree cosign`` to finalize.\n\nExample (counter flow):\n\n\b\n    genesis-mesh trust agree accept \\\n        --counter counter.json --offer offer.json \\\n        --signing-key aspayr.key --key-id aspayr-2026 \\\n        --output agreement.json\n",
+    "description": "Accept an Offer or Counter-offer, producing an AgreementRecord.\n\nTwo modes:\n\n\b\n  Direct acceptance (responder, no counter):\n    --offer offer.json --graph responder-graph.json --signing-key responder.key\n\n  Counter acceptance (offerer accepts counter):\n    --counter counter.json --offer offer.json --signing-key offerer.key\n\nCounter acceptance produces a DUAL-signed record immediately.\nDirect acceptance produces a half-signed record; the offerer must run\n``trust agree cosign`` to finalize.\n\nExample (counter flow):\n\n\b\n    genesis-mesh trust agree accept \\\n        --counter counter.json --offer offer.json \\\n        --signing-key aspayr.key --key-id aspayr-2026 \\\n        --output agreement.json",
     "parameters": [
       {
         "name": "offer_path",
@@ -3968,7 +3968,7 @@
   },
   "trust agree cosign": {
     "command": "genesis-mesh trust agree cosign",
-    "description": "Add a second party's signature to finalize a half-signed AgreementRecord.\n\nUsed after direct offer acceptance (``trust agree accept --offer``).\nThe offerer calls this to add their co-signature over the same canonical form.\n\nExample:\n\n\b\n    genesis-mesh trust agree cosign \\\n        --agreement half-agreement.json \\\n        --signing-key aspayr.key --key-id aspayr-2026 \\\n        --output agreement-final.json\n",
+    "description": "Add a second party's signature to finalize a half-signed AgreementRecord.\n\nUsed after direct offer acceptance (``trust agree accept --offer``).\nThe offerer calls this to add their co-signature over the same canonical form.\n\nExample:\n\n\b\n    genesis-mesh trust agree cosign \\\n        --agreement half-agreement.json \\\n        --signing-key aspayr.key --key-id aspayr-2026 \\\n        --output agreement-final.json",
     "parameters": [
       {
         "name": "agreement_path",
@@ -4015,7 +4015,7 @@
   },
   "trust agree counter": {
     "command": "genesis-mesh trust agree counter",
-    "description": "Build and sign a CapabilityCounter (Step 2, optional).\n\nCounter capabilities must be a subset of the offer's requested capabilities.\nIf no capabilities are specified, all offer capabilities are accepted.\n\nExample:\n\n\b\n    genesis-mesh trust agree counter \\\n        --offer offer.json \\\n        --capability transactions.read --capability balances.read \\\n        --freshness-floor 12 \\\n        --graph bank-graph.json \\\n        --signing-key bank.key --key-id bank-2026 \\\n        --output counter.json\n",
+    "description": "Build and sign a CapabilityCounter (Step 2, optional).\n\nCounter capabilities must be a subset of the offer's requested capabilities.\nIf no capabilities are specified, all offer capabilities are accepted.\n\nExample:\n\n\b\n    genesis-mesh trust agree counter \\\n        --offer offer.json \\\n        --capability transactions.read --capability balances.read \\\n        --freshness-floor 12 \\\n        --graph bank-graph.json \\\n        --signing-key bank.key --key-id bank-2026 \\\n        --output counter.json",
     "parameters": [
       {
         "name": "offer_path",
@@ -4122,7 +4122,7 @@
   },
   "trust agree offer": {
     "command": "genesis-mesh trust agree offer",
-    "description": "Build and sign a CapabilityOffer (Step 1 of Relationship Agreement).\n\nExample:\n\n\b\n    genesis-mesh trust agree offer \\\n        --from aspayr --to bank-a \\\n        --capability transactions.read --capability balances.read \\\n        --scope '{\"delegation\": false}' \\\n        --valid-until 2027-01-01T00:00:00Z \\\n        --graph aspayr-graph.json \\\n        --signing-key aspayr.key --key-id aspayr-2026 \\\n        --output offer.json\n",
+    "description": "Build and sign a CapabilityOffer (Step 1 of Relationship Agreement).\n\nExample:\n\n\b\n    genesis-mesh trust agree offer \\\n        --from aspayr --to bank-a \\\n        --capability transactions.read --capability balances.read \\\n        --scope '{\"delegation\": false}' \\\n        --valid-until 2027-01-01T00:00:00Z \\\n        --graph aspayr-graph.json \\\n        --signing-key aspayr.key --key-id aspayr-2026 \\\n        --output offer.json",
     "parameters": [
       {
         "name": "from_sovereign",
@@ -4249,7 +4249,7 @@
   },
   "trust agree verify": {
     "command": "genesis-mesh trust agree verify",
-    "description": "Verify dual signatures + evidence on an AgreementRecord.\n\nAlways checks that both the offerer and responder signed the record.\nWith --graph, also re-derives the graph digest and confirms binding.\n\nExit code: 0 if verified, 1 if any check fails.\n\nExample:\n\n\b\n    genesis-mesh trust agree verify \\\n        --agreement agreement.json \\\n        --offerer-public-key <aspayr-pub-b64> \\\n        --responder-public-key <bank-pub-b64> \\\n        --graph aspayr-graph.json\n",
+    "description": "Verify dual signatures + evidence on an AgreementRecord.\n\nAlways checks that both the offerer and responder signed the record.\nWith --graph, also re-derives the graph digest and confirms binding.\n\nExit code: 0 if verified, 1 if any check fails.\n\nExample:\n\n\b\n    genesis-mesh trust agree verify \\\n        --agreement agreement.json \\\n        --offerer-public-key <aspayr-pub-b64> \\\n        --responder-public-key <bank-pub-b64> \\\n        --graph aspayr-graph.json",
     "parameters": [
       {
         "name": "agreement_path",
@@ -4490,7 +4490,7 @@
   },
   "trust attest verify": {
     "command": "genesis-mesh trust attest verify",
-    "description": "Verify a ModelAttestation against an AttestationPolicy.\n\nExits 0 if valid, 1 if any check fails.\n",
+    "description": "Verify a ModelAttestation against an AttestationPolicy.\n\nExits 0 if valid, 1 if any check fails.",
     "parameters": [
       {
         "name": "attest_path",
@@ -4537,7 +4537,7 @@
   },
   "trust boundary-policy explain": {
     "command": "genesis-mesh trust boundary-policy explain",
-    "description": "Explain which policies, configured gates and attestation produced a decision.\n\nExample:\n\n\b\n    genesis-mesh trust boundary-policy explain --decision decision.json\n",
+    "description": "Explain which policies, configured gates and attestation produced a decision.\n\nExample:\n\n\b\n    genesis-mesh trust boundary-policy explain --decision decision.json",
     "parameters": [
       {
         "name": "decision_path",
@@ -4564,7 +4564,7 @@
   },
   "trust boundary-policy gate-types": {
     "command": "genesis-mesh trust boundary-policy gate-types",
-    "description": "List the trusted gate types policies may reference.\n\nExample:\n\n\b\n    genesis-mesh trust boundary-policy gate-types\n",
+    "description": "List the trusted gate types policies may reference.\n\nExample:\n\n\b\n    genesis-mesh trust boundary-policy gate-types",
     "parameters": [
       {
         "name": "fmt",
@@ -4581,7 +4581,7 @@
   },
   "trust boundary-policy validate": {
     "command": "genesis-mesh trust boundary-policy validate",
-    "description": "Validate a policy against the built-in trusted gate registry.\n\nExample:\n\n\b\n    genesis-mesh trust boundary-policy validate --file policy.json\n",
+    "description": "Validate a policy against the built-in trusted gate registry.\n\nExample:\n\n\b\n    genesis-mesh trust boundary-policy validate --file policy.json",
     "parameters": [
       {
         "name": "file_path",
@@ -4608,7 +4608,7 @@
   },
   "trust boundary-policy verify": {
     "command": "genesis-mesh trust boundary-policy verify",
-    "description": "Verify a signed boundary policy.\n\nExample:\n\n\b\n    genesis-mesh trust boundary-policy verify \\\n        --file policy.signed.json --public-key keys/na.pub\n",
+    "description": "Verify a signed boundary policy.\n\nExample:\n\n\b\n    genesis-mesh trust boundary-policy verify \\\n        --file policy.signed.json --public-key keys/na.pub",
     "parameters": [
       {
         "name": "file_path",
@@ -4732,7 +4732,7 @@
   },
   "trust consensus assess-cascade": {
     "command": "genesis-mesh trust consensus assess-cascade",
-    "description": "Assess cascade risk on a set of ValidatorVotes without assembling a proof.\n\nExits 0 when votes appear independent; exits 1 when cascade is detected.\n",
+    "description": "Assess cascade risk on a set of ValidatorVotes without assembling a proof.\n\nExits 0 when votes appear independent; exits 1 when cascade is detected.",
     "parameters": [
       {
         "name": "vote_paths",
@@ -5037,7 +5037,7 @@
   },
   "trust context evaluate": {
     "command": "genesis-mesh trust context evaluate",
-    "description": "Run the BoundaryEngine on a ContextRecord and produce a signed BoundaryDecision.\n\nEvaluates: capability scope, validity window, and freshness commitment.\nExit code 0 if authorized, 1 if any gate failed.\n\nExample:\n\n\b\n    genesis-mesh trust context evaluate \\\n        --context context.json \\\n        --agreement agreement.json \\\n        --operator bank-a \\\n        --signing-key bank.key --key-id bank-2026 \\\n        --output decision.json\n",
+    "description": "Run the BoundaryEngine on a ContextRecord and produce a signed BoundaryDecision.\n\nEvaluates: capability scope, validity window, and freshness commitment.\nExit code 0 if authorized, 1 if any gate failed.\n\nExample:\n\n\b\n    genesis-mesh trust context evaluate \\\n        --context context.json \\\n        --agreement agreement.json \\\n        --operator bank-a \\\n        --signing-key bank.key --key-id bank-2026 \\\n        --output decision.json",
     "parameters": [
       {
         "name": "context_path",
@@ -5114,7 +5114,7 @@
   },
   "trust context request": {
     "command": "genesis-mesh trust context request",
-    "description": "Create a ContextRecord asserting a capability invocation request.\n\nThe ContextRecord is unsigned — it is an input to the BoundaryEngine.\nRun 'trust context evaluate' to produce a signed BoundaryDecision.\n\nExample:\n\n\b\n    genesis-mesh trust context request \\\n        --agreement agreement.json \\\n        --capability transactions.read \\\n        --requester aspayr --provider bank-a \\\n        --freshness-seq 12 \\\n        --output context.json\n\nWith --attestation the context is evaluated under a MembershipAttestation\nthe Network Authority issued (POST /admin/boundary/evaluate with\nattestation_id); the requester must be the attestation subject.\n",
+    "description": "Create a ContextRecord asserting a capability invocation request.\n\nThe ContextRecord is unsigned — it is an input to the BoundaryEngine.\nRun 'trust context evaluate' to produce a signed BoundaryDecision.\n\nExample:\n\n\b\n    genesis-mesh trust context request \\\n        --agreement agreement.json \\\n        --capability transactions.read \\\n        --requester aspayr --provider bank-a \\\n        --freshness-seq 12 \\\n        --output context.json\n\nWith --attestation the context is evaluated under a MembershipAttestation\nthe Network Authority issued (POST /admin/boundary/evaluate with\nattestation_id); the requester must be the attestation subject.",
     "parameters": [
       {
         "name": "agreement_path",
@@ -5201,7 +5201,7 @@
   },
   "trust context verify": {
     "command": "genesis-mesh trust context verify",
-    "description": "Verify a BoundaryDecision's operator signature and expiry.\n\nExit code 0 if valid, 1 on any failure.\n\nExample:\n\n\b\n    genesis-mesh trust context verify \\\n        --decision decision.json \\\n        --operator-public-key <bank-pub-b64>\n",
+    "description": "Verify a BoundaryDecision's operator signature and expiry.\n\nExit code 0 if valid, 1 on any failure.\n\nExample:\n\n\b\n    genesis-mesh trust context verify \\\n        --decision decision.json \\\n        --operator-public-key <bank-pub-b64>",
     "parameters": [
       {
         "name": "decision_path",
@@ -5536,7 +5536,7 @@
   },
   "trust decide": {
     "command": "genesis-mesh trust decide",
-    "description": "Evaluate a trust decision between two sovereigns over a graph export.\n\nExit code reflects the verdict: 0=allow, 1=warn, 2=escalate, 3=block.\n\nExample:\n\n\b\n    genesis-mesh trust decide \\\n        --graph fleet-graph.json \\\n        --from sovereign-a --to sovereign-b \\\n        --role role:service:maintainer\n",
+    "description": "Evaluate a trust decision between two sovereigns over a graph export.\n\nExit code reflects the verdict: 0=allow, 1=warn, 2=escalate, 3=block.\n\nExample:\n\n\b\n    genesis-mesh trust decide \\\n        --graph fleet-graph.json \\\n        --from sovereign-a --to sovereign-b \\\n        --role role:service:maintainer",
     "parameters": [
       {
         "name": "graph_path",
@@ -5593,7 +5593,7 @@
   },
   "trust delegate cosign": {
     "command": "genesis-mesh trust delegate cosign",
-    "description": "Add the delegate's signature and evidence to finalize a delegation.\n\nExample:\n\n\b\n    genesis-mesh trust delegate cosign \\\n        --delegation delegation.json \\\n        --graph agent-x-graph.json \\\n        --signing-key agent-x.key --key-id agent-x-2026 \\\n        --output delegation-final.json\n",
+    "description": "Add the delegate's signature and evidence to finalize a delegation.\n\nExample:\n\n\b\n    genesis-mesh trust delegate cosign \\\n        --delegation delegation.json \\\n        --graph agent-x-graph.json \\\n        --signing-key agent-x.key --key-id agent-x-2026 \\\n        --output delegation-final.json",
     "parameters": [
       {
         "name": "delegation_path",
@@ -5650,7 +5650,7 @@
   },
   "trust delegate create": {
     "command": "genesis-mesh trust delegate create",
-    "description": "Build and sign a DelegatedAgreementRecord (delegator's step).\n\nReturns a half-signed record. The delegate must run ``trust delegate cosign``\nto add their signature and evidence.\n\nExample (delegate from AgreementRecord):\n\n\b\n    genesis-mesh trust delegate create \\\n        --agreement agreement.json \\\n        --from aspayr --to agent-x \\\n        --capability transactions.read \\\n        --valid-until 2027-01-01T00:00:00Z \\\n        --graph aspayr-graph.json \\\n        --signing-key aspayr.key --key-id aspayr-2026 \\\n        --output delegation.json\n",
+    "description": "Build and sign a DelegatedAgreementRecord (delegator's step).\n\nReturns a half-signed record. The delegate must run ``trust delegate cosign``\nto add their signature and evidence.\n\nExample (delegate from AgreementRecord):\n\n\b\n    genesis-mesh trust delegate create \\\n        --agreement agreement.json \\\n        --from aspayr --to agent-x \\\n        --capability transactions.read \\\n        --valid-until 2027-01-01T00:00:00Z \\\n        --graph aspayr-graph.json \\\n        --signing-key aspayr.key --key-id aspayr-2026 \\\n        --output delegation.json",
     "parameters": [
       {
         "name": "agreement_path",
@@ -5787,7 +5787,7 @@
   },
   "trust delegate verify": {
     "command": "genesis-mesh trust delegate verify",
-    "description": "Verify a full delegation chain from root AgreementRecord to terminal.\n\nChecks parent linkage, scope attenuation, validity bounds, and both\nsignatures at every hop.\n\nExit code: 0 if verified, 1 on any failure.\n\nExample:\n\n\b\n    genesis-mesh trust delegate verify \\\n        --agreement agreement.json \\\n        --delegation delegation.json \\\n        --offerer-public-key <aspayr-pub> \\\n        --responder-public-key <bank-pub> \\\n        --key agent-x:AAAA...\n",
+    "description": "Verify a full delegation chain from root AgreementRecord to terminal.\n\nChecks parent linkage, scope attenuation, validity bounds, and both\nsignatures at every hop.\n\nExit code: 0 if verified, 1 on any failure.\n\nExample:\n\n\b\n    genesis-mesh trust delegate verify \\\n        --agreement agreement.json \\\n        --delegation delegation.json \\\n        --offerer-public-key <aspayr-pub> \\\n        --responder-public-key <bank-pub> \\\n        --key agent-x:AAAA...",
     "parameters": [
       {
         "name": "agreement_path",
@@ -6280,7 +6280,7 @@
   },
   "trust evidence": {
     "command": "genesis-mesh trust evidence",
-    "description": "Evaluate trust and emit a signed TrustEvidence record.\n\nThe evidence binds the verdict to the graph state via a SHA-256 digest\nso a second sovereign can independently verify it later.\n\nExample:\n\n\b\n    genesis-mesh trust evidence \\\n        --graph fleet-graph.json \\\n        --from sovereign-a --to sovereign-b \\\n        --issuer-sovereign sovereign-a \\\n        --signing-key keys/na.key --key-id na-2026-q1 \\\n        --output evidence-a-b.json\n",
+    "description": "Evaluate trust and emit a signed TrustEvidence record.\n\nThe evidence binds the verdict to the graph state via a SHA-256 digest\nso a second sovereign can independently verify it later.\n\nExample:\n\n\b\n    genesis-mesh trust evidence \\\n        --graph fleet-graph.json \\\n        --from sovereign-a --to sovereign-b \\\n        --issuer-sovereign sovereign-a \\\n        --signing-key keys/na.key --key-id na-2026-q1 \\\n        --output evidence-a-b.json",
     "parameters": [
       {
         "name": "graph_path",
@@ -6377,7 +6377,7 @@
   },
   "trust execution record": {
     "command": "genesis-mesh trust execution record",
-    "description": "Create and sign an ExecutionEvidence record.\n\nWith --prior, links this record to the prior via prev_evidence_digest,\nforming a tamper-evident chain.\n\nExample (first record):\n\n\b\n    genesis-mesh trust execution record \\\n        --decision decision.json \\\n        --capability transactions.read \\\n        --executor bank-a \\\n        --outcome success \\\n        --sequence 1 \\\n        --signing-key bank.key --key-id bank-2026 \\\n        --output evidence-1.json\n\nExample (chained record):\n\n\b\n    genesis-mesh trust execution record \\\n        --decision decision.json \\\n        --capability transactions.read \\\n        --executor bank-a \\\n        --outcome success \\\n        --sequence 2 \\\n        --prior evidence-1.json \\\n        --signing-key bank.key --key-id bank-2026 \\\n        --output evidence-2.json\n",
+    "description": "Create and sign an ExecutionEvidence record.\n\nWith --prior, links this record to the prior via prev_evidence_digest,\nforming a tamper-evident chain.\n\nExample (first record):\n\n\b\n    genesis-mesh trust execution record \\\n        --decision decision.json \\\n        --capability transactions.read \\\n        --executor bank-a \\\n        --outcome success \\\n        --sequence 1 \\\n        --signing-key bank.key --key-id bank-2026 \\\n        --output evidence-1.json\n\nExample (chained record):\n\n\b\n    genesis-mesh trust execution record \\\n        --decision decision.json \\\n        --capability transactions.read \\\n        --executor bank-a \\\n        --outcome success \\\n        --sequence 2 \\\n        --prior evidence-1.json \\\n        --signing-key bank.key --key-id bank-2026 \\\n        --output evidence-2.json",
     "parameters": [
       {
         "name": "decision_path",
@@ -6494,7 +6494,7 @@
   },
   "trust execution verify": {
     "command": "genesis-mesh trust execution verify",
-    "description": "Verify a chain of ExecutionEvidence records.\n\nChecks: sequence numbers, prev_evidence_digest linkage, and signatures.\nExit code 0 if verified, 1 on any failure.\n\nExample:\n\n\b\n    genesis-mesh trust execution verify \\\n        --decision-id <uuid> \\\n        --evidence evidence-1.json \\\n        --evidence evidence-2.json \\\n        --key bank-a:<bank-pub-b64>\n",
+    "description": "Verify a chain of ExecutionEvidence records.\n\nChecks: sequence numbers, prev_evidence_digest linkage, and signatures.\nExit code 0 if verified, 1 on any failure.\n\nExample:\n\n\b\n    genesis-mesh trust execution verify \\\n        --decision-id <uuid> \\\n        --evidence evidence-1.json \\\n        --evidence evidence-2.json \\\n        --key bank-a:<bank-pub-b64>",
     "parameters": [
       {
         "name": "decision_id",
@@ -6551,7 +6551,7 @@
   },
   "trust freshness issue": {
     "command": "genesis-mesh trust freshness issue",
-    "description": "Issue a signed FreshnessProof for a revocation feed.\n\nExample:\n\n\b\n    genesis-mesh trust freshness issue \\\n        --feed-sovereign bank-a \\\n        --feed-sequence 42 \\\n        --issuer-sovereign feed-node-1 \\\n        --valid-for 300 \\\n        --signing-key keys/feed-node.key --key-id node-2026 \\\n        --output freshness-proof.json\n",
+    "description": "Issue a signed FreshnessProof for a revocation feed.\n\nExample:\n\n\b\n    genesis-mesh trust freshness issue \\\n        --feed-sovereign bank-a \\\n        --feed-sequence 42 \\\n        --issuer-sovereign feed-node-1 \\\n        --valid-for 300 \\\n        --signing-key keys/feed-node.key --key-id node-2026 \\\n        --output freshness-proof.json",
     "parameters": [
       {
         "name": "feed_sovereign_id",
@@ -6638,7 +6638,7 @@
   },
   "trust freshness verify": {
     "command": "genesis-mesh trust freshness verify",
-    "description": "Verify a FreshnessProof.\n\nChecks: signature, expiry at the given time, and feed_sequence >= required.\nExit code 0 if valid, 1 otherwise.\n\nExample:\n\n\b\n    genesis-mesh trust freshness verify \\\n        --proof freshness-proof.json \\\n        --issuer-key <pub-b64> \\\n        --required-sequence 42\n",
+    "description": "Verify a FreshnessProof.\n\nChecks: signature, expiry at the given time, and feed_sequence >= required.\nExit code 0 if valid, 1 otherwise.\n\nExample:\n\n\b\n    genesis-mesh trust freshness verify \\\n        --proof freshness-proof.json \\\n        --issuer-key <pub-b64> \\\n        --required-sequence 42",
     "parameters": [
       {
         "name": "proof_path",
@@ -6936,7 +6936,7 @@
   },
   "trust integrity commit": {
     "command": "genesis-mesh trust integrity commit",
-    "description": "Commit to a base context before execution begins.\n\nCreates a signed ContextIntegrityRecord capturing the base context hash\nand the declared growth bounds. Any undeclared context growth detected at\nverify time is treated as a potential injection.\n",
+    "description": "Commit to a base context before execution begins.\n\nCreates a signed ContextIntegrityRecord capturing the base context hash\nand the declared growth bounds. Any undeclared context growth detected at\nverify time is treated as a potential injection.",
     "parameters": [
       {
         "name": "agent_sov",
@@ -7033,7 +7033,7 @@
   },
   "trust integrity verify": {
     "command": "genesis-mesh trust integrity verify",
-    "description": "Verify final context matches the committed base plus declared segments.\n\nExits 0 if valid, 1 if any check fails.\n",
+    "description": "Verify final context matches the committed base plus declared segments.\n\nExits 0 if valid, 1 if any check fails.",
     "parameters": [
       {
         "name": "record_path",
@@ -7090,7 +7090,7 @@
   },
   "trust interop to-jwt": {
     "command": "genesis-mesh trust interop to-jwt",
-    "description": "Convert a BoundaryDecision to a signed EdDSA JWT.\n\nThe JWT can be consumed by any REST API that understands OKP/EdDSA JWTs.\nGM-specific fields are in the 'gm:' claim namespace.\n\nExample:\n\n\b\n    genesis-mesh trust interop to-jwt \\\n        --decision decision.json \\\n        --signing-key keys/bridge.key --key-id bridge-2026 \\\n        --output decision.jwt\n",
+    "description": "Convert a BoundaryDecision to a signed EdDSA JWT.\n\nThe JWT can be consumed by any REST API that understands OKP/EdDSA JWTs.\nGM-specific fields are in the 'gm:' claim namespace.\n\nExample:\n\n\b\n    genesis-mesh trust interop to-jwt \\\n        --decision decision.json \\\n        --signing-key keys/bridge.key --key-id bridge-2026 \\\n        --output decision.jwt",
     "parameters": [
       {
         "name": "decision_path",
@@ -7137,7 +7137,7 @@
   },
   "trust interop to-spiffe": {
     "command": "genesis-mesh trust interop to-spiffe",
-    "description": "Convert an AgreementRecord to a SPIFFE SVID-like JSON.\n\nThe output is not a self-contained X.509 or JWT SVID.  It carries the GM\nsignatures as extensions for verification against GM public keys.\n\nExample:\n\n\b\n    genesis-mesh trust interop to-spiffe \\\n        --agreement agreement.json \\\n        --output svid.json\n",
+    "description": "Convert an AgreementRecord to a SPIFFE SVID-like JSON.\n\nThe output is not a self-contained X.509 or JWT SVID.  It carries the GM\nsignatures as extensions for verification against GM public keys.\n\nExample:\n\n\b\n    genesis-mesh trust interop to-spiffe \\\n        --agreement agreement.json \\\n        --output svid.json",
     "parameters": [
       {
         "name": "agreement_path",
@@ -7164,7 +7164,7 @@
   },
   "trust interop to-vc": {
     "command": "genesis-mesh trust interop to-vc",
-    "description": "Convert an AgreementRecord or TrustEvidence to a W3C Verifiable Credential.\n\nPass either --agreement or --evidence (not both).\n\nExample:\n\n\b\n    genesis-mesh trust interop to-vc \\\n        --agreement agreement.json \\\n        --output vc.json\n",
+    "description": "Convert an AgreementRecord or TrustEvidence to a W3C Verifiable Credential.\n\nPass either --agreement or --evidence (not both).\n\nExample:\n\n\b\n    genesis-mesh trust interop to-vc \\\n        --agreement agreement.json \\\n        --output vc.json",
     "parameters": [
       {
         "name": "agreement_path",
@@ -7201,7 +7201,7 @@
   },
   "trust justify sign": {
     "command": "genesis-mesh trust justify sign",
-    "description": "Sign a GateTrace into a JustificationProof.\n\nExample:\n\n\b\n    genesis-mesh trust justify sign \\\n        --decision decision.json \\\n        --trace trace.json \\\n        --signing-key keys/operator.key \\\n        --output proof.json\n",
+    "description": "Sign a GateTrace into a JustificationProof.\n\nExample:\n\n\b\n    genesis-mesh trust justify sign \\\n        --decision decision.json \\\n        --trace trace.json \\\n        --signing-key keys/operator.key \\\n        --output proof.json",
     "parameters": [
       {
         "name": "decision_path",
@@ -7258,7 +7258,7 @@
   },
   "trust justify verify": {
     "command": "genesis-mesh trust justify verify",
-    "description": "Verify the signature on a JustificationProof.\n\nAlways verifies the Ed25519 signature.  With --decision, also cross-checks\ndecision_id and gate entry count.\n\nExample:\n\n\b\n    genesis-mesh trust justify verify \\\n        --proof proof.json \\\n        --verify-key keys/operator.pub \\\n        --decision decision.json\n",
+    "description": "Verify the signature on a JustificationProof.\n\nAlways verifies the Ed25519 signature.  With --decision, also cross-checks\ndecision_id and gate entry count.\n\nExample:\n\n\b\n    genesis-mesh trust justify verify \\\n        --proof proof.json \\\n        --verify-key keys/operator.pub \\\n        --decision decision.json",
     "parameters": [
       {
         "name": "proof_path",
@@ -7305,7 +7305,7 @@
   },
   "trust oversight approve": {
     "command": "genesis-mesh trust oversight approve",
-    "description": "Human custodian approves a HumanApprovalRequest.\n\nEmits a DualSignedCommitment with both the agent signature (from the request)\nand the human custodian's countersignature.\n\nExample:\n\n\b\n    genesis-mesh trust oversight approve \\\n        --request request.json --policy policy.json \\\n        --signing-key human.key --output commitment.json\n",
+    "description": "Human custodian approves a HumanApprovalRequest.\n\nEmits a DualSignedCommitment with both the agent signature (from the request)\nand the human custodian's countersignature.\n\nExample:\n\n\b\n    genesis-mesh trust oversight approve \\\n        --request request.json --policy policy.json \\\n        --signing-key human.key --output commitment.json",
     "parameters": [
       {
         "name": "request_path",
@@ -7382,7 +7382,7 @@
   },
   "trust oversight evaluate": {
     "command": "genesis-mesh trust oversight evaluate",
-    "description": "Evaluate a HumanOversightPolicy against a proposed action.\n\nPrints the escalation result and per-check outcomes.  Exits 0=automatic,\n1=human_approve, 2=block.\n\nExample:\n\n\b\n    genesis-mesh trust oversight evaluate \\\n        --policy policy.json --action action.json --requester bank-b\n",
+    "description": "Evaluate a HumanOversightPolicy against a proposed action.\n\nPrints the escalation result and per-check outcomes.  Exits 0=automatic,\n1=human_approve, 2=block.\n\nExample:\n\n\b\n    genesis-mesh trust oversight evaluate \\\n        --policy policy.json --action action.json --requester bank-b",
     "parameters": [
       {
         "name": "policy_path",
@@ -7449,7 +7449,7 @@
   },
   "trust oversight propose": {
     "command": "genesis-mesh trust oversight propose",
-    "description": "Sign and emit a HumanApprovalRequest for a high-stakes action.\n\nExample:\n\n\b\n    genesis-mesh trust oversight propose \\\n        --policy policy.json --action action.json \\\n        --requester bank-b --signing-key agent.key \\\n        --output request.json\n",
+    "description": "Sign and emit a HumanApprovalRequest for a high-stakes action.\n\nExample:\n\n\b\n    genesis-mesh trust oversight propose \\\n        --policy policy.json --action action.json \\\n        --requester bank-b --signing-key agent.key \\\n        --output request.json",
     "parameters": [
       {
         "name": "policy_path",
@@ -7546,7 +7546,7 @@
   },
   "trust oversight reject": {
     "command": "genesis-mesh trust oversight reject",
-    "description": "Human custodian rejects a HumanApprovalRequest.\n\nExample:\n\n\b\n    genesis-mesh trust oversight reject \\\n        --request request.json --policy policy.json \\\n        --signing-key human.key --note \"denied: unusual counterparty\" \\\n        --output response.json\n",
+    "description": "Human custodian rejects a HumanApprovalRequest.\n\nExample:\n\n\b\n    genesis-mesh trust oversight reject \\\n        --request request.json --policy policy.json \\\n        --signing-key human.key --note \"denied: unusual counterparty\" \\\n        --output response.json",
     "parameters": [
       {
         "name": "request_path",
@@ -7613,7 +7613,7 @@
   },
   "trust oversight verify": {
     "command": "genesis-mesh trust oversight verify",
-    "description": "Verify both signatures on a DualSignedCommitment.\n\nExample:\n\n\b\n    genesis-mesh trust oversight verify \\\n        --commitment commitment.json \\\n        --agent-key agent.pub \\\n        --human-key human.pub\n",
+    "description": "Verify both signatures on a DualSignedCommitment.\n\nExample:\n\n\b\n    genesis-mesh trust oversight verify \\\n        --commitment commitment.json \\\n        --agent-key agent.pub \\\n        --human-key human.pub",
     "parameters": [
       {
         "name": "commitment_path",
@@ -7834,7 +7834,7 @@
   },
   "trust privacy scan": {
     "command": "genesis-mesh trust privacy scan",
-    "description": "List header keys that would be stripped by the privacy profile.\n\nNon-blocking — output is informational only.\n",
+    "description": "List header keys that would be stripped by the privacy profile.\n\nNon-blocking — output is informational only.",
     "parameters": [
       {
         "name": "headers_path",
@@ -7918,7 +7918,7 @@
   },
   "trust purge receipt": {
     "command": "genesis-mesh trust purge receipt",
-    "description": "Create a signed NullificationReceipt for an expired EphemeralExecutionIdentity.\n\nFails if the identity has not yet expired.\nThe receipt retains only identity_id, consensus_id, expiry, and a digest —\nnot bearer_sovereign_id, allowed_capabilities, or decision_id.\n",
+    "description": "Create a signed NullificationReceipt for an expired EphemeralExecutionIdentity.\n\nFails if the identity has not yet expired.\nThe receipt retains only identity_id, consensus_id, expiry, and a digest —\nnot bearer_sovereign_id, allowed_capabilities, or decision_id.",
     "parameters": [
       {
         "name": "identity_path",
@@ -8022,7 +8022,7 @@
   },
   "trust purge verify": {
     "command": "genesis-mesh trust purge verify",
-    "description": "Verify a Merkle inclusion proof against a NullificationRegistryRoot.\n\nExits 0 if valid, 1 if any check fails.\n",
+    "description": "Verify a Merkle inclusion proof against a NullificationRegistryRoot.\n\nExits 0 if valid, 1 if any check fails.",
     "parameters": [
       {
         "name": "proof_path",
@@ -8079,7 +8079,7 @@
   },
   "trust risk assess-seed": {
     "command": "genesis-mesh trust risk assess-seed",
-    "description": "Assess whether a counterparty's update history matches adversarial seed patterns.\n\nExits 0 if not isolated, 1 if isolated.\n",
+    "description": "Assess whether a counterparty's update history matches adversarial seed patterns.\n\nExits 0 if not isolated, 1 if isolated.",
     "parameters": [
       {
         "name": "signal_path",
@@ -8334,7 +8334,7 @@
   },
   "trust token issue": {
     "command": "genesis-mesh trust token issue",
-    "description": "Issue a signed Invocation-Bound Capability Token (IBCT).\n\nThe token carries an attenuated subset of capabilities from the source\nagreement (or delegation), expires at --valid-for seconds, and optionally\nlimits the bearer to --max-invocations uses.\n\nExample (simple, 5-minute token):\n\n\b\n    genesis-mesh trust token issue \\\n        --agreement agreement.json \\\n        --bearer agent-b \\\n        --caps \"transactions.read\" \\\n        --signing-key operator.key --key-id op-2026 \\\n        --output token.json\n\nExample (budget-limited + constraint):\n\n\b\n    genesis-mesh trust token issue \\\n        --agreement agreement.json \\\n        --bearer agent-b \\\n        --caps \"transactions.read,audit.read\" \\\n        --max-invocations 5 \\\n        --constraint \"not_before:2026-07-01T00:00:00Z\" \\\n        --signing-key operator.key \\\n        --output token.json\n",
+    "description": "Issue a signed Invocation-Bound Capability Token (IBCT).\n\nThe token carries an attenuated subset of capabilities from the source\nagreement (or delegation), expires at --valid-for seconds, and optionally\nlimits the bearer to --max-invocations uses.\n\nExample (simple, 5-minute token):\n\n\b\n    genesis-mesh trust token issue \\\n        --agreement agreement.json \\\n        --bearer agent-b \\\n        --caps \"transactions.read\" \\\n        --signing-key operator.key --key-id op-2026 \\\n        --output token.json\n\nExample (budget-limited + constraint):\n\n\b\n    genesis-mesh trust token issue \\\n        --agreement agreement.json \\\n        --bearer agent-b \\\n        --caps \"transactions.read,audit.read\" \\\n        --max-invocations 5 \\\n        --constraint \"not_before:2026-07-01T00:00:00Z\" \\\n        --signing-key operator.key \\\n        --output token.json",
     "parameters": [
       {
         "name": "agreement_path",
@@ -8441,7 +8441,7 @@
   },
   "trust token record-use": {
     "command": "genesis-mesh trust token record-use",
-    "description": "Record a single token invocation.\n\nLinks to the prior use-record when --prior is supplied, forming a\ntamper-evident use chain.\n\nExample (first use):\n\n\b\n    genesis-mesh trust token record-use \\\n        --token token.json \\\n        --action \"transactions.read\" \\\n        --outcome success \\\n        --signing-key agent.key --key-id agent-2026 \\\n        --output use-1.json\n\nExample (chained use):\n\n\b\n    genesis-mesh trust token record-use \\\n        --token token.json \\\n        --action \"transactions.read\" \\\n        --outcome success \\\n        --prior use-1.json \\\n        --signing-key agent.key \\\n        --output use-2.json\n",
+    "description": "Record a single token invocation.\n\nLinks to the prior use-record when --prior is supplied, forming a\ntamper-evident use chain.\n\nExample (first use):\n\n\b\n    genesis-mesh trust token record-use \\\n        --token token.json \\\n        --action \"transactions.read\" \\\n        --outcome success \\\n        --signing-key agent.key --key-id agent-2026 \\\n        --output use-1.json\n\nExample (chained use):\n\n\b\n    genesis-mesh trust token record-use \\\n        --token token.json \\\n        --action \"transactions.read\" \\\n        --outcome success \\\n        --prior use-1.json \\\n        --signing-key agent.key \\\n        --output use-2.json",
     "parameters": [
       {
         "name": "token_path",
@@ -8518,7 +8518,7 @@
   },
   "trust token verify": {
     "command": "genesis-mesh trust token verify",
-    "description": "Verify an InvocationToken for a specific capability invocation.\n\nExit code 0 if valid, 1 on any failure.\n\nExample:\n\n\b\n    genesis-mesh trust token verify \\\n        --token token.json \\\n        --verify-key operator.pub \\\n        --capability \"transactions.read\" \\\n        --bearer agent-b\n",
+    "description": "Verify an InvocationToken for a specific capability invocation.\n\nExit code 0 if valid, 1 on any failure.\n\nExample:\n\n\b\n    genesis-mesh trust token verify \\\n        --token token.json \\\n        --verify-key operator.pub \\\n        --capability \"transactions.read\" \\\n        --bearer agent-b",
     "parameters": [
       {
         "name": "token_path",
@@ -8585,7 +8585,7 @@
   },
   "trust verify-evidence": {
     "command": "genesis-mesh trust verify-evidence",
-    "description": "Verify the signature on a TrustEvidence record.\n\nAlways checks the Ed25519 signature.  With --graph, also re-derives the\ngraph digest and confirms the evidence was produced over the same graph state.\n\nExample:\n\n\b\n    # Signature check only\n    genesis-mesh trust verify-evidence \\\n        --evidence evidence-a-b.json \\\n        --public-key <base64-pub-key>\n\n    # Strict: signature + graph binding\n    genesis-mesh trust verify-evidence \\\n        --evidence evidence-a-b.json \\\n        --public-key <base64-pub-key> \\\n        --graph fleet-graph.json\n",
+    "description": "Verify the signature on a TrustEvidence record.\n\nAlways checks the Ed25519 signature.  With --graph, also re-derives the\ngraph digest and confirms the evidence was produced over the same graph state.\n\nExample:\n\n\b\n    # Signature check only\n    genesis-mesh trust verify-evidence \\\n        --evidence evidence-a-b.json \\\n        --public-key <base64-pub-key>\n\n    # Strict: signature + graph binding\n    genesis-mesh trust verify-evidence \\\n        --evidence evidence-a-b.json \\\n        --public-key <base64-pub-key> \\\n        --graph fleet-graph.json",
     "parameters": [
       {
         "name": "evidence_path",

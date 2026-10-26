@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any
+from typing import Any, Iterable
 
 from genesis_mesh.crypto import sign_model
 from genesis_mesh.crypto.signing import SigningKeyLike
@@ -148,6 +148,20 @@ def inspect_proof_bundle(bundle: dict[str, Any], *, connectome_artifact: dict[st
             "verification_scope": "summary_consistency_only", "signatures_verified": False}
 
 
+def parse_export_lines(lines: Iterable[str]) -> list[dict[str, Any]]:
+    """Parse export lines with the core, preserving received envelopes and signed payloads unchanged.
+
+    This validates the export format, not its signatures or digest chain.
+    The received field spellings must survive transport to the evidence verifier.
+    """
+    from genesis_mesh import strict_json
+    from genesis_mesh.trust.evidence_store import parse_export_lines as core_parse
+
+    listed = list(lines)
+    core_parse(listed)
+    return [strict_json.loads(line) for line in listed if line.strip(" \t\r\n")]
+
+
 def artifact_verifier():
     """Build a fixed artifact-model selector; no client-supplied imports are possible."""
     import importlib
@@ -222,6 +236,8 @@ def build_workflow_tools(settings: Any) -> list:
          "artifact:genesis_mesh.models.key_succession:KeySuccessionRecord"),
         (inspect_proof_bundle, "proof", "inspect_proof_bundle", ("proof inspect",),
          "python:genesis_mesh.workflows.proof:inspect_proof_bundle"),
+        (parse_export_lines, "evidence_store", "parse_export_lines", (),
+         "python:genesis_mesh.trust.evidence_store:parse_export_lines"),
     ]
     return [make_tool(settings, fn, module, name, cli, target=target)
             for fn, module, name, cli, target in definitions]

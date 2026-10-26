@@ -26,159 +26,159 @@ No unresolved executable gaps or component-only workflows in the pinned contract
 | Core surface | Status | MCP mapping | Test evidence |
 | --- | --- | --- | --- |
 | `http:GET /` | internal_boundary | See boundary/reason in catalog | not_exercised |
-| `http:POST /admin/agreements/accept` | implemented | `na_agreement_accept` | unit_tested |
-| `http:POST /admin/agreements/counter` | implemented | `na_agreement_build_counter` | unit_tested |
-| `http:POST /admin/agreements/offer` | implemented | `na_agreement_build_offer` | unit_tested |
+| `http:POST /admin/agreements/accept` | implemented | `na_agreement_accept` | integration_tested |
+| `http:POST /admin/agreements/counter` | implemented | `na_agreement_build_counter` | integration_tested |
+| `http:POST /admin/agreements/offer` | implemented | `na_agreement_build_offer` | integration_tested |
 | `http:POST /admin/attestations` | implemented | `na_attestations_issue_attestation` | integration_tested |
 | `http:POST /admin/attestations/<attestation_id>/revoke` | implemented | `na_attestations_revoke_attestation` | integration_tested |
-| `http:GET /admin/boundary-policies` | implemented | `na_boundary_policy_list_policies` | unit_tested |
+| `http:GET /admin/boundary-policies` | implemented | `na_boundary_policy_list_policies` | integration_tested |
 | `http:POST /admin/boundary-policies` | implemented | `na_boundary_policy_publish_policy` | integration_tested |
 | `http:POST /admin/boundary-policies/<policy_id>/activate` | implemented | `na_boundary_policy_activate_policy` | integration_tested |
-| `http:POST /admin/boundary-policies/<policy_id>/deactivate` | implemented | `na_boundary_policy_deactivate_policy` | unit_tested |
-| `http:GET /admin/boundary-policies/<policy_id>/history` | implemented | `na_boundary_policy_policy_history` | unit_tested |
-| `http:GET /admin/boundary-policies/active` | implemented | `na_boundary_policy_active_policies` | unit_tested |
-| `http:POST /admin/boundary-policies/validate` | implemented | `na_boundary_policy_validate_policy` | unit_tested |
-| `http:POST /admin/boundary/decide` | implemented | `na_boundary_decide` | unit_tested |
+| `http:POST /admin/boundary-policies/<policy_id>/deactivate` | implemented | `na_boundary_policy_deactivate_policy` | integration_tested |
+| `http:GET /admin/boundary-policies/<policy_id>/history` | implemented | `na_boundary_policy_policy_history` | integration_tested |
+| `http:GET /admin/boundary-policies/active` | implemented | `na_boundary_policy_active_policies` | integration_tested |
+| `http:POST /admin/boundary-policies/validate` | implemented | `na_boundary_policy_validate_policy` | integration_tested |
+| `http:POST /admin/boundary/decide` | implemented | `na_boundary_decide` | integration_tested |
 | `http:POST /admin/boundary/evaluate` | implemented | `na_boundary_policy_evaluate` | integration_tested |
 | `http:POST /admin/consensus/proof` | implemented | `na_consensus_proof` | integration_tested |
 | `http:POST /admin/consensus/vote` | implemented | `na_consensus_vote` | integration_tested |
-| `http:POST /admin/data-usage/intent` | implemented | `na_data_usage_create_intent` | unit_tested |
-| `http:POST /admin/data-usage/policy` | implemented | `na_data_usage_create_policy` | unit_tested |
-| `http:POST /admin/disclosure/commit` | implemented | `na_disclosure_commit` | unit_tested |
-| `http:POST /admin/disclosure/nullifier` | implemented | `na_disclosure_nullifier` | unit_tested |
-| `http:GET /admin/edge-nodes` | implemented | `na_edge_list_edge_nodes` | unit_tested |
+| `http:POST /admin/data-usage/intent` | implemented | `na_data_usage_create_intent` | integration_tested |
+| `http:POST /admin/data-usage/policy` | implemented | `na_data_usage_create_policy` | integration_tested |
+| `http:POST /admin/disclosure/commit` | implemented | `na_disclosure_commit` | integration_tested |
+| `http:POST /admin/disclosure/nullifier` | implemented | `na_disclosure_nullifier` | integration_tested |
+| `http:GET /admin/edge-nodes` | implemented | `na_edge_list_edge_nodes` | integration_tested |
 | `http:GET /admin/evidence` | implemented | `na_evidence_store_search` | integration_tested |
-| `http:GET /admin/evidence/anchors` | implemented | `na_evidence_store_list_anchors` | unit_tested |
-| `http:POST /admin/evidence/anchors` | implemented | `na_evidence_store_create_anchor` | unit_tested |
-| `http:GET /admin/evidence/archives` | implemented | `na_evidence_store_list_archives` | unit_tested |
-| `http:POST /admin/evidence/archives` | implemented | `na_evidence_store_record_archive` | unit_tested |
-| `http:POST /admin/evidence/audit-pack` | implemented | `na_evidence_store_audit_pack` | unit_tested |
-| `http:POST /admin/evidence/break-glass/<break_glass_id>/judge` | implemented | `na_out_of_band_judge_break_glass` | unit_tested |
-| `http:GET /admin/evidence/changes/<path:resource_id>` | implemented | `na_out_of_band_resource_changes` | unit_tested |
-| `http:GET /admin/evidence/executor-keys` | implemented | `na_evidence_store_list_executor_keys` | unit_tested |
+| `http:GET /admin/evidence/anchors` | implemented | `na_evidence_store_list_anchors` | integration_tested |
+| `http:POST /admin/evidence/anchors` | implemented | `na_evidence_store_create_anchor` | integration_tested |
+| `http:GET /admin/evidence/archives` | implemented | `na_evidence_store_list_archives` | integration_tested |
+| `http:POST /admin/evidence/archives` | implemented | `na_evidence_store_record_archive` | integration_tested |
+| `http:POST /admin/evidence/audit-pack` | implemented | `na_evidence_store_audit_pack` | integration_tested |
+| `http:POST /admin/evidence/break-glass/<break_glass_id>/judge` | implemented | `na_out_of_band_judge_break_glass` | integration_tested |
+| `http:GET /admin/evidence/changes/<path:resource_id>` | implemented | `na_out_of_band_resource_changes` | integration_tested |
+| `http:GET /admin/evidence/executor-keys` | implemented | `na_evidence_store_list_executor_keys` | integration_tested |
 | `http:POST /admin/evidence/executor-keys` | implemented | `na_evidence_store_register_executor_key` | integration_tested |
-| `http:POST /admin/evidence/executor-keys/<key_id>/retire` | implemented | `na_evidence_store_retire_executor_key` | unit_tested |
+| `http:POST /admin/evidence/executor-keys/<key_id>/retire` | implemented | `na_evidence_store_retire_executor_key` | integration_tested |
 | `http:GET /admin/evidence/export` | implemented | `na_evidence_store_export` | integration_tested |
-| `http:POST /admin/evidence/observations/<observation_id>/judge` | implemented | `na_out_of_band_judge_observation` | unit_tested |
-| `http:GET /admin/evidence/operator-holders` | implemented | `na_out_of_band_operator_holders` | unit_tested |
+| `http:POST /admin/evidence/observations/<observation_id>/judge` | implemented | `na_out_of_band_judge_observation` | integration_tested |
+| `http:GET /admin/evidence/operator-holders` | implemented | `na_out_of_band_operator_holders` | integration_tested |
 | `http:GET /admin/evidence/remediations` | implemented | `na_remediation_due_queue` | integration_tested |
-| `http:GET /admin/evidence/remediations/<subject_id>` | implemented | `na_remediation_get_remediation` | unit_tested |
-| `http:POST /admin/evidence/remediations/<subject_id>/notified` | implemented | `na_remediation_record_notice` | unit_tested |
-| `http:GET /admin/evidence/resource-heads/<path:resource_id>` | implemented | `na_evidence_store_resource_head` | unit_tested |
-| `http:GET /admin/evidence/resources/<path:resource_id>` | implemented | `na_evidence_store_resource_history` | unit_tested |
-| `http:POST /admin/evidence/retention/apply` | implemented | `na_evidence_store_apply_retention` | unit_tested |
+| `http:GET /admin/evidence/remediations/<subject_id>` | implemented | `na_remediation_get_remediation` | integration_tested |
+| `http:POST /admin/evidence/remediations/<subject_id>/notified` | implemented | `na_remediation_record_notice` | integration_tested |
+| `http:GET /admin/evidence/resource-heads/<path:resource_id>` | implemented | `na_evidence_store_resource_head` | integration_tested |
+| `http:GET /admin/evidence/resources/<path:resource_id>` | implemented | `na_evidence_store_resource_history` | integration_tested |
+| `http:POST /admin/evidence/retention/apply` | implemented | `na_evidence_store_apply_retention` | integration_tested |
 | `http:POST /admin/evidence/reviews` | implemented | `na_remediation_request_review` | integration_tested |
-| `http:GET /admin/evidence/reviews/<review_id>` | implemented | `na_remediation_get_review` | unit_tested |
+| `http:GET /admin/evidence/reviews/<review_id>` | implemented | `na_remediation_get_review` | integration_tested |
 | `http:POST /admin/evidence/reviews/<review_id>/decide` | implemented | `na_remediation_decide_review` | integration_tested |
-| `http:GET /admin/evidence/status` | implemented | `na_evidence_store_status` | unit_tested |
-| `http:GET /admin/evidence/vendors/<vendor_id>` | implemented | `na_evidence_store_vendor_history` | unit_tested |
-| `http:GET /admin/evidence/verify` | implemented | `na_evidence_store_verify` | unit_tested |
+| `http:GET /admin/evidence/status` | implemented | `na_evidence_store_status` | integration_tested |
+| `http:GET /admin/evidence/vendors/<vendor_id>` | implemented | `na_evidence_store_vendor_history` | integration_tested |
+| `http:GET /admin/evidence/verify` | implemented | `na_evidence_store_verify` | integration_tested |
 | `http:GET /admin/grants` | implemented | `na_grants_list_grants` | integration_tested |
 | `http:POST /admin/grants` | implemented | `na_grants_issue_grant` | integration_tested |
 | `http:GET /admin/grants/<grant_id>` | implemented | `na_grants_get_grant` | integration_tested |
 | `http:POST /admin/grants/<grant_id>/revoke` | implemented | `na_grants_revoke_grant` | integration_tested |
 | `http:GET /admin/grants/<grant_id>/uses` | implemented | `na_grants_list_grant_uses` | integration_tested |
 | `http:POST /admin/invite` | implemented | `na_admin_create_invite` | integration_tested |
-| `http:POST /admin/na/reissue` | implemented | `na_key_history_reissue` | unit_tested |
-| `http:POST /admin/na/succession` | implemented | `na_key_history_succession` | unit_tested |
-| `http:POST /admin/operator-keys/<key_id>/holder` | implemented | `na_out_of_band_propose_holder` | unit_tested |
-| `http:POST /admin/operator-keys/<key_id>/revoke` | implemented | `na_admin_revoke_operator_key` | unit_tested |
-| `http:POST /admin/operator-keys/holder-changes/<proposal_id>/approve` | implemented | `na_out_of_band_approve_holder` | unit_tested |
-| `http:POST /admin/policy` | implemented | `na_admin_publish_policy` | unit_tested |
-| `http:GET /admin/policy/history` | implemented | `na_admin_policy_history` | unit_tested |
-| `http:POST /admin/policy/rollback` | implemented | `na_admin_rollback_policy` | unit_tested |
-| `http:POST /admin/recognition-policy` | implemented | `na_attestations_save_recognition_policy` | unit_tested |
-| `http:POST /admin/recognition-treaties` | implemented | `na_treaties_issue_treaty` | unit_tested |
-| `http:POST /admin/recognition-treaties/<treaty_id>/revoke` | implemented | `na_treaties_revoke_treaty` | unit_tested |
-| `http:POST /admin/revoke` | implemented | `na_admin_revoke_certificate` | unit_tested |
-| `http:POST /admin/sovereign-revocation-feeds/import` | implemented | `na_treaties_import_sovereign_revocation_feed` | unit_tested |
-| `http:POST /admin/trust-evidence` | implemented | `na_evidence_build` | unit_tested |
+| `http:POST /admin/na/reissue` | implemented | `na_key_history_reissue` | integration_tested |
+| `http:POST /admin/na/succession` | implemented | `na_key_history_succession` | integration_tested |
+| `http:POST /admin/operator-keys/<key_id>/holder` | implemented | `na_out_of_band_propose_holder` | integration_tested |
+| `http:POST /admin/operator-keys/<key_id>/revoke` | implemented | `na_admin_revoke_operator_key` | integration_tested |
+| `http:POST /admin/operator-keys/holder-changes/<proposal_id>/approve` | implemented | `na_out_of_band_approve_holder` | integration_tested |
+| `http:POST /admin/policy` | implemented | `na_admin_publish_policy` | integration_tested |
+| `http:GET /admin/policy/history` | implemented | `na_admin_policy_history` | integration_tested |
+| `http:POST /admin/policy/rollback` | implemented | `na_admin_rollback_policy` | integration_tested |
+| `http:POST /admin/recognition-policy` | implemented | `na_attestations_save_recognition_policy` | integration_tested |
+| `http:POST /admin/recognition-treaties` | implemented | `na_treaties_issue_treaty` | integration_tested |
+| `http:POST /admin/recognition-treaties/<treaty_id>/revoke` | implemented | `na_treaties_revoke_treaty` | integration_tested |
+| `http:POST /admin/revoke` | implemented | `na_admin_revoke_certificate` | integration_tested |
+| `http:POST /admin/sovereign-revocation-feeds/import` | implemented | `na_treaties_import_sovereign_revocation_feed` | integration_tested |
+| `http:POST /admin/trust-evidence` | implemented | `na_evidence_build` | integration_tested |
 | `http:GET /agents` | implemented | `na_discovery_list_agents` | integration_tested |
 | `http:POST /agents` | implemented | `na_discovery_register_agent` | integration_tested |
 | `http:DELETE /agents/<path:node_public_key>` | implemented | `na_discovery_delete_agent` | integration_tested |
-| `http:GET /agents/<path:node_public_key>` | implemented | `na_discovery_get_agent` | unit_tested |
-| `http:POST /agreements/verify` | implemented | `na_agreement_verify` | unit_tested |
+| `http:GET /agents/<path:node_public_key>` | implemented | `na_discovery_get_agent` | integration_tested |
+| `http:POST /agreements/verify` | implemented | `na_agreement_verify` | integration_tested |
 | `http:GET /api-reference` | internal_boundary | See boundary/reason in catalog | not_exercised |
 | `http:GET /atlas` | internal_boundary | See boundary/reason in catalog | not_exercised |
-| `http:GET /atlas.json` | implemented | `na_public_atlas_json` | unit_tested |
+| `http:GET /atlas.json` | implemented | `na_public_atlas_json` | integration_tested |
 | `http:GET /attestations` | implemented | `na_attestations_list_attestations`, `na_attestations_roster` | integration_tested |
 | `http:GET /attestations/<attestation_id>` | implemented | `na_attestations_get_attestation` | integration_tested |
-| `http:POST /attestations/verify` | implemented | `na_attestations_verify_attestation` | unit_tested |
-| `http:POST /attestations/verify-with-treaty` | implemented | `na_treaties_verify_attestation_with_treaty` | unit_tested |
-| `http:POST /boundary-policies/verify` | implemented | `na_boundary_policy_verify_policy` | unit_tested |
+| `http:POST /attestations/verify` | implemented | `na_attestations_verify_attestation` | integration_tested |
+| `http:POST /attestations/verify-with-treaty` | implemented | `na_treaties_verify_attestation_with_treaty` | integration_tested |
+| `http:POST /boundary-policies/verify` | implemented | `na_boundary_policy_verify_policy` | integration_tested |
 | `http:POST /boundary/verify` | implemented | `na_boundary_verify` | integration_tested |
 | `http:GET /cli-reference` | internal_boundary | See boundary/reason in catalog | not_exercised |
 | `http:GET /connectome` | internal_boundary | See boundary/reason in catalog | not_exercised |
-| `http:GET /connectome.json` | implemented | `na_treaties_connectome_json` | unit_tested |
-| `http:GET /connectome/trust-path` | implemented | `na_treaties_connectome_trust_path` | unit_tested |
+| `http:GET /connectome.json` | implemented | `na_treaties_connectome_json` | integration_tested |
+| `http:GET /connectome/trust-path` | implemented | `na_treaties_connectome_trust_path` | integration_tested |
 | `http:POST /consensus/verify` | implemented | `na_consensus_verify` | integration_tested |
-| `http:GET /crl` | implemented | `na_crl_get_crl` | unit_tested |
+| `http:GET /crl` | implemented | `na_crl_get_crl` | integration_tested |
 | `http:GET /dashboard` | internal_boundary | See boundary/reason in catalog | not_exercised |
 | `http:GET /dashboard.json` | internal_boundary | See boundary/reason in catalog | not_exercised |
-| `http:GET /data-usage/policy` | implemented | `na_data_usage_get_policy` | unit_tested |
-| `http:POST /data-usage/verify` | implemented | `na_data_usage_verify` | unit_tested |
-| `http:POST /disclosure/prove` | implemented | `na_disclosure_prove` | unit_tested |
-| `http:POST /disclosure/verify` | implemented | `na_disclosure_verify` | unit_tested |
-| `http:POST /evidence/break-glass` | implemented | `na_out_of_band_submit_break_glass` | unit_tested |
-| `http:POST /evidence/execution` | implemented | `na_evidence_store_submit_execution` | unit_tested |
+| `http:GET /data-usage/policy` | implemented | `na_data_usage_get_policy` | integration_tested |
+| `http:POST /data-usage/verify` | implemented | `na_data_usage_verify` | integration_tested |
+| `http:POST /disclosure/prove` | implemented | `na_disclosure_prove` | integration_tested |
+| `http:POST /disclosure/verify` | implemented | `na_disclosure_verify` | integration_tested |
+| `http:POST /evidence/break-glass` | implemented | `na_out_of_band_submit_break_glass` | integration_tested |
+| `http:POST /evidence/execution` | implemented | `na_evidence_store_submit_execution` | integration_tested |
 | `http:POST /evidence/grant-executions` | implemented | `na_grants_submit_grant_execution` | integration_tested |
-| `http:POST /evidence/observations` | implemented | `na_out_of_band_submit_observation` | unit_tested |
-| `http:POST /evidence/observations/batch` | implemented | `na_out_of_band_submit_observations` | unit_tested |
-| `http:POST /evidence/remediations` | implemented | `na_remediation_submit_remediation` | unit_tested |
+| `http:POST /evidence/observations` | implemented | `na_out_of_band_submit_observation` | integration_tested |
+| `http:POST /evidence/observations/batch` | implemented | `na_out_of_band_submit_observations` | integration_tested |
+| `http:POST /evidence/remediations` | implemented | `na_remediation_submit_remediation` | integration_tested |
 | `http:GET /favicon.ico` | internal_boundary | See boundary/reason in catalog | not_exercised |
 | `http:GET /favicon.svg` | internal_boundary | See boundary/reason in catalog | not_exercised |
-| `http:GET /genesis` | implemented | `na_public_get_genesis` | unit_tested |
+| `http:GET /genesis` | implemented | `na_public_get_genesis` | integration_tested |
 | `http:POST /grants/time-tokens` | implemented | `na_grants_time_token` | integration_tested |
-| `http:GET /health` | implemented | `na_health_health` | unit_tested |
-| `http:GET /healthz` | implemented | `na_health_healthz` | unit_tested |
+| `http:GET /health` | implemented | `na_health_health` | integration_tested |
+| `http:GET /healthz` | implemented | `na_health_healthz` | integration_tested |
 | `http:POST /heartbeat` | implemented | `na_enrollment_heartbeat` | integration_tested |
 | `http:POST /join` | implemented | `na_enrollment_request_join` | integration_tested |
-| `http:GET /metrics` | implemented | `na_health_metrics` | unit_tested |
-| `http:GET /na/key-history` | implemented | `na_key_history_key_history` | unit_tested |
-| `http:POST /node/boundary/evaluate` | implemented | `na_edge_node_boundary_evaluate` | unit_tested |
-| `http:POST /node/evidence/resource-head` | implemented | `na_edge_node_resource_head` | unit_tested |
+| `http:GET /metrics` | implemented | `na_health_metrics` | integration_tested |
+| `http:GET /na/key-history` | implemented | `na_key_history_key_history` | integration_tested |
+| `http:POST /node/boundary/evaluate` | implemented | `na_edge_node_boundary_evaluate` | integration_tested |
+| `http:POST /node/evidence/resource-head` | implemented | `na_edge_node_resource_head` | integration_tested |
 | `http:POST /node/state` | implemented | `na_edge_node_state` | integration_tested |
 | `http:GET /nodes` | implemented | `na_health_list_nodes`, `na_nodes_roster` | integration_tested |
 | `http:GET /operator-console-static/console.js` | internal_boundary | See boundary/reason in catalog | not_exercised |
 | `http:GET /operator-console-static/logo.svg` | internal_boundary | See boundary/reason in catalog | not_exercised |
 | `http:GET /operator-console-static/styles.css` | internal_boundary | See boundary/reason in catalog | not_exercised |
-| `http:GET /policy` | implemented | `na_public_get_policy` | unit_tested |
-| `http:GET /readyz` | implemented | `na_health_readyz` | unit_tested |
-| `http:GET /recognition-graph` | implemented | `na_treaties_recognition_graph` | unit_tested |
-| `http:GET /recognition-policy` | implemented | `na_attestations_get_recognition_policy` | unit_tested |
-| `http:GET /recognition-treaties` | implemented | `na_treaties_list_treaties` | unit_tested |
-| `http:GET /recognition-treaties/<treaty_id>` | implemented | `na_treaties_get_treaty` | unit_tested |
-| `http:POST /recognition-treaties/verify` | implemented | `na_treaties_verify_treaty` | unit_tested |
-| `http:POST /renew` | implemented | `na_enrollment_renew_certificate` | unit_tested |
-| `http:GET /sovereign-revocation-feed` | implemented | `na_attestations_sovereign_revocation_feed` | unit_tested |
-| `http:GET /sovereign.json` | implemented | `na_public_sovereign_metadata` | unit_tested |
+| `http:GET /policy` | implemented | `na_public_get_policy` | integration_tested |
+| `http:GET /readyz` | implemented | `na_health_readyz` | integration_tested |
+| `http:GET /recognition-graph` | implemented | `na_treaties_recognition_graph` | integration_tested |
+| `http:GET /recognition-policy` | implemented | `na_attestations_get_recognition_policy` | integration_tested |
+| `http:GET /recognition-treaties` | implemented | `na_treaties_list_treaties` | integration_tested |
+| `http:GET /recognition-treaties/<treaty_id>` | implemented | `na_treaties_get_treaty` | integration_tested |
+| `http:POST /recognition-treaties/verify` | implemented | `na_treaties_verify_treaty` | integration_tested |
+| `http:POST /renew` | implemented | `na_enrollment_renew_certificate` | integration_tested |
+| `http:GET /sovereign-revocation-feed` | implemented | `na_attestations_sovereign_revocation_feed` | integration_tested |
+| `http:GET /sovereign.json` | implemented | `na_public_sovereign_metadata` | integration_tested |
 | `http:GET /surfaces` | internal_boundary | See boundary/reason in catalog | not_exercised |
 | `http:GET /swagger.json` | internal_boundary | See boundary/reason in catalog | not_exercised |
-| `http:POST /trust-evidence/verify` | implemented | `na_evidence_verify` | unit_tested |
+| `http:POST /trust-evidence/verify` | implemented | `na_evidence_verify` | integration_tested |
 
 ## cli_commands
 
 | Core surface | Status | MCP mapping | Test evidence |
 | --- | --- | --- | --- |
-| `cli:admin edge-nodes` | implemented | `na_edge_list_edge_nodes` | not_exercised |
-| `cli:admin invite` | implemented | `na_admin_create_invite` | not_exercised |
-| `cli:admin revoke` | implemented | `na_admin_revoke_certificate` | not_exercised |
-| `cli:admin revoke-operator-key` | implemented | `na_admin_revoke_operator_key` | not_exercised |
-| `cli:atlas build` | implemented | `gm_workflow_atlas_build` | unit_tested |
+| `cli:admin edge-nodes` | implemented | `na_edge_list_edge_nodes` | integration_tested |
+| `cli:admin invite` | implemented | `na_admin_create_invite` | integration_tested |
+| `cli:admin revoke` | implemented | `na_admin_revoke_certificate` | integration_tested |
+| `cli:admin revoke-operator-key` | implemented | `na_admin_revoke_operator_key` | integration_tested |
+| `cli:atlas build` | implemented | `gm_workflow_atlas_build` | integration_tested |
 | `cli:atlas cache` | implemented | `gm_offline_atlas_build_trust_path_cache` | unit_tested |
-| `cli:atlas lookup` | implemented | `gm_offline_atlas_lookup_trust_path` | not_exercised |
-| `cli:atlas prune` | implemented | `gm_offline_atlas_prune_graph` | not_exercised |
-| `cli:attestation issue` | implemented | `na_attestations_issue_attestation` | not_exercised |
-| `cli:attestation revoke` | implemented | `na_attestations_revoke_attestation` | not_exercised |
-| `cli:attestation verify-with-treaty` | implemented | `na_treaties_verify_attestation_with_treaty` | not_exercised |
+| `cli:atlas lookup` | implemented | `gm_offline_atlas_lookup_trust_path` | unit_tested |
+| `cli:atlas prune` | implemented | `gm_offline_atlas_prune_graph` | unit_tested |
+| `cli:attestation issue` | implemented | `na_attestations_issue_attestation` | integration_tested |
+| `cli:attestation revoke` | implemented | `na_attestations_revoke_attestation` | integration_tested |
+| `cli:attestation verify-with-treaty` | implemented | `na_treaties_verify_attestation_with_treaty` | integration_tested |
 | `cli:audit archive` | implemented | `gm_workflow_audit_archive` | integration_tested |
 | `cli:audit pack` | implemented | `gm_workflow_audit_pack` | integration_tested |
-| `cli:audit verify` | implemented | `gm_local_audit_verify`, `gm_offline_audit_pack_verify_audit_pack` | unit_tested |
+| `cli:audit verify` | implemented | `gm_local_audit_verify`, `gm_offline_audit_pack_verify_audit_pack` | integration_tested |
 | `cli:dev down` | operational_boundary | See boundary/reason in catalog | not_exercised |
 | `cli:dev up` | operational_boundary | See boundary/reason in catalog | not_exercised |
-| `cli:discover` | implemented | `na_discovery_list_agents` | not_exercised |
+| `cli:discover` | implemented | `na_discovery_list_agents` | integration_tested |
 | `cli:evidence anchors fetch` | implemented | `gm_workflow_evidence_anchors_fetch` | integration_tested |
-| `cli:evidence verify-export` | implemented | `gm_local_evidence_verify_export` | not_exercised |
+| `cli:evidence verify-export` | implemented | `gm_local_evidence_verify_export` | integration_tested |
 | `cli:federation bootstrap` | implemented | `gm_workflow_federation_bootstrap`, `gm_workflow_federation_preview` | integration_tested |
 | `cli:fleet generate` | implemented | `gm_workflow_fleet_generate` | integration_tested |
 | `cli:fleet mesh` | implemented | `gm_workflow_fleet_mesh` | integration_tested |
@@ -187,7 +187,7 @@ No unresolved executable gaps or component-only workflows in the pinned contract
 | `cli:genesis create` | operational_boundary | See boundary/reason in catalog | not_exercised |
 | `cli:genesis sign` | operational_boundary | See boundary/reason in catalog | not_exercised |
 | `cli:genesis verify` | implemented | `gm_offline_genesis_verify_genesis` | unit_tested |
-| `cli:info` | implemented | `gm_offline_genesis_inspect_genesis` | not_exercised |
+| `cli:info` | implemented | `gm_offline_genesis_inspect_genesis` | unit_tested |
 | `cli:init` | operational_boundary | See boundary/reason in catalog | not_exercised |
 | `cli:join` | implemented | `gm_workflow_node_join` | integration_tested |
 | `cli:keygen network-authority` | operational_boundary | See boundary/reason in catalog | not_exercised |
@@ -199,65 +199,65 @@ No unresolved executable gaps or component-only workflows in the pinned contract
 | `cli:managed restore` | operational_boundary | See boundary/reason in catalog | not_exercised |
 | `cli:na doctor` | operational_boundary | See boundary/reason in catalog | not_exercised |
 | `cli:na migrate-db` | operational_boundary | See boundary/reason in catalog | not_exercised |
-| `cli:na reissue` | implemented | `na_key_history_reissue` | not_exercised |
+| `cli:na reissue` | implemented | `na_key_history_reissue` | integration_tested |
 | `cli:na start` | operational_boundary | See boundary/reason in catalog | not_exercised |
-| `cli:na succession history` | implemented | `na_key_history_key_history` | not_exercised |
+| `cli:na succession history` | implemented | `na_key_history_key_history` | integration_tested |
 | `cli:na succession prove` | implemented | `gm_offline_key_succession_prove_succession` | unit_tested |
 | `cli:na succession sign` | operational_boundary | See boundary/reason in catalog | not_exercised |
-| `cli:na succession submit` | implemented | `na_key_history_succession` | not_exercised |
+| `cli:na succession submit` | implemented | `na_key_history_succession` | integration_tested |
 | `cli:na verify-db` | operational_boundary | See boundary/reason in catalog | not_exercised |
 | `cli:proof canary` | implemented | `gm_workflow_proof_canary` | integration_tested |
 | `cli:proof cleanup` | implemented | `gm_workflow_proof_cleanup` | integration_tested |
 | `cli:proof inspect` | implemented | `gm_offline_proof_inspect_proof_bundle` | unit_tested |
 | `cli:proof remote` | implemented | `gm_workflow_proof_remote` | integration_tested |
 | `cli:send` | implemented | `gm_workflow_peer_send` | integration_tested |
-| `cli:sovereign inspect` | implemented | `na_public_sovereign_metadata` | not_exercised |
+| `cli:sovereign inspect` | implemented | `na_public_sovereign_metadata` | integration_tested |
 | `cli:status` | implemented | `gm_workflow_node_status` | integration_tested |
-| `cli:supply-chain verify` | implemented | `gm_offline_supply_chain_verify_supply_chain_maintainer_gate` | not_exercised |
-| `cli:treaty import-feed` | implemented | `na_treaties_import_sovereign_revocation_feed` | not_exercised |
-| `cli:treaty inspect` | implemented | `na_treaties_get_treaty` | not_exercised |
-| `cli:treaty list` | implemented | `na_treaties_list_treaties` | not_exercised |
+| `cli:supply-chain verify` | implemented | `gm_offline_supply_chain_verify_supply_chain_maintainer_gate` | unit_tested |
+| `cli:treaty import-feed` | implemented | `na_treaties_import_sovereign_revocation_feed` | integration_tested |
+| `cli:treaty inspect` | implemented | `na_treaties_get_treaty` | integration_tested |
+| `cli:treaty list` | implemented | `na_treaties_list_treaties` | integration_tested |
 | `cli:treaty renew` | implemented | `gm_workflow_treaty_renew` | integration_tested |
 | `cli:treaty replace` | implemented | `gm_workflow_treaty_replace` | integration_tested |
-| `cli:treaty revoke` | implemented | `na_treaties_revoke_treaty` | not_exercised |
+| `cli:treaty revoke` | implemented | `na_treaties_revoke_treaty` | integration_tested |
 | `cli:trust agree accept` | implemented | `gm_offline_agreement_accept_offer` | unit_tested |
 | `cli:trust agree cosign` | implemented | `gm_offline_agreement_cosign_agreement` | unit_tested |
-| `cli:trust agree counter` | implemented | `gm_offline_agreement_build_counter` | not_exercised |
+| `cli:trust agree counter` | implemented | `gm_offline_agreement_build_counter` | unit_tested |
 | `cli:trust agree offer` | implemented | `gm_offline_agreement_build_offer` | unit_tested |
 | `cli:trust agree verify` | implemented | `gm_offline_agreement_verify_agreement` | unit_tested |
-| `cli:trust attest create` | implemented | `gm_offline_logic_attestation_create_model_attestation` | not_exercised |
-| `cli:trust attest policy` | implemented | `gm_offline_attestation_create_attestation_policy` | not_exercised |
-| `cli:trust attest verify` | implemented | `gm_offline_logic_attestation_verify_model_attestation` | not_exercised |
-| `cli:trust boundary-policy explain` | implemented | `gm_offline_context_explain_policy` | not_exercised |
-| `cli:trust boundary-policy gate-types` | implemented | `gm_offline_context_gate_types` | not_exercised |
-| `cli:trust boundary-policy validate` | implemented | `gm_offline_context_validate_boundary_policy` | not_exercised |
-| `cli:trust boundary-policy verify` | implemented | `gm_offline_context_verify_boundary_policy` | not_exercised |
+| `cli:trust attest create` | implemented | `gm_offline_logic_attestation_create_model_attestation` | unit_tested |
+| `cli:trust attest policy` | implemented | `gm_offline_attestation_create_attestation_policy` | unit_tested |
+| `cli:trust attest verify` | implemented | `gm_offline_logic_attestation_verify_model_attestation` | unit_tested |
+| `cli:trust boundary-policy explain` | implemented | `gm_offline_context_explain_policy` | unit_tested |
+| `cli:trust boundary-policy gate-types` | implemented | `gm_offline_context_gate_types` | unit_tested |
+| `cli:trust boundary-policy validate` | implemented | `gm_offline_context_validate_boundary_policy` | unit_tested |
+| `cli:trust boundary-policy verify` | implemented | `gm_offline_context_verify_boundary_policy` | unit_tested |
 | `cli:trust consensus assemble` | implemented | `gm_offline_consensus_assemble_consensus_proof` | unit_tested |
-| `cli:trust consensus assess-cascade` | implemented | `gm_offline_consensus_assess_cascade_risk` | not_exercised |
+| `cli:trust consensus assess-cascade` | implemented | `gm_offline_consensus_assess_cascade_risk` | unit_tested |
 | `cli:trust consensus issue-identity` | implemented | `gm_offline_consensus_issue_ephemeral_identity` | unit_tested |
 | `cli:trust consensus verify` | implemented | `gm_offline_consensus_verify_consensus_proof` | unit_tested |
 | `cli:trust consensus verify-identity` | implemented | `gm_offline_consensus_verify_ephemeral_identity` | unit_tested |
 | `cli:trust consensus vote` | implemented | `gm_offline_consensus_cast_validator_vote` | unit_tested |
 | `cli:trust context evaluate` | implemented | `gm_offline_context_evaluate_context` | unit_tested |
-| `cli:trust context request` | implemented | `gm_offline_context_create_context` | not_exercised |
+| `cli:trust context request` | implemented | `gm_offline_context_create_context` | unit_tested |
 | `cli:trust context verify` | implemented | `gm_offline_context_verify_boundary_decision` | unit_tested |
 | `cli:trust data intent` | implemented | `gm_offline_data_usage_create_data_access_intent` | unit_tested |
 | `cli:trust data policy` | implemented | `gm_offline_data_usage_create_data_policy` | unit_tested |
 | `cli:trust data record` | implemented | `gm_offline_data_usage_create_data_record` | unit_tested |
 | `cli:trust data verify` | implemented | `gm_offline_data_usage_verify_data_access_intent` | unit_tested |
-| `cli:trust decide` | implemented | `gm_offline_decision_evaluate_trust_decision` | not_exercised |
+| `cli:trust decide` | implemented | `gm_offline_decision_evaluate_trust_decision` | unit_tested |
 | `cli:trust delegate cosign` | implemented | `gm_offline_delegation_cosign_delegation` | unit_tested |
 | `cli:trust delegate create` | implemented | `gm_offline_delegation_build_delegation` | unit_tested |
 | `cli:trust delegate verify` | implemented | `gm_offline_delegation_verify_delegation_chain` | unit_tested |
 | `cli:trust disclose commit` | implemented | `gm_offline_selective_disclosure_commit_capabilities` | unit_tested |
-| `cli:trust disclose nullify` | implemented | `gm_offline_selective_disclosure_issue_nullifier` | not_exercised |
+| `cli:trust disclose nullify` | implemented | `gm_offline_selective_disclosure_issue_nullifier` | unit_tested |
 | `cli:trust disclose prove` | implemented | `gm_offline_selective_disclosure_prove_capability_membership` | unit_tested |
 | `cli:trust disclose verify` | implemented | `gm_offline_selective_disclosure_verify_capability_proof` | unit_tested |
 | `cli:trust discover announce` | implemented | `gm_offline_overlay_discovery_create_discovery_record` | unit_tested |
-| `cli:trust discover feed` | implemented | `gm_offline_overlay_discovery_build_discovery_feed` | not_exercised |
-| `cli:trust discover merge` | implemented | `gm_offline_overlay_discovery_merge_discovery_records` | not_exercised |
+| `cli:trust discover feed` | implemented | `gm_offline_overlay_discovery_build_discovery_feed` | unit_tested |
+| `cli:trust discover merge` | implemented | `gm_offline_overlay_discovery_merge_discovery_records` | unit_tested |
 | `cli:trust discover verify` | implemented | `gm_offline_overlay_discovery_verify_discovery_record` | unit_tested |
-| `cli:trust evidence` | implemented | `gm_offline_evidence_build_trust_evidence` | not_exercised |
+| `cli:trust evidence` | implemented | `gm_offline_evidence_build_trust_evidence` | unit_tested |
 | `cli:trust execution record` | implemented | `gm_offline_execution_record_execution` | unit_tested |
 | `cli:trust execution verify` | implemented | `gm_offline_execution_verify_evidence_chain` | unit_tested |
 | `cli:trust freshness issue` | implemented | `gm_offline_freshness_issue_freshness_proof` | unit_tested |
@@ -268,35 +268,35 @@ No unresolved executable gaps or component-only workflows in the pinned contract
 | `cli:trust integrity commit` | implemented | `gm_offline_context_integrity_create_context_integrity_record` | unit_tested |
 | `cli:trust integrity verify` | implemented | `gm_offline_context_integrity_verify_context_integrity` | unit_tested |
 | `cli:trust interop to-jwt` | implemented | `gm_offline_jose_decision_to_jwt` | unit_tested |
-| `cli:trust interop to-spiffe` | implemented | `gm_offline_spiffe_agreement_to_svid` | not_exercised |
-| `cli:trust interop to-vc` | implemented | `gm_offline_w3c_vc_trust_evidence_to_vc` | not_exercised |
-| `cli:trust justify sign` | implemented | `gm_offline_justification_sign_justification_proof` | not_exercised |
+| `cli:trust interop to-spiffe` | implemented | `gm_offline_spiffe_agreement_to_svid` | unit_tested |
+| `cli:trust interop to-vc` | implemented | `gm_offline_w3c_vc_trust_evidence_to_vc` | unit_tested |
+| `cli:trust justify sign` | implemented | `gm_offline_justification_sign_justification_proof` | unit_tested |
 | `cli:trust justify verify` | implemented | `gm_offline_justification_verify_justification_proof` | unit_tested |
 | `cli:trust oversight approve` | implemented | `gm_offline_oversight_approve_commitment` | unit_tested |
-| `cli:trust oversight evaluate` | implemented | `gm_offline_oversight_evaluate_oversight_policy` | not_exercised |
+| `cli:trust oversight evaluate` | implemented | `gm_offline_oversight_evaluate_oversight_policy` | unit_tested |
 | `cli:trust oversight propose` | implemented | `gm_offline_oversight_propose_commitment` | unit_tested |
-| `cli:trust oversight reject` | implemented | `gm_offline_oversight_reject_commitment` | not_exercised |
+| `cli:trust oversight reject` | implemented | `gm_offline_oversight_reject_commitment` | unit_tested |
 | `cli:trust oversight verify` | implemented | `gm_offline_oversight_verify_dual_signed_commitment` | unit_tested |
 | `cli:trust privacy apply` | implemented | `gm_offline_privacy_apply_privacy_profile` | unit_tested |
 | `cli:trust privacy profile` | implemented | `gm_offline_privacy_create_privacy_profile` | unit_tested |
-| `cli:trust privacy scan` | implemented | `gm_offline_privacy_scan_metadata_fingerprints` | not_exercised |
+| `cli:trust privacy scan` | implemented | `gm_offline_privacy_scan_metadata_fingerprints` | unit_tested |
 | `cli:trust purge prove` | implemented | `gm_offline_purge_prove_nullification_inclusion` | unit_tested |
 | `cli:trust purge receipt` | implemented | `gm_offline_purge_create_nullification_receipt` | unit_tested |
 | `cli:trust purge register` | implemented | `gm_offline_purge_build_nullification_registry` | unit_tested |
 | `cli:trust purge verify` | implemented | `gm_offline_purge_verify_nullification_inclusion` | unit_tested |
-| `cli:trust risk assess-seed` | implemented | `gm_offline_risk_signal_assess_seed_isolation` | not_exercised |
+| `cli:trust risk assess-seed` | implemented | `gm_offline_risk_signal_assess_seed_isolation` | unit_tested |
 | `cli:trust risk create` | implemented | `gm_offline_risk_signal_create_risk_signal` | unit_tested |
 | `cli:trust risk decay` | implemented | `gm_offline_risk_signal_decay_risk_signal` | unit_tested |
-| `cli:trust risk show` | implemented | `gm_offline_risk_signal_inspect_risk` | not_exercised |
-| `cli:trust risk update` | implemented | `gm_offline_risk_signal_update_risk_signal` | not_exercised |
+| `cli:trust risk show` | implemented | `gm_offline_risk_signal_inspect_risk` | unit_tested |
+| `cli:trust risk update` | implemented | `gm_offline_risk_signal_update_risk_signal` | unit_tested |
 | `cli:trust token issue` | implemented | `gm_offline_invocation_token_issue_invocation_token` | unit_tested |
 | `cli:trust token record-use` | implemented | `gm_offline_invocation_token_record_invocation_use` | unit_tested |
 | `cli:trust token verify` | implemented | `gm_offline_invocation_token_verify_invocation_token` | unit_tested |
-| `cli:trust verify-evidence` | implemented | `gm_offline_evidence_verify_trust_evidence` | not_exercised |
+| `cli:trust verify-evidence` | implemented | `gm_offline_evidence_verify_trust_evidence` | unit_tested |
 | `cli:trust-bundle export` | implemented | `gm_workflow_trust_bundle_export` | integration_tested |
 | `cli:trust-bundle import` | implemented | `gm_workflow_trust_bundle_review` | integration_tested |
-| `cli:trust-bundle inspect` | implemented | `gm_local_trust_bundle_inspect`, `gm_offline_trust_bundle_bundle_summary` | not_exercised |
-| `cli:trust-bundle validate` | implemented | `gm_local_trust_bundle_inspect`, `gm_offline_trust_bundle_validate_trust_bundle` | unit_tested |
+| `cli:trust-bundle inspect` | implemented | `gm_local_trust_bundle_inspect`, `gm_offline_trust_bundle_bundle_summary` | integration_tested |
+| `cli:trust-bundle validate` | implemented | `gm_local_trust_bundle_inspect`, `gm_offline_trust_bundle_validate_trust_bundle` | integration_tested |
 
 ## python
 
@@ -322,8 +322,8 @@ No unresolved executable gaps or component-only workflows in the pinned contract
 | `python:genesis_mesh.models:SovereignRevocationFeed` | schema | `genesis-mesh://schema/genesis_mesh.models:SovereignRevocationFeed` | not_exercised |
 | `python:genesis_mesh.models:GenesisBlock` | implemented | `gm_offline_genesis_inspect_genesis`, `gm_offline_genesis_verify_genesis` | unit_tested |
 | `python:genesis_mesh.models:Signature` | schema | `genesis-mesh://schema/genesis_mesh.models:Signature` | not_exercised |
-| `python:genesis_mesh.models:ContextRecord` | implemented | `gm_offline_context_create_context` | not_exercised |
-| `python:genesis_mesh.models:BoundaryPolicy` | implemented | `gm_offline_context_explain_policy` | not_exercised |
+| `python:genesis_mesh.models:ContextRecord` | implemented | `gm_offline_context_create_context` | unit_tested |
+| `python:genesis_mesh.models:BoundaryPolicy` | implemented | `gm_offline_context_explain_policy` | unit_tested |
 | `python:genesis_mesh.models:PolicySelector` | schema | `genesis-mesh://schema/genesis_mesh.models:PolicySelector` | not_exercised |
 | `python:genesis_mesh.models:GateSpec` | schema | `genesis-mesh://schema/genesis_mesh.models:GateSpec` | not_exercised |
 | `python:genesis_mesh.models:PolicyBinding` | schema | `genesis-mesh://schema/genesis_mesh.models:PolicyBinding` | not_exercised |
@@ -339,24 +339,24 @@ No unresolved executable gaps or component-only workflows in the pinned contract
 | `python:genesis_mesh.models.execution:ExecutionEvidence` | schema | `genesis-mesh://schema/genesis_mesh.models.execution:ExecutionEvidence` | not_exercised |
 | `python:genesis_mesh.models.context:BoundaryDecision` | schema | `genesis-mesh://schema/genesis_mesh.models.context:BoundaryDecision` | not_exercised |
 | `python:genesis_mesh.models.justification:JustificationProof` | schema | `genesis-mesh://schema/genesis_mesh.models.justification:JustificationProof` | not_exercised |
-| `python:genesis_mesh.trust.treaty:verify_recognition_treaty` | implemented | `gm_offline_treaty_verify_recognition_treaty` | not_exercised |
-| `python:genesis_mesh.trust.treaty:verify_attestation_with_treaty` | implemented | `gm_offline_treaty_verify_attestation_with_treaty` | not_exercised |
-| `python:genesis_mesh.trust.treaty:verify_sovereign_revocation_feed` | implemented | `gm_offline_treaty_verify_sovereign_revocation_feed` | not_exercised |
-| `python:genesis_mesh.trust.attestation:verify_membership_attestation` | implemented | `gm_offline_attestation_verify_membership_attestation` | not_exercised |
-| `python:genesis_mesh.trust.decision:evaluate_trust_decision` | implemented | `gm_offline_decision_evaluate_trust_decision` | not_exercised |
+| `python:genesis_mesh.trust.treaty:verify_recognition_treaty` | implemented | `gm_offline_treaty_verify_recognition_treaty` | unit_tested |
+| `python:genesis_mesh.trust.treaty:verify_attestation_with_treaty` | implemented | `gm_offline_treaty_verify_attestation_with_treaty` | unit_tested |
+| `python:genesis_mesh.trust.treaty:verify_sovereign_revocation_feed` | implemented | `gm_offline_treaty_verify_sovereign_revocation_feed` | unit_tested |
+| `python:genesis_mesh.trust.attestation:verify_membership_attestation` | implemented | `gm_offline_attestation_verify_membership_attestation` | unit_tested |
+| `python:genesis_mesh.trust.decision:evaluate_trust_decision` | implemented | `gm_offline_decision_evaluate_trust_decision` | unit_tested |
 | `python:genesis_mesh.trust.agreement:AgreementTerms` | schema | `genesis-mesh://schema/genesis_mesh.trust.agreement:AgreementTerms` | not_exercised |
 | `python:genesis_mesh.trust.agreement:build_offer` | implemented | `gm_offline_agreement_build_offer` | unit_tested |
-| `python:genesis_mesh.trust.agreement:build_counter` | implemented | `gm_offline_agreement_build_counter` | not_exercised |
+| `python:genesis_mesh.trust.agreement:build_counter` | implemented | `gm_offline_agreement_build_counter` | unit_tested |
 | `python:genesis_mesh.trust.agreement:accept_offer` | implemented | `gm_offline_agreement_accept_offer` | unit_tested |
-| `python:genesis_mesh.trust.agreement:accept_counter` | implemented | `gm_offline_agreement_accept_counter` | not_exercised |
+| `python:genesis_mesh.trust.agreement:accept_counter` | implemented | `gm_offline_agreement_accept_counter` | unit_tested |
 | `python:genesis_mesh.trust.agreement:cosign_agreement` | implemented | `gm_offline_agreement_cosign_agreement` | unit_tested |
 | `python:genesis_mesh.trust.agreement:verify_agreement` | implemented | `gm_offline_agreement_verify_agreement` | unit_tested |
 | `python:genesis_mesh.trust.context:verify_boundary_decision` | implemented | `gm_offline_context_verify_boundary_decision` | unit_tested |
-| `python:genesis_mesh.trust.context:sign_boundary_policy` | implemented | `gm_offline_context_sign_boundary_policy` | not_exercised |
-| `python:genesis_mesh.trust.context:verify_boundary_policy` | implemented | `gm_offline_context_verify_boundary_policy` | not_exercised |
-| `python:genesis_mesh.trust.context:validate_boundary_policy` | implemented | `gm_offline_context_validate_boundary_policy` | not_exercised |
+| `python:genesis_mesh.trust.context:sign_boundary_policy` | implemented | `gm_offline_context_sign_boundary_policy` | unit_tested |
+| `python:genesis_mesh.trust.context:verify_boundary_policy` | implemented | `gm_offline_context_verify_boundary_policy` | unit_tested |
+| `python:genesis_mesh.trust.context:validate_boundary_policy` | implemented | `gm_offline_context_validate_boundary_policy` | unit_tested |
 | `python:genesis_mesh.trust.evidence_store:verify_evidence_events` | implemented | `gm_offline_evidence_store_verify_evidence_events` | unit_tested |
-| `python:genesis_mesh.trust.evidence_store:check_metadata_only` | implemented | `gm_offline_evidence_store_check_metadata_only` | not_exercised |
+| `python:genesis_mesh.trust.evidence_store:check_metadata_only` | implemented | `gm_offline_evidence_store_check_metadata_only` | unit_tested |
 | `python:genesis_mesh.trust.data_usage:DataLicensePolicy` | schema | `genesis-mesh://schema/genesis_mesh.trust.data_usage:DataLicensePolicy` | not_exercised |
 | `python:genesis_mesh.trust.data_usage:DataSourceDescriptor` | schema | `genesis-mesh://schema/genesis_mesh.trust.data_usage:DataSourceDescriptor` | not_exercised |
 | `python:genesis_mesh.trust.data_usage:DataAccessIntent` | schema | `genesis-mesh://schema/genesis_mesh.trust.data_usage:DataAccessIntent` | not_exercised |
@@ -364,24 +364,24 @@ No unresolved executable gaps or component-only workflows in the pinned contract
 | `python:genesis_mesh.trust.data_usage:verify_data_access_intent` | implemented | `gm_offline_data_usage_verify_data_access_intent` | unit_tested |
 | `python:genesis_mesh.trust.context:BoundaryEngine` | support | `gm_offline_context_evaluate_context` | unit_tested |
 | `python:genesis_mesh.trust.context:GateRegistry` | support | `gm_offline_context_gate_types` | not_exercised |
-| `python:genesis_mesh.trust.context:resolve_policies` | implemented | `gm_offline_context_resolve_policies` | not_exercised |
-| `python:genesis_mesh.trust.context:assess_attestation_basis` | implemented | `gm_offline_context_assess_attestation_basis` | not_exercised |
+| `python:genesis_mesh.trust.context:resolve_policies` | implemented | `gm_offline_context_resolve_policies` | unit_tested |
+| `python:genesis_mesh.trust.context:assess_attestation_basis` | implemented | `gm_offline_context_assess_attestation_basis` | unit_tested |
 | `python:genesis_mesh.trust.invocation_token:issue_invocation_token` | implemented | `gm_offline_invocation_token_issue_invocation_token` | unit_tested |
 | `python:genesis_mesh.trust.invocation_token:verify_invocation_token` | implemented | `gm_offline_invocation_token_verify_invocation_token` | unit_tested |
-| `python:genesis_mesh.trust.logic_attestation:create_model_attestation` | implemented | `gm_offline_logic_attestation_create_model_attestation` | not_exercised |
-| `python:genesis_mesh.trust.logic_attestation:verify_model_attestation` | implemented | `gm_offline_logic_attestation_verify_model_attestation` | not_exercised |
-| `python:genesis_mesh.trust.evidence:build_trust_evidence` | implemented | `gm_offline_evidence_build_trust_evidence` | not_exercised |
-| `python:genesis_mesh.trust.evidence:verify_trust_evidence` | implemented | `gm_offline_evidence_verify_trust_evidence` | not_exercised |
+| `python:genesis_mesh.trust.logic_attestation:create_model_attestation` | implemented | `gm_offline_logic_attestation_create_model_attestation` | unit_tested |
+| `python:genesis_mesh.trust.logic_attestation:verify_model_attestation` | implemented | `gm_offline_logic_attestation_verify_model_attestation` | unit_tested |
+| `python:genesis_mesh.trust.evidence:build_trust_evidence` | implemented | `gm_offline_evidence_build_trust_evidence` | unit_tested |
+| `python:genesis_mesh.trust.evidence:verify_trust_evidence` | implemented | `gm_offline_evidence_verify_trust_evidence` | unit_tested |
 | `python:genesis_mesh.trust.selective_disclosure:commit_capabilities` | implemented | `gm_offline_selective_disclosure_commit_capabilities` | unit_tested |
 | `python:genesis_mesh.trust.selective_disclosure:prove_capability_membership` | implemented | `gm_offline_selective_disclosure_prove_capability_membership` | unit_tested |
 | `python:genesis_mesh.trust.selective_disclosure:verify_capability_proof` | implemented | `gm_offline_selective_disclosure_verify_capability_proof` | unit_tested |
-| `python:genesis_mesh.trust.selective_disclosure:issue_nullifier` | implemented | `gm_offline_selective_disclosure_issue_nullifier` | not_exercised |
+| `python:genesis_mesh.trust.selective_disclosure:issue_nullifier` | implemented | `gm_offline_selective_disclosure_issue_nullifier` | unit_tested |
 | `python:genesis_mesh.trust.consensus:cast_validator_vote` | implemented | `gm_offline_consensus_cast_validator_vote` | unit_tested |
 | `python:genesis_mesh.trust.consensus:assemble_consensus_proof` | implemented | `gm_offline_consensus_assemble_consensus_proof` | unit_tested |
 | `python:genesis_mesh.trust.consensus:verify_consensus_proof` | implemented | `gm_offline_consensus_verify_consensus_proof` | unit_tested |
-| `python:genesis_mesh.trust.connectome:build_connectome_view` | implemented | `gm_offline_connectome_build_connectome_view` | not_exercised |
+| `python:genesis_mesh.trust.connectome:build_connectome_view` | implemented | `gm_offline_connectome_build_connectome_view` | unit_tested |
 | `python:genesis_mesh.trust.risk_signal:create_risk_signal` | implemented | `gm_offline_risk_signal_create_risk_signal` | unit_tested |
-| `python:genesis_mesh.trust.risk_signal:update_risk_signal` | implemented | `gm_offline_risk_signal_update_risk_signal` | not_exercised |
+| `python:genesis_mesh.trust.risk_signal:update_risk_signal` | implemented | `gm_offline_risk_signal_update_risk_signal` | unit_tested |
 | `python:genesis_mesh.trust.risk_signal:decay_risk_signal` | implemented | `gm_offline_risk_signal_decay_risk_signal` | unit_tested |
 | `python:genesis_mesh.na_service.key_provider:Signer` | reference | `genesis-mesh://configuration` | not_exercised |
 | `python:genesis_mesh.na_service.key_provider:load_signer` | operational_boundary | See boundary/reason in catalog | not_exercised |
@@ -389,18 +389,18 @@ No unresolved executable gaps or component-only workflows in the pinned contract
 | `python:genesis_mesh.workflows.db_migration:verify_database` | operational_boundary | See boundary/reason in catalog | not_exercised |
 | `python:genesis_mesh.workflows.db_migration:migrate_sqlite_to_postgres` | operational_boundary | See boundary/reason in catalog | not_exercised |
 | `python:genesis_mesh.trust.remediation:next_state` | implemented | `gm_offline_remediation_next_state` | unit_tested |
-| `python:genesis_mesh.trust.remediation:remediation_plan` | implemented | `gm_offline_remediation_remediation_plan` | not_exercised |
-| `python:genesis_mesh.trust.remediation:check_remediation` | implemented | `gm_offline_remediation_check_remediation` | not_exercised |
+| `python:genesis_mesh.trust.remediation:remediation_plan` | implemented | `gm_offline_remediation_remediation_plan` | unit_tested |
+| `python:genesis_mesh.trust.remediation:check_remediation` | implemented | `gm_offline_remediation_check_remediation` | unit_tested |
 | `python:genesis_mesh.trust.remediation:review_holder_problem` | implemented | `gm_offline_remediation_review_holder_problem` | unit_tested |
-| `python:genesis_mesh.trust.remediation:review_approval_problem` | implemented | `gm_offline_remediation_review_approval_problem` | integration_tested |
-| `python:genesis_mesh.trust.remediation:admin_approval_valid` | implemented | `gm_offline_remediation_admin_approval_valid` | not_exercised |
-| `python:genesis_mesh.trust.remediation:remediation_record_problem` | implemented | `gm_offline_remediation_remediation_record_problem` | not_exercised |
-| `python:genesis_mesh.trust.remediation:review_request_problem` | implemented | `gm_offline_remediation_review_request_problem` | not_exercised |
-| `python:genesis_mesh.trust.remediation:request_approval_problem` | implemented | `gm_offline_remediation_request_approval_problem` | not_exercised |
-| `python:genesis_mesh.trust.remediation:rfc3339` | implemented | `gm_offline_remediation_rfc3339` | not_exercised |
-| `python:genesis_mesh.trust.remediation:decision_plan` | implemented | `gm_offline_remediation_decision_plan` | not_exercised |
-| `python:genesis_mesh.trust.remediation:emergency_map` | implemented | `gm_offline_remediation_emergency_map` | not_exercised |
-| `python:genesis_mesh.trust.remediation:rotation_problem` | implemented | `gm_offline_remediation_rotation_problem` | not_exercised |
+| `python:genesis_mesh.trust.remediation:review_approval_problem` | implemented | `gm_offline_remediation_review_approval_problem` | unit_tested |
+| `python:genesis_mesh.trust.remediation:admin_approval_valid` | implemented | `gm_offline_remediation_admin_approval_valid` | unit_tested |
+| `python:genesis_mesh.trust.remediation:remediation_record_problem` | implemented | `gm_offline_remediation_remediation_record_problem` | unit_tested |
+| `python:genesis_mesh.trust.remediation:review_request_problem` | implemented | `gm_offline_remediation_review_request_problem` | unit_tested |
+| `python:genesis_mesh.trust.remediation:request_approval_problem` | implemented | `gm_offline_remediation_request_approval_problem` | unit_tested |
+| `python:genesis_mesh.trust.remediation:rfc3339` | implemented | `gm_offline_remediation_rfc3339` | unit_tested |
+| `python:genesis_mesh.trust.remediation:decision_plan` | implemented | `gm_offline_remediation_decision_plan` | unit_tested |
+| `python:genesis_mesh.trust.remediation:emergency_map` | implemented | `gm_offline_remediation_emergency_map` | unit_tested |
+| `python:genesis_mesh.trust.remediation:rotation_problem` | implemented | `gm_offline_remediation_rotation_problem` | unit_tested |
 
 ## signed_artifacts
 
@@ -413,7 +413,7 @@ No unresolved executable gaps or component-only workflows in the pinned contract
 | `artifact:genesis_mesh.models.atlas:PrunedAtlasExport` | schema | `genesis-mesh://schema/genesis_mesh.models.atlas:PrunedAtlasExport` | not_exercised |
 | `artifact:genesis_mesh.models.atlas:TrustPathCache` | schema | `genesis-mesh://schema/genesis_mesh.models.atlas:TrustPathCache` | not_exercised |
 | `artifact:genesis_mesh.models.atlas:TrustPathEntry` | schema | `genesis-mesh://schema/genesis_mesh.models.atlas:TrustPathEntry` | not_exercised |
-| `artifact:genesis_mesh.models.attestation:AttestationPolicy` | implemented | `gm_offline_attestation_create_attestation_policy` | not_exercised |
+| `artifact:genesis_mesh.models.attestation:AttestationPolicy` | implemented | `gm_offline_attestation_create_attestation_policy` | unit_tested |
 | `artifact:genesis_mesh.models.attestation:ModelAttestation` | schema | `genesis-mesh://schema/genesis_mesh.models.attestation:ModelAttestation` | not_exercised |
 | `artifact:genesis_mesh.models.audit_pack:ArchiveRecord` | schema | `genesis-mesh://schema/genesis_mesh.models.audit_pack:ArchiveRecord` | not_exercised |
 | `artifact:genesis_mesh.models.audit_pack:AuditPackManifest` | schema | `genesis-mesh://schema/genesis_mesh.models.audit_pack:AuditPackManifest` | not_exercised |
@@ -466,7 +466,7 @@ No unresolved executable gaps or component-only workflows in the pinned contract
 | `artifact:genesis_mesh.models.remediation:RemediationRecord` | schema | `genesis-mesh://schema/genesis_mesh.models.remediation:RemediationRecord` | not_exercised |
 | `artifact:genesis_mesh.models.remediation:ReviewRecord` | schema | `genesis-mesh://schema/genesis_mesh.models.remediation:ReviewRecord` | not_exercised |
 | `artifact:genesis_mesh.models.revocation:CertificateRevocationList` | schema | `genesis-mesh://schema/genesis_mesh.models.revocation:CertificateRevocationList` | not_exercised |
-| `artifact:genesis_mesh.models.risk_signal:PeerRiskSignal` | implemented | `gm_offline_risk_signal_inspect_risk` | not_exercised |
+| `artifact:genesis_mesh.models.risk_signal:PeerRiskSignal` | implemented | `gm_offline_risk_signal_inspect_risk` | unit_tested |
 | `artifact:genesis_mesh.models.risk_signal:RiskSignalUpdate` | schema | `genesis-mesh://schema/genesis_mesh.models.risk_signal:RiskSignalUpdate` | not_exercised |
 | `artifact:genesis_mesh.models.selective_disclosure:CapabilityCommitment` | schema | `genesis-mesh://schema/genesis_mesh.models.selective_disclosure:CapabilityCommitment` | not_exercised |
 | `artifact:genesis_mesh.models.selective_disclosure:CapabilityNullifier` | schema | `genesis-mesh://schema/genesis_mesh.models.selective_disclosure:CapabilityNullifier` | not_exercised |

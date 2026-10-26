@@ -23,6 +23,9 @@ async def main():
             assert report["summary"]["sections"]["http_routes"]["implemented"] == 116
             result = await client.call_tool("gm_offline_trust_bundle_validate_trust_bundle", {"bundle": {}})
             assert not result.is_error and result.structured_content["errors"]
+            parsed = await client.call_tool("gm_offline_evidence_store_parse_export_lines", {"lines": []})
+            assert not parsed.is_error and parsed.structured_content == {"result": []}
+            assert json.loads(parsed.content[0].text) == []
             print(json.dumps({"wheel_stdio_smoke": "passed", "tools": report["summary"]["registered_tools"],
                               "visible_tools": len(tools.tools), "core": "1.8.1"}))
 

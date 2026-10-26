@@ -77,18 +77,37 @@ def resource_lock(settings: Settings, kind: str, name: str):
 
 def private_directory(path: Path) -> None:
     """Create a new private directory before any keys or sensitive state exist."""
-    path.mkdir(mode=0o700, parents=True, exist_ok=False)
-    if os.name == "nt":
+    if os.name != "nt":
+        path.mkdir(mode=0o700, parents=True, exist_ok=False)
+        return
+    if path.exists() or path.is_symlink():
+        raise FileExistsError(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    # Windows mkdir does not establish the required ACL on all supported
+    # Python versions. Publish the configured path only after a fresh sibling
+    # is secured. Windows rename refuses an existing destination, including a
+    # directory created by another initializer while ACL setup was running.
+    stage = Path(tempfile.mkdtemp(prefix=".private-init-", dir=path.parent))
+    try:
         try:
             result = subprocess.run(["whoami", "/user", "/fo", "csv", "/nh"], check=True,
                                     capture_output=True, text=True, timeout=10)
             sid = next(csv.reader(io.StringIO(result.stdout.strip())))[1]
             if not sid.startswith("S-1-"):
                 raise ValueError("Invalid current-user SID")
-            subprocess.run(["icacls", str(path), "/inheritance:r", "/grant:r", f"*{sid}:(OI)(CI)F",
+            subprocess.run(["icacls", str(stage), "/inheritance:r", "/grant:r", f"*{sid}:(OI)(CI)F",
                             "/grant:r", "*S-1-5-18:(OI)(CI)F"], check=True, capture_output=True, timeout=10)
-        except (OSError, ValueError, subprocess.SubprocessError):
+        except (OSError, ValueError, IndexError, StopIteration, subprocess.SubprocessError):
             raise ToolError("private_storage_unavailable", "Could not secure the new private directory.") from None
+        os.rename(stage, path)
+    finally:
+        if stage.exists():
+            try:
+                stage.rmdir()
+            except OSError:
+                # A failed cleanup or a concurrent file must never cause
+                # recursive deletion. This unpublished directory is not reused.
+                pass
 
 
 def atomic_json(path: Path, value: Any, *, max_bytes: int = 16_777_216, overwrite: bool = True) -> None:

@@ -2,6 +2,8 @@
 
 The separate repository follows the core's protocol-first boundary. MCP is an application adapter, while Genesis Mesh remains usable without a model provider, agent framework or MCP host.
 
+Tool text content contains the original JSON result. Dictionary results also appear directly in MCP `structuredContent`; lists, scalars and null use `{"result": original_value}` there because MCP requires an object. The contained wire records are preserved unchanged. Clients should unwrap only this documented non-object envelope, not arbitrary dictionaries with a domain field named `result`.
+
 ```mermaid
 flowchart LR
   H[MCP host] --> S[Stdio server and permission checks]
@@ -34,6 +36,7 @@ flowchart LR
 | `provision_workflows.py`, `proof_workflows.py` | Private fleet scaffolding, canary receipt/audit persistence and disposable proof-store maintenance |
 | `catalog.py`, `data/` | Pinned public contract, immutable source provenance, coverage classifications and test evidence |
 | `test_evidence.py`, root `conftest.py` | Optional checkout evidence gate and pytest execution receipt; runtime discovery does not require test sources |
+| `tool_evidence.py`, `coverage_union.py` | Reviewed per-tool scenario checks and complete supported-platform statement/branch accounting |
 
 ## What full reflection means
 
@@ -51,7 +54,7 @@ The coverage report deliberately distinguishes:
 
 Tests do not automatically turn registration counts into behavioral proof. Each recorded test claim names its evidence and scope. The core's classified public contract is the denominator; extra internal helper imports needed for CLI-equivalent adapters remain pinned implementation dependencies rather than new stable API promises.
 
-CI verifies those citations against a source-bound pytest execution receipt and preserves contextual branch measurements. A passing cited test establishes execution; reviewers still assess whether its assertions support the claimed behavior. Unexercised classifications remain explicit. See [verification evidence](verification.md).
+CI verifies those citations against source-bound pytest receipts and actual registered-handler observations, and requires complete statement/branch coverage across the four supported OS/interpreter combinations. A passing cited test establishes execution; reviewers still assess whether its assertions support the claimed behavior. Schema/reference/custody classifications remain distinct. See [verification evidence](verification.md).
 
 ## Authentication and trust outcomes
 

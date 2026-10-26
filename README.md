@@ -9,7 +9,7 @@ A standalone [Model Context Protocol](https://modelcontextprotocol.io/) server f
 - Named adapters cover **all 116 public HTTP method/path operations**, plus separate signed node and attestation rosters.
 - Offline tools cover agreements, delegation, recognition, tokens, freshness, policy decisions, execution evidence, audit verification, disclosure, consensus, data governance, oversight, risk, privacy, purge, discovery, interoperability, grants and key history.
 - The catalog accounts for **782 contract entries**, including every CLI command, public Python symbol, signed artifact, error code, package and behavioral rule. These are overlapping surfaces, not 782 independent features.
-- Resources include model schemas, all **137 CLI command references**, compatibility details, configuration capabilities and the current coverage report.
+- Resources include model schemas, all **137 CLI command references**, compatibility details, configuration capabilities, the coverage report and reviewed per-tool test citations.
 - **284 tools** include configured workflows for federation, fleet generation/mesh/status/verification, remote proofs/canaries/cleanup, audit packs/archives, held anchors, treaty lifecycle, node enrollment/status, peer sends and guard requests.
 
 Coverage accounting, executable adapters and tested behavior are reported separately. The executable-workflow gap count is **zero** against the pinned contract: 119 CLI commands have adapters and 18 describe host/custody operations. Host daemons, general database migration/restore and production root-key custody remain documented boundaries. This is not identical CLI flag/process behavior or proof of production deployment. See [measured coverage](docs/coverage.md), [workflow scope](docs/operational-gaps.md), and [configuration examples](docs/workflows.md).
@@ -123,14 +123,14 @@ Typed tools expose argument schemas through MCP. Binary arguments/results use st
 .\.venv\Scripts\python.exe -m coverage json
 .\.venv\Scripts\python.exe -m coverage report
 .\.venv\Scripts\python.exe scripts/snapshot_cli.py --check
-.\.venv\Scripts\python.exe scripts/check_coverage.py --core ../genesismesh --require-http --require-no-gaps --test-evidence temp/coverage/tests.json --branch-coverage temp/coverage/branches.json
+.\.venv\Scripts\python.exe scripts/check_coverage.py --core ../genesismesh --require-http --require-no-gaps --test-evidence temp/coverage/tests.json --branch-coverage temp/coverage/branches.json --require-full-behavior
 .\.venv\Scripts\python.exe scripts/render_coverage.py --check
 .\.venv\Scripts\python.exe -m build
 ```
 
 The source check requires the exact revision in `data/compatibility.json`. New core surfaces, changed signatures, invalid aliases, snapshot drift and missing workflow adapters fail CI. `--require-no-gaps` includes incomplete compositions; schemas, references and documented host boundaries remain separate classifications.
 
-CI also requires `--require-clean-evidence`. Every exercised catalog claim must cite tests that were collected and passed, including all matching parameterized cases. Missing, skipped, expected-failure, deselected and stale evidence fails this gate. Branch measurements carry the same source digest. Each Windows/Linux and Python job retains its receipt, branch report, JUnit results and resolved verification report for 14 days. See [verification evidence](docs/verification.md) for scope and interpretation.
+CI also requires `--require-clean-evidence`. Every exercised catalog claim must cite tests that were collected and passed, including all matching parameterized cases. The per-tool ledger requires actual registered-handler success and refusal observations. Missing, skipped, expected-failure, deselected and stale evidence fails this gate. Branch measurements carry the same source digest. Each Windows/Linux and Python job retains its receipt, branch report, JUnit results and resolved verification report for 14 days; a final job requires zero missing adapter statements and branch arcs across all four reports. See [verification evidence](docs/verification.md) for scope and interpretation.
 
 Tests include disposable real HTTP authorities, Noise peers, guard subprocesses, SQLite stores, domain success/denial paths, official MCP clients, real stdio processes, signing isolation and filesystem limits. Recovery tests exercise missing mutation replies, revoked certificates, changed anchors, corrupt readback and key-history rollback. `scripts/smoke_installed.py` must additionally run with a fresh wheel-only virtual environment; an editable-environment stdio test is not clean-wheel evidence. CI runs Windows/Linux and Python 3.12/3.14.
 

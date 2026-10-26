@@ -1,0 +1,3048 @@
+{
+  "format_version": 1,
+  "meaning": "Reviewed successful and negative-domain scenarios linked to actual registered-handler observations. Negative-domain outcomes include refusal, absent/unusable results, validation findings and restricted plans; they do not necessarily mean an MCP error or enforced action. Constructors may successfully produce a signed rejection artifact. Assertion relevance remains independently reviewed.",
+  "tools": {
+    "gm_local_audit_verify": {
+      "kind": "workspace",
+      "scope": "Bounded workspace artifacts verified against independently held pins and relevant tamper/failure cases.",
+      "positive": [
+        "tests/test_local_full.py::test_nonempty_audit_pack_root_pin_anchors_and_tampering"
+      ],
+      "negative": [
+        "tests/test_local.py::test_empty_audit_pack_does_not_verify",
+        "tests/test_local_full.py::test_nonempty_audit_pack_root_pin_anchors_and_tampering",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_local_audit_verify]"
+      ]
+    },
+    "gm_local_evidence_verify_export": {
+      "kind": "workspace",
+      "scope": "Bounded workspace artifacts verified against independently held pins and relevant tamper/failure cases.",
+      "positive": [
+        "tests/test_local_full.py::test_nonempty_evidence_independent_keys_history_anchors_and_tamper"
+      ],
+      "negative": [
+        "tests/test_local.py::test_evidence_requires_independent_key_material_and_valid_jsonl",
+        "tests/test_local_full.py::test_evidence_history_and_anchor_preconditions",
+        "tests/test_local_full.py::test_nonempty_evidence_independent_keys_history_anchors_and_tamper",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_local_evidence_verify_export]"
+      ]
+    },
+    "gm_local_trust_bundle_inspect": {
+      "kind": "workspace",
+      "scope": "Bounded workspace artifacts verified against independently held pins and relevant tamper/failure cases.",
+      "positive": [
+        "tests/test_local_full.py::test_real_bundle_inspection_keeps_structural_and_signature_claims_separate"
+      ],
+      "negative": [
+        "tests/test_local.py::test_invalid_bundle_and_oversize_file_are_rejected",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_local_trust_bundle_inspect]"
+      ]
+    },
+    "gm_offline_agreement_accept_counter": {
+      "kind": "real_core",
+      "scope": "Offerer accepts the CapabilityCounter (finalization step). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_counter_negotiation_narrows_scope_and_preserves_signatures"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_agreement_accept_counter]"
+      ]
+    },
+    "gm_offline_agreement_accept_offer": {
+      "kind": "real_core",
+      "scope": "Responder accepts the CapabilityOffer directly (no counter-offer). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_policy_context_resolution_and_bound_evaluation"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_agreement_accept_offer]"
+      ]
+    },
+    "gm_offline_agreement_build_counter": {
+      "kind": "real_core",
+      "scope": "Build and sign a CapabilityCounter (Step 2, optional). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_counter_negotiation_narrows_scope_and_preserves_signatures"
+      ],
+      "negative": [
+        "tests/test_offline_full.py::test_counter_negotiation_narrows_scope_and_preserves_signatures",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_agreement_build_counter]"
+      ]
+    },
+    "gm_offline_agreement_build_offer": {
+      "kind": "real_core",
+      "scope": "Build and sign a CapabilityOffer (Step 1 of the Agreement protocol). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_policy_context_resolution_and_bound_evaluation"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_agreement_build_offer]"
+      ]
+    },
+    "gm_offline_agreement_cosign_agreement": {
+      "kind": "real_core",
+      "scope": "Add a second party's signature to a half-signed AgreementRecord. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_policy_context_resolution_and_bound_evaluation"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_agreement_cosign_agreement]"
+      ]
+    },
+    "gm_offline_agreement_verify_agreement": {
+      "kind": "real_core",
+      "scope": "Verify an AgreementRecord's dual signatures and optional graph binding. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_counter_negotiation_narrows_scope_and_preserves_signatures"
+      ],
+      "negative": [
+        "tests/test_offline_verifier_refusals.py::test_agreement_verifier_rejects_wrong_party_pin_and_changed_terms",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_agreement_verify_agreement]"
+      ]
+    },
+    "gm_offline_atlas_build_trust_path_cache": {
+      "kind": "real_core",
+      "scope": "Pre-compute trust paths for multiple (source, target) pairs. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_atlas_cache_roundtrip_staleness_and_signed_pruning"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_audit_and_atlas_refuse_excessive_work_before_core_processing",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_atlas_build_trust_path_cache]"
+      ]
+    },
+    "gm_offline_atlas_cache_trust_path": {
+      "kind": "real_core",
+      "scope": "Compute trust path via BFS and return a signed, TTL-bound cache entry. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_atlas_cache_roundtrip_staleness_and_signed_pruning"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_atlas_cache_trust_path]"
+      ]
+    },
+    "gm_offline_atlas_lookup_trust_path": {
+      "kind": "real_core",
+      "scope": "Return cached entry if present, graph_digest matches, and entry is fresh. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_atlas_cache_roundtrip_staleness_and_signed_pruning"
+      ],
+      "negative": [
+        "tests/test_offline_full.py::test_atlas_cache_roundtrip_staleness_and_signed_pruning",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_atlas_lookup_trust_path]"
+      ]
+    },
+    "gm_offline_atlas_prune_graph": {
+      "kind": "real_core",
+      "scope": "Apply pruning policy to graph; return (pruned_graph, audit_export). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_atlas_cache_roundtrip_staleness_and_signed_pruning"
+      ],
+      "negative": [
+        "tests/test_offline_full.py::test_atlas_cache_roundtrip_staleness_and_signed_pruning",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_atlas_prune_graph]"
+      ]
+    },
+    "gm_offline_attestation_create_attestation_policy": {
+      "kind": "real_core",
+      "scope": "Sign a schema-validated model-attestation acceptance policy. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_logic_attestation_policy_binds_model_prompt_tools_and_token"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_attestation_create_attestation_policy]"
+      ]
+    },
+    "gm_offline_attestation_verify_membership_attestation": {
+      "kind": "real_core",
+      "scope": "Verify an attestation against local recognition policy. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_membership_treaty_and_feed_verify_independent_pins_and_revocation"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_membership_treaty_and_feed_verify_independent_pins_and_revocation",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_attestation_verify_membership_attestation]"
+      ]
+    },
+    "gm_offline_audit_pack_check_completeness": {
+      "kind": "real_core",
+      "scope": "Match changes from an outside log against the pack's records (v1.5.0 review fixes). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_audit_pack_verifies_real_records_and_rejects_changed_file"
+      ],
+      "negative": [
+        "tests/test_offline_branches.py::test_audit_comparison_budget_is_checked_before_matching",
+        "tests/test_offline_remaining.py::test_audit_pack_verifies_real_records_and_rejects_changed_file",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_audit_pack_check_completeness]"
+      ]
+    },
+    "gm_offline_audit_pack_parse_changes": {
+      "kind": "real_core",
+      "scope": "Changes from CSV (a header row naming ``CHANGE_COLUMNS``) or JSON (a list, or ``{\"changes\": [...]}``). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_audit_pack_verifies_real_records_and_rejects_changed_file"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_audit_pack_verifies_real_records_and_rejects_changed_file",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_audit_pack_parse_changes]"
+      ]
+    },
+    "gm_offline_audit_pack_verify_audit_pack": {
+      "kind": "real_core",
+      "scope": "Verify an audit pack offline (the module docstring lists the checks). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_audit_pack_verifies_real_records_and_rejects_changed_file"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_audit_and_atlas_refuse_excessive_work_before_core_processing",
+        "tests/test_offline.py::test_malformed_audit_pack_returns_negative_result",
+        "tests/test_offline_remaining.py::test_audit_pack_verifies_real_records_and_rejects_changed_file",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_audit_pack_verify_audit_pack]"
+      ]
+    },
+    "gm_offline_connectome_build_connectome_view": {
+      "kind": "real_core",
+      "scope": "Build an operator-facing Connectome view from raw recognition graph data. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_graph_decisions_and_portable_evidence_detect_wrong_graph_and_key"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_connectome_build_connectome_view]"
+      ]
+    },
+    "gm_offline_connectome_explain_trust_path": {
+      "kind": "real_core",
+      "scope": "Explain whether one sovereign currently recognizes another. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_graph_decisions_and_portable_evidence_detect_wrong_graph_and_key"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_connectome_explain_trust_path]"
+      ]
+    },
+    "gm_offline_consensus_assemble_consensus_proof": {
+      "kind": "real_core",
+      "scope": "Assemble a ConsensusProof once K approvals from the named set have arrived. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_consensus_vote_proof_identity_and_threshold"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_consensus_vote_proof_identity_and_threshold",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_consensus_assemble_consensus_proof]"
+      ]
+    },
+    "gm_offline_consensus_assess_cascade_risk": {
+      "kind": "real_core",
+      "scope": "Assess vote-independence risk using Context Divergence Score and Temporal Clustering Score. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_justification_cascade_and_metadata_scanners"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_justification_cascade_and_metadata_scanners",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_consensus_assess_cascade_risk]"
+      ]
+    },
+    "gm_offline_consensus_cast_validator_vote": {
+      "kind": "real_core",
+      "scope": "Produce a signed ValidatorVote for a JustificationProof. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_justification_cascade_and_metadata_scanners"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_consensus_cast_validator_vote]"
+      ]
+    },
+    "gm_offline_consensus_issue_ephemeral_identity": {
+      "kind": "real_core",
+      "scope": "Issue a short-lived EphemeralExecutionIdentity from a ConsensusProof. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_consensus_vote_proof_identity_and_threshold"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_consensus_issue_ephemeral_identity]"
+      ]
+    },
+    "gm_offline_consensus_verify_consensus_proof": {
+      "kind": "real_core",
+      "scope": "Verify a ConsensusProof. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_consensus_vote_proof_identity_and_threshold"
+      ],
+      "negative": [
+        "tests/test_offline_verifier_refusals.py::test_consensus_verifier_rejects_wrong_assembler_pin_and_changed_vote",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_consensus_verify_consensus_proof]"
+      ]
+    },
+    "gm_offline_consensus_verify_ephemeral_identity": {
+      "kind": "real_core",
+      "scope": "Verify an EphemeralExecutionIdentity. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_consensus_vote_proof_identity_and_threshold"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_consensus_vote_proof_identity_and_threshold",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_consensus_verify_ephemeral_identity]"
+      ]
+    },
+    "gm_offline_context_assess_attestation_basis": {
+      "kind": "real_core",
+      "scope": "Check existence, signature, revocation and subject of an attestation. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_attestation_basis_and_grant_envelopes_preserve_refusals"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_attestation_basis_and_grant_envelopes_preserve_refusals",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_context_assess_attestation_basis]"
+      ]
+    },
+    "gm_offline_context_create_context": {
+      "kind": "real_core",
+      "scope": "Construct and validate an offline context request without submitting or executing it. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_policy_context_resolution_and_bound_evaluation"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_context_create_context]"
+      ]
+    },
+    "gm_offline_context_evaluate_context": {
+      "kind": "real_core",
+      "scope": "Evaluate supplied context and agreement, returning signed decision and justification. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_policy_context_resolution_and_bound_evaluation"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_boundary_decision_denial_and_justification_are_preserved",
+        "tests/test_offline_remaining.py::test_policy_context_resolution_and_bound_evaluation",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_context_evaluate_context]"
+      ]
+    },
+    "gm_offline_context_explain_policy": {
+      "kind": "real_core",
+      "scope": "Show a boundary policy and its validation against the core gate registry. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_policy_context_resolution_and_bound_evaluation"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_context_explain_policy]"
+      ]
+    },
+    "gm_offline_context_gate_types": {
+      "kind": "real_core",
+      "scope": "Describe the pinned core's built-in gate types and their configuration. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_policy_context_resolution_and_bound_evaluation"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_context_gate_types]"
+      ]
+    },
+    "gm_offline_context_integrity_create_context_integrity_record": {
+      "kind": "real_core",
+      "scope": "Create and sign a ContextIntegrityRecord. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_context_integrity_detects_changed_system_prompt"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_context_integrity_create_context_integrity_record]"
+      ]
+    },
+    "gm_offline_context_integrity_scan_for_injection_markers": {
+      "kind": "real_core",
+      "scope": "Return list of matched injection-pattern strings found in content. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_justification_cascade_and_metadata_scanners"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_direct_adapter_enforces_input_and_output_limits",
+        "tests/test_offline_branches.py::test_adapter_refuses_nonfinite_input_before_dispatch",
+        "tests/test_offline_remaining.py::test_justification_cascade_and_metadata_scanners",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_context_integrity_scan_for_injection_markers]"
+      ]
+    },
+    "gm_offline_context_integrity_verify_context_integrity": {
+      "kind": "real_core",
+      "scope": "Verify that final context = committed base + declared append segments. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_context_integrity_detects_changed_system_prompt"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_context_integrity_detects_changed_system_prompt",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_context_integrity_verify_context_integrity]"
+      ]
+    },
+    "gm_offline_context_resolve_policies": {
+      "kind": "real_core",
+      "scope": "Deterministically select the applicable active policies (see module docstring). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_policy_context_resolution_and_bound_evaluation"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_policy_context_resolution_and_bound_evaluation",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_context_resolve_policies]"
+      ]
+    },
+    "gm_offline_context_sign_boundary_policy": {
+      "kind": "real_core",
+      "scope": "Return a copy of ``policy`` signed over its canonical body. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_policy_context_resolution_and_bound_evaluation"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_context_sign_boundary_policy]"
+      ]
+    },
+    "gm_offline_context_validate_boundary_policy": {
+      "kind": "real_core",
+      "scope": "Validate a policy's structure and gate configuration against a registry. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_policy_context_resolution_and_bound_evaluation"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_policy_context_resolution_and_bound_evaluation",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_context_validate_boundary_policy]"
+      ]
+    },
+    "gm_offline_context_verify_boundary_decision": {
+      "kind": "real_core",
+      "scope": "Verify a BoundaryDecision's signature and expiry. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_boundary_decision_denial_and_justification_are_preserved"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_boundary_decision_denial_and_justification_are_preserved",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_context_verify_boundary_decision]"
+      ]
+    },
+    "gm_offline_context_verify_boundary_policy": {
+      "kind": "real_core",
+      "scope": "Verify a policy signature against any of the supplied issuer keys. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_policy_context_resolution_and_bound_evaluation"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_policy_context_resolution_and_bound_evaluation",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_context_verify_boundary_policy]"
+      ]
+    },
+    "gm_offline_crypto_verify_artifact": {
+      "kind": "real_core",
+      "scope": "Verify cryptographic signature only using a pinned artifact model; this does not establish issuer trust or authorization. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_detached_and_typed_artifact_signature_verifiers"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_detached_and_typed_artifact_signature_verifiers",
+        "tests/test_offline_branches.py::test_registered_privacy_profile_and_artifact_schema_refusals",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_crypto_verify_artifact]"
+      ]
+    },
+    "gm_offline_crypto_verify_detached_signature": {
+      "kind": "real_core",
+      "scope": "Verify a detached Ed25519 signature over base64 bytes. This does not establish issuer trust or authorization. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_detached_and_typed_artifact_signature_verifiers"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_detached_and_typed_artifact_signature_verifiers",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_crypto_verify_detached_signature]"
+      ]
+    },
+    "gm_offline_data_usage_create_data_access_intent": {
+      "kind": "real_core",
+      "scope": "create data access intent Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_data_policy_intent_record_and_unauthorized_source"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_data_usage_create_data_access_intent]"
+      ]
+    },
+    "gm_offline_data_usage_create_data_policy": {
+      "kind": "real_core",
+      "scope": "Sign a supplied, schema-validated data license policy, as the core CLI does. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_data_policy_intent_record_and_unauthorized_source"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_data_usage_create_data_policy]"
+      ]
+    },
+    "gm_offline_data_usage_create_data_record": {
+      "kind": "real_core",
+      "scope": "Sign a declared completed data-access record; this does not perform or attest observation of access. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_data_policy_intent_record_and_unauthorized_source"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_data_usage_create_data_record]"
+      ]
+    },
+    "gm_offline_data_usage_verify_data_access_intent": {
+      "kind": "real_core",
+      "scope": "Pre-execution compliance check. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_data_policy_intent_record_and_unauthorized_source"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_data_policy_intent_record_and_unauthorized_source",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_data_usage_verify_data_access_intent]"
+      ]
+    },
+    "gm_offline_data_usage_verify_data_access_record": {
+      "kind": "real_core",
+      "scope": "Post-execution compliance check. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_data_policy_intent_record_and_unauthorized_source"
+      ],
+      "negative": [
+        "tests/test_offline_verifier_refusals.py::test_data_record_verifier_rejects_wrong_agent_pin_and_changed_volume",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_data_usage_verify_data_access_record]"
+      ]
+    },
+    "gm_offline_decision_evaluate_trust_decision": {
+      "kind": "real_core",
+      "scope": "Evaluate a trust decision from source toward target over a graph export. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_graph_decisions_and_portable_evidence_detect_wrong_graph_and_key"
+      ],
+      "negative": [
+        "tests/test_offline_full.py::test_graph_decisions_and_portable_evidence_detect_wrong_graph_and_key",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_decision_evaluate_trust_decision]"
+      ]
+    },
+    "gm_offline_delegation_build_delegation": {
+      "kind": "real_core",
+      "scope": "Build and sign a DelegatedAgreementRecord (delegator's step). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_agreement_and_delegation_roundtrip_and_widening_refused"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_agreement_and_delegation_roundtrip_and_widening_refused",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_delegation_build_delegation]"
+      ]
+    },
+    "gm_offline_delegation_cosign_delegation": {
+      "kind": "real_core",
+      "scope": "Add the delegate's signature and evidence to finalize a delegation. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_agreement_and_delegation_roundtrip_and_widening_refused"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_delegation_cosign_delegation]"
+      ]
+    },
+    "gm_offline_delegation_verify_delegation_chain": {
+      "kind": "real_core",
+      "scope": "Verify a delegation chain from root to terminal. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_agreement_and_delegation_roundtrip_and_widening_refused"
+      ],
+      "negative": [
+        "tests/test_offline_verifier_refusals.py::test_delegation_verifier_rejects_wrong_hop_pin_and_changed_terms",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_delegation_verify_delegation_chain]"
+      ]
+    },
+    "gm_offline_evidence_build_trust_evidence": {
+      "kind": "real_core",
+      "scope": "Build and sign a TrustEvidence record from a trust decision. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_graph_decisions_and_portable_evidence_detect_wrong_graph_and_key"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_evidence_build_trust_evidence]"
+      ]
+    },
+    "gm_offline_evidence_graph_digest_from_export": {
+      "kind": "real_core",
+      "scope": "Return the SHA-256 hex digest of the canonical graph export. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_graph_decisions_and_portable_evidence_detect_wrong_graph_and_key"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_evidence_graph_digest_from_export]"
+      ]
+    },
+    "gm_offline_evidence_store_check_metadata_only": {
+      "kind": "real_core",
+      "scope": "Return why the record carries secret material, or None. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_execution_metadata_validation_and_grant_secret_guard"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_execution_metadata_validation_and_grant_secret_guard",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_evidence_store_check_metadata_only]"
+      ]
+    },
+    "gm_offline_evidence_store_parse_export_lines": {
+      "kind": "real_core",
+      "scope": "Parse export lines with the core, preserving received envelopes and signed payloads unchanged. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_nonempty_evidence_export_and_anchor_integrity",
+        "tests/test_offline_remaining.py::test_received_evidence_envelope_is_never_normalized_before_verification"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_nonempty_evidence_export_and_anchor_integrity",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_evidence_store_parse_export_lines]"
+      ]
+    },
+    "gm_offline_evidence_store_validate_execution": {
+      "kind": "real_core",
+      "scope": "Validate a submitted execution record against the stored state. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_execution_metadata_validation_and_grant_secret_guard"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_execution_metadata_validation_and_grant_secret_guard",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_evidence_store_validate_execution]"
+      ]
+    },
+    "gm_offline_evidence_store_verify_evidence_events": {
+      "kind": "real_core",
+      "scope": "Verify stored entries: envelopes, store chain, signatures and chains. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_nonempty_evidence_export_and_anchor_integrity"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_nonempty_evidence_export_and_anchor_integrity",
+        "tests/test_offline_remaining.py::test_received_evidence_envelope_is_never_normalized_before_verification",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_evidence_store_verify_evidence_events]"
+      ]
+    },
+    "gm_offline_evidence_store_verify_retention_checkpoint": {
+      "kind": "real_core",
+      "scope": "True when the checkpoint carries a valid NA signature (v1.5.0: by the key valid at its ``created_at``). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_nonempty_evidence_export_and_anchor_integrity"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_nonempty_evidence_export_and_anchor_integrity",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_evidence_store_verify_retention_checkpoint]"
+      ]
+    },
+    "gm_offline_evidence_store_verify_store_anchors": {
+      "kind": "real_core",
+      "scope": "Verify a run of anchors: signatures, the anchor chain and monotonic heads. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_nonempty_evidence_export_and_anchor_integrity"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_nonempty_evidence_export_and_anchor_integrity",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_evidence_store_verify_store_anchors]"
+      ]
+    },
+    "gm_offline_evidence_verify_trust_evidence": {
+      "kind": "real_core",
+      "scope": "Verify a signed TrustEvidence record. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_graph_decisions_and_portable_evidence_detect_wrong_graph_and_key"
+      ],
+      "negative": [
+        "tests/test_offline_full.py::test_graph_decisions_and_portable_evidence_detect_wrong_graph_and_key",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_evidence_verify_trust_evidence]"
+      ]
+    },
+    "gm_offline_execution_record_execution": {
+      "kind": "real_core",
+      "scope": "Create and sign a new ExecutionEvidence record. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_execution_metadata_validation_and_grant_secret_guard"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_execution_record_execution]"
+      ]
+    },
+    "gm_offline_execution_verify_evidence_chain": {
+      "kind": "real_core",
+      "scope": "Verify an ExecutionEvidence hash chain. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_execution_evidence_chain_checks_tampering"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_execution_evidence_chain_checks_tampering",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_execution_verify_evidence_chain]"
+      ]
+    },
+    "gm_offline_freshness_issue_freshness_proof": {
+      "kind": "real_core",
+      "scope": "Create and sign a FreshnessProof. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_detached_and_typed_artifact_signature_verifiers"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_unknown_signer_and_unknown_input_rejected",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_freshness_issue_freshness_proof]"
+      ]
+    },
+    "gm_offline_freshness_verify_freshness_proof": {
+      "kind": "real_core",
+      "scope": "Verify a FreshnessProof. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_freshness_round_trip_stale_and_tampered"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_freshness_round_trip_stale_and_tampered",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_freshness_verify_freshness_proof]"
+      ]
+    },
+    "gm_offline_genesis_inspect_genesis": {
+      "kind": "real_core",
+      "scope": "Inspect genesis metadata; this does not verify signatures or grant trust. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_genesis_and_review_bundle_are_structural_not_trust"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_genesis_inspect_genesis]"
+      ]
+    },
+    "gm_offline_genesis_verify_genesis": {
+      "kind": "real_core",
+      "scope": "Verify every genesis signature against an independently supplied root pin; an unsigned genesis fails. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_verified_key_history_output_can_be_supplied_to_evidence_verifier"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_verified_key_history_output_can_be_supplied_to_evidence_verifier",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_genesis_verify_genesis]"
+      ]
+    },
+    "gm_offline_grants_check_grant": {
+      "kind": "real_core",
+      "scope": "Check a grant against its basis and the active policies (the module docstring lists the rules). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_attestation_basis_and_grant_envelopes_preserve_refusals"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_attestation_basis_and_grant_envelopes_preserve_refusals",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_grants_check_grant]"
+      ]
+    },
+    "gm_offline_grants_envelope_secret_problem": {
+      "kind": "real_core",
+      "scope": "Why a parameter envelope may carry secret material, or None (v1.6.0 review fixes): its names\nand values are what every use's ``request_parameters`` carry, which the metadata guard checks. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_attestation_basis_and_grant_envelopes_preserve_refusals"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_attestation_basis_and_grant_envelopes_preserve_refusals",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_grants_envelope_secret_problem]"
+      ]
+    },
+    "gm_offline_grants_grant_horizon": {
+      "kind": "real_core",
+      "scope": "The last time a use of the grant may still be admitted: its end, plus the late-upload window\n(its validity), plus the clock skew. Retention keeps a grant and its uses until then. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_grants_grant_horizon]"
+      ]
+    },
+    "gm_offline_grants_use_problem": {
+      "kind": "real_core",
+      "scope": "(code, detail) for the first rule a use breaks, or None (``GrantUseRejectionCode`` order). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
+      ],
+      "negative": [
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_grants_use_problem]"
+      ]
+    },
+    "gm_offline_grants_use_secret_problem": {
+      "kind": "real_core",
+      "scope": "Why a use may carry secret material, or None (the metadata guard on its own values). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_execution_metadata_validation_and_grant_secret_guard"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_execution_metadata_validation_and_grant_secret_guard",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_grants_use_secret_problem]"
+      ]
+    },
+    "gm_offline_invocation_token_issue_invocation_token": {
+      "kind": "real_core",
+      "scope": "Create and sign an InvocationToken. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_mediation_validates_all_bound_artifacts_without_execution"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_invocation_token_issue_invocation_token]"
+      ]
+    },
+    "gm_offline_invocation_token_record_invocation_use": {
+      "kind": "real_core",
+      "scope": "Create and sign an InvocationUseRecord. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_invocation_token_capability_bearer_and_usage"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_invocation_token_record_invocation_use]"
+      ]
+    },
+    "gm_offline_invocation_token_verify_invocation_token": {
+      "kind": "real_core",
+      "scope": "Verify an InvocationToken against a specific invocation request. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_invocation_token_capability_bearer_and_usage"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_invocation_token_capability_bearer_and_usage",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_invocation_token_verify_invocation_token]"
+      ]
+    },
+    "gm_offline_jose_decision_to_jwt": {
+      "kind": "real_core",
+      "scope": "Encode a BoundaryDecision as a signed EdDSA JWT. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_jwt_interop_checks_signature"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_jose_decision_to_jwt]"
+      ]
+    },
+    "gm_offline_jose_jwt_to_decision_claims": {
+      "kind": "real_core",
+      "scope": "Verify a GM-bridge JWT and return its claims. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_jwt_interop_checks_signature"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_jwt_interop_checks_signature",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_jose_jwt_to_decision_claims]"
+      ]
+    },
+    "gm_offline_justification_sign_justification_proof": {
+      "kind": "real_core",
+      "scope": "Sign a GateTrace into a JustificationProof. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_justification_cascade_and_metadata_scanners"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_justification_sign_justification_proof]"
+      ]
+    },
+    "gm_offline_justification_verify_justification_proof": {
+      "kind": "real_core",
+      "scope": "Verify a JustificationProof. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_justification_cascade_and_metadata_scanners"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_justification_cascade_and_metadata_scanners",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_justification_verify_justification_proof]"
+      ]
+    },
+    "gm_offline_key_succession_genesis_refusal": {
+      "kind": "real_core",
+      "scope": "(reason the genesis block is refused or None, the parsed block). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_genesis_and_review_bundle_are_structural_not_trust"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_genesis_and_review_bundle_are_structural_not_trust",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_key_succession_genesis_refusal]"
+      ]
+    },
+    "gm_offline_key_succession_prove_succession": {
+      "kind": "real_core",
+      "scope": "Prove possession of the new NA key named in a succession; this does not root-authorize, submit, or activate it. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_succession_proof_is_bound_to_named_new_key"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_succession_proof_is_bound_to_named_new_key",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_key_succession_prove_succession]"
+      ]
+    },
+    "gm_offline_key_succession_verify_key_history": {
+      "kind": "real_core",
+      "scope": "Verify a genesis block and its successions, in order, and build the key history. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_verified_key_history_output_can_be_supplied_to_evidence_verifier"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_verified_key_history_output_can_be_supplied_to_evidence_verifier",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_key_succession_verify_key_history]"
+      ]
+    },
+    "gm_offline_logic_attestation_create_model_attestation": {
+      "kind": "real_core",
+      "scope": "Create and sign a ModelAttestation for a given execution context. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_logic_attestation_policy_binds_model_prompt_tools_and_token"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_logic_attestation_create_model_attestation]"
+      ]
+    },
+    "gm_offline_logic_attestation_verify_model_attestation": {
+      "kind": "real_core",
+      "scope": "Verify a ModelAttestation against an AttestationPolicy. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_logic_attestation_policy_binds_model_prompt_tools_and_token"
+      ],
+      "negative": [
+        "tests/test_offline_full.py::test_logic_attestation_policy_binds_model_prompt_tools_and_token",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_logic_attestation_verify_model_attestation]"
+      ]
+    },
+    "gm_offline_mediation_validate_mediation_request": {
+      "kind": "real_core",
+      "scope": "Validate all authorization artifacts before spawning subprocess. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_mediation_validates_all_bound_artifacts_without_execution"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_mediation_validates_all_bound_artifacts_without_execution",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_mediation_validate_mediation_request]"
+      ]
+    },
+    "gm_offline_mediation_verify_guard_receipt": {
+      "kind": "real_core",
+      "scope": "Verify the guard signature on a receipt, following trust guard verify; no process is started. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_guard_receipt_verification_cannot_launch_a_process"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_guard_receipt_verification_cannot_launch_a_process",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_mediation_verify_guard_receipt]"
+      ]
+    },
+    "gm_offline_node_auth_decode_ed25519_public_key": {
+      "kind": "real_core",
+      "scope": "The raw 32 bytes of a base64 Ed25519 public key; ``ValueError`` otherwise. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_public_node_key_helpers_validate_key_length"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_public_node_key_helpers_validate_key_length",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_node_auth_decode_ed25519_public_key]"
+      ]
+    },
+    "gm_offline_node_auth_executor_key_id": {
+      "kind": "real_core",
+      "scope": "An edge node's executor key ID: ``edge-`` and the first 32 hex digits of SHA-256 of the raw key. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_public_node_key_helpers_validate_key_length"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_node_auth_executor_key_id]"
+      ]
+    },
+    "gm_offline_out_of_band_check_break_glass": {
+      "kind": "real_core",
+      "scope": "Whether a break-glass record is authentic, in its key's scope and free of secret material. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_executor_records_authenticity_scope_and_exact_wire"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_executor_records_authenticity_scope_and_exact_wire",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_out_of_band_check_break_glass]"
+      ]
+    },
+    "gm_offline_out_of_band_check_observation": {
+      "kind": "real_core",
+      "scope": "Whether an observation is authentic, in its key's scope and free of secret material. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_executor_records_authenticity_scope_and_exact_wire"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_executor_records_authenticity_scope_and_exact_wire",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_out_of_band_check_observation]"
+      ]
+    },
+    "gm_offline_overlay_discovery_build_discovery_feed": {
+      "kind": "real_core",
+      "scope": "build discovery feed Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_discovery_cache_feed_and_metadata_scan"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_overlay_discovery_build_discovery_feed]"
+      ]
+    },
+    "gm_offline_overlay_discovery_create_discovery_record": {
+      "kind": "real_core",
+      "scope": "create discovery record Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_discovery_cache_feed_and_metadata_scan"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_overlay_discovery_create_discovery_record]"
+      ]
+    },
+    "gm_offline_overlay_discovery_merge_discovery_records": {
+      "kind": "real_core",
+      "scope": "Merge incoming records into cache, keeping highest sequence_no per sovereign. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_discovery_cache_feed_and_metadata_scan"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_overlay_discovery_merge_discovery_records]"
+      ]
+    },
+    "gm_offline_overlay_discovery_verify_discovery_record": {
+      "kind": "real_core",
+      "scope": "verify discovery record Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_discovery_roundtrip_replay_and_expiry"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_discovery_roundtrip_replay_and_expiry",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_overlay_discovery_verify_discovery_record]"
+      ]
+    },
+    "gm_offline_oversight_approve_commitment": {
+      "kind": "real_core",
+      "scope": "Human custodian approves the request and produces a DualSignedCommitment. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_human_oversight_dual_signature_and_expiry"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_oversight_approve_commitment]"
+      ]
+    },
+    "gm_offline_oversight_evaluate_oversight_policy": {
+      "kind": "real_core",
+      "scope": "Run the 8-check deterministic policy engine. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_oversight_evaluation_and_signed_rejection_do_not_claim_approval"
+      ],
+      "negative": [
+        "tests/test_offline_full.py::test_oversight_evaluation_and_signed_rejection_do_not_claim_approval",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_oversight_evaluate_oversight_policy]"
+      ]
+    },
+    "gm_offline_oversight_propose_commitment": {
+      "kind": "real_core",
+      "scope": "Evaluate policy and sign a HumanApprovalRequest when human approval is needed. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_oversight_evaluation_and_signed_rejection_do_not_claim_approval"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_oversight_propose_commitment]"
+      ]
+    },
+    "gm_offline_oversight_reject_commitment": {
+      "kind": "real_core",
+      "scope": "Human custodian rejects the request. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_oversight_evaluation_and_signed_rejection_do_not_claim_approval"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_oversight_reject_commitment]"
+      ]
+    },
+    "gm_offline_oversight_verify_dual_signed_commitment": {
+      "kind": "real_core",
+      "scope": "Verify a DualSignedCommitment. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_human_oversight_dual_signature_and_expiry"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_human_oversight_dual_signature_and_expiry",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_oversight_verify_dual_signed_commitment]"
+      ]
+    },
+    "gm_offline_privacy_apply_privacy_profile": {
+      "kind": "real_core",
+      "scope": "Apply normalization rules from profile to payload + headers. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_privacy_base64_roundtrip_and_allocation_bound"
+      ],
+      "negative": [
+        "tests/test_offline_branches.py::test_registered_privacy_profile_and_artifact_schema_refusals",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_privacy_apply_privacy_profile]"
+      ]
+    },
+    "gm_offline_privacy_bucket_timestamp": {
+      "kind": "real_core",
+      "scope": "Round ts DOWN to the nearest bucket_seconds boundary (UTC epoch-relative). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_justification_cascade_and_metadata_scanners"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_justification_cascade_and_metadata_scanners",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_privacy_bucket_timestamp]"
+      ]
+    },
+    "gm_offline_privacy_create_privacy_profile": {
+      "kind": "real_core",
+      "scope": "Sign a schema-validated communication privacy profile. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_privacy_base64_roundtrip_and_allocation_bound"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_privacy_create_privacy_profile]"
+      ]
+    },
+    "gm_offline_privacy_normalize_payload_length": {
+      "kind": "real_core",
+      "scope": "Pad payload to next multiple of block_bytes using zero-bytes. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_discovery_cache_feed_and_metadata_scan"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_direct_adapter_enforces_input_and_output_limits",
+        "tests/test_offline.py::test_privacy_base64_roundtrip_and_allocation_bound",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_privacy_normalize_payload_length]"
+      ]
+    },
+    "gm_offline_privacy_scan_metadata_fingerprints": {
+      "kind": "real_core",
+      "scope": "Return list of header keys that would be stripped by the profile. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_justification_cascade_and_metadata_scanners"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_justification_cascade_and_metadata_scanners",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_privacy_scan_metadata_fingerprints]"
+      ]
+    },
+    "gm_offline_proof_inspect_proof_bundle": {
+      "kind": "real_core",
+      "scope": "Check a redacted proof summary and optional Connectome consistency; this does not verify signatures or run a live proof. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_proof_inspection_distinguishes_summary_from_cryptographic_proof"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_proof_inspection_distinguishes_summary_from_cryptographic_proof",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_proof_inspect_proof_bundle]"
+      ]
+    },
+    "gm_offline_purge_build_nullification_registry": {
+      "kind": "real_core",
+      "scope": "Build a signed Merkle registry over a batch of NullificationReceipts. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_purge_receipt_merkle_proof_and_wrong_key"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_purge_build_nullification_registry]"
+      ]
+    },
+    "gm_offline_purge_create_nullification_receipt": {
+      "kind": "real_core",
+      "scope": "Produce a signed NullificationReceipt for an expired identity. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_purge_receipt_merkle_proof_and_wrong_key"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_purge_create_nullification_receipt]"
+      ]
+    },
+    "gm_offline_purge_prove_nullification_inclusion": {
+      "kind": "real_core",
+      "scope": "Build a Merkle inclusion proof for the receipt with the given receipt_id. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_purge_receipt_merkle_proof_and_wrong_key"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_purge_prove_nullification_inclusion]"
+      ]
+    },
+    "gm_offline_purge_verify_nullification_inclusion": {
+      "kind": "real_core",
+      "scope": "Verify that a NullificationReceipt is included in the registry. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_purge_receipt_merkle_proof_and_wrong_key"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_purge_receipt_merkle_proof_and_wrong_key",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_purge_verify_nullification_inclusion]"
+      ]
+    },
+    "gm_offline_remediation_admin_approval_valid": {
+      "kind": "real_core",
+      "scope": "Whether the operator's signature verifies over the request it kept (signature version 2). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_review_identity_and_signed_request_approval"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_review_identity_and_signed_request_approval",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_remediation_admin_approval_valid]"
+      ]
+    },
+    "gm_offline_remediation_check_remediation": {
+      "kind": "real_core",
+      "scope": "Whether a remediation record is authentic, signed by an executor key covering its\nresource, and free of secret material (the 1.3.1 guards). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_executor_records_authenticity_scope_and_exact_wire"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_executor_records_authenticity_scope_and_exact_wire",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_remediation_check_remediation]"
+      ]
+    },
+    "gm_offline_remediation_decision_plan": {
+      "kind": "real_core",
+      "scope": "A decision's plan (v1.4.0 review fixes): from its latest execution evidence's\n``(action, version_id, rotatable)``, as for a denied change; never executed, an alert\n(``fallback`` ``not_executed``) with the guidance's grace. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_remediation_plans_state_transitions_and_emergency_mapping"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_remediation_plans_state_transitions_and_emergency_mapping",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_remediation_decision_plan]"
+      ]
+    },
+    "gm_offline_remediation_emergency_map": {
+      "kind": "real_core",
+      "scope": "emergency capability -> the ordinary capability it stands for, from the policies given\n(those active at ``at``) whose validity covers ``at`` (v1.4.0 review fixes). A capability a\npolicy without an emergency section also names is no emergency capability. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_remediation_plans_state_transitions_and_emergency_mapping"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_remediation_plans_state_transitions_and_emergency_mapping",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_remediation_emergency_map]"
+      ]
+    },
+    "gm_offline_remediation_next_state": {
+      "kind": "real_core",
+      "scope": "The state after ``event``, given whether a review is pending; raises ``TransitionRefused``\nwhen the table does not allow it. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_remediation_plans_state_transitions_and_emergency_mapping"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_remediation_holder_separation_and_illegal_transition",
+        "tests/test_offline_remaining.py::test_remediation_plans_state_transitions_and_emergency_mapping",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_remediation_next_state]"
+      ]
+    },
+    "gm_offline_remediation_remediation_plan": {
+      "kind": "real_core",
+      "scope": "What a change judged ``verdict`` leads to. An ``indeterminate`` judgement always alerts. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_remediation_plans_state_transitions_and_emergency_mapping"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_remediation_plans_state_transitions_and_emergency_mapping",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_remediation_remediation_plan]"
+      ]
+    },
+    "gm_offline_remediation_remediation_record_problem": {
+      "kind": "real_core",
+      "scope": "A remediation record as received, checked in the reference order (v1.4.0 review fixes): first\nits form (``remediation_malformed``: not an object, not a ``RemediationRecord``, or not in its exact\nserialized form, the form it is signed in), then ``check_remediation``. Returns the check and the\nparsed record (None when it does not parse). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_executor_records_authenticity_scope_and_exact_wire"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_executor_records_authenticity_scope_and_exact_wire",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_remediation_remediation_record_problem]"
+      ]
+    },
+    "gm_offline_remediation_request_approval_problem": {
+      "kind": "real_core",
+      "scope": "Why a requester's embedded request does not prove the review request, or None: signed by\n``requested_by`` as ``POST /admin/evidence/reviews`` for this NA, with exactly the subject and\njustification, within ``APPROVAL_MAX_AGE`` of ``requested_at``. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_review_identity_and_signed_request_approval"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_review_identity_and_signed_request_approval",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_remediation_request_approval_problem]"
+      ]
+    },
+    "gm_offline_remediation_review_approval_problem": {
+      "kind": "real_core",
+      "scope": "Why the requests embedded in a review do not prove it, or None. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval"
+      ],
+      "negative": [
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_remediation_review_approval_problem]"
+      ]
+    },
+    "gm_offline_remediation_review_holder_problem": {
+      "kind": "real_core",
+      "scope": "(code, detail) when the decider is not a second holder, or None. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_review_identity_and_signed_request_approval"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_remediation_holder_separation_and_illegal_transition",
+        "tests/test_offline_remaining.py::test_review_identity_and_signed_request_approval",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_remediation_review_holder_problem]"
+      ]
+    },
+    "gm_offline_remediation_review_request_problem": {
+      "kind": "real_core",
+      "scope": "(code, detail) when the requester is the change's actor (its key, or its holder), or None:\nthe person who made a change does not ask for its review (v1.4.0 review fixes). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_review_identity_and_signed_request_approval"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_review_identity_and_signed_request_approval",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_remediation_review_request_problem]"
+      ]
+    },
+    "gm_offline_remediation_rfc3339": {
+      "kind": "real_core",
+      "scope": "``value`` as an aware datetime when it is an RFC 3339 timestamp in the grammar above, else None. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_remediation_plans_state_transitions_and_emergency_mapping"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_remediation_plans_state_transitions_and_emergency_mapping",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_remediation_rfc3339]"
+      ]
+    },
+    "gm_offline_remediation_rotation_problem": {
+      "kind": "real_core",
+      "scope": "(code, detail) when a forward rotation cannot be the one that replaces a change, or None. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_remediation_plans_state_transitions_and_emergency_mapping"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_remediation_plans_state_transitions_and_emergency_mapping",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_remediation_rotation_problem]"
+      ]
+    },
+    "gm_offline_risk_signal_assess_seed_isolation": {
+      "kind": "real_core",
+      "scope": "Assess whether a counterparty's update history matches adversarial seed patterns. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_risk_updates_inspection_and_seed_assessment_use_signed_history"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_risk_signal_assess_seed_isolation]"
+      ]
+    },
+    "gm_offline_risk_signal_check_risk_signal_gate": {
+      "kind": "real_core",
+      "scope": "Check if a signal passes the minimum threshold gate. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_risk_signal_signature_and_decay"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_risk_signal_signature_and_decay",
+        "tests/test_offline_full.py::test_risk_updates_inspection_and_seed_assessment_use_signed_history",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_risk_signal_check_risk_signal_gate]"
+      ]
+    },
+    "gm_offline_risk_signal_create_risk_signal": {
+      "kind": "real_core",
+      "scope": "Create and sign a new PeerRiskSignal starting at initial_signal. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_risk_updates_inspection_and_seed_assessment_use_signed_history"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_signer_permission_is_specific_to_operation",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_risk_signal_create_risk_signal]"
+      ]
+    },
+    "gm_offline_risk_signal_decay_risk_signal": {
+      "kind": "real_core",
+      "scope": "Apply time decay without a new evidence update (e.g. on a schedule). Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline.py::test_risk_signal_signature_and_decay"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_risk_signal_decay_risk_signal]"
+      ]
+    },
+    "gm_offline_risk_signal_inspect_risk": {
+      "kind": "real_core",
+      "scope": "Inspect a risk signal without asserting its signature or freshness is valid. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_risk_updates_inspection_and_seed_assessment_use_signed_history"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_risk_signal_inspect_risk]"
+      ]
+    },
+    "gm_offline_risk_signal_update_risk_signal": {
+      "kind": "real_core",
+      "scope": "Update a PeerRiskSignal from an ExecutionEvidence outcome. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_risk_updates_inspection_and_seed_assessment_use_signed_history"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_risk_signal_update_risk_signal]"
+      ]
+    },
+    "gm_offline_selective_disclosure_commit_capabilities": {
+      "kind": "real_core",
+      "scope": "Build and sign a Merkle commitment over the provided capability list. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_nullifier_binds_membership_and_reuse_is_refused"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_selective_disclosure_commit_capabilities]"
+      ]
+    },
+    "gm_offline_selective_disclosure_issue_nullifier": {
+      "kind": "real_core",
+      "scope": "Issue a single-use nullifier tied to this proof. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_nullifier_binds_membership_and_reuse_is_refused"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_selective_disclosure_issue_nullifier]"
+      ]
+    },
+    "gm_offline_selective_disclosure_prove_capability_membership": {
+      "kind": "real_core",
+      "scope": "Produce a Merkle membership proof for a single capability. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_nullifier_binds_membership_and_reuse_is_refused"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_selective_disclosure_prove_capability_membership]"
+      ]
+    },
+    "gm_offline_selective_disclosure_verify_capability_proof": {
+      "kind": "real_core",
+      "scope": "Verify a CapabilityMembershipProof against its commitment. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_nullifier_binds_membership_and_reuse_is_refused"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_disclosure_merkle_proof_detects_tampering",
+        "tests/test_offline_full.py::test_nullifier_binds_membership_and_reuse_is_refused",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_selective_disclosure_verify_capability_proof]"
+      ]
+    },
+    "gm_offline_spiffe_agreement_to_svid": {
+      "kind": "real_core",
+      "scope": "Map an AgreementRecord to a SPIFFE SVID-like representation. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_spiffe_and_vc_bridges_keep_evidence_and_reject_foreign_metadata"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_spiffe_agreement_to_svid]"
+      ]
+    },
+    "gm_offline_spiffe_svid_to_agreement_fields": {
+      "kind": "real_core",
+      "scope": "Best-effort reverse mapping: extract GM fields from a bridge SVID. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_spiffe_and_vc_bridges_keep_evidence_and_reject_foreign_metadata"
+      ],
+      "negative": [
+        "tests/test_offline_full.py::test_spiffe_and_vc_bridges_keep_evidence_and_reject_foreign_metadata",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_spiffe_svid_to_agreement_fields]"
+      ]
+    },
+    "gm_offline_supply_chain_verify_supply_chain_maintainer_gate": {
+      "kind": "real_core",
+      "scope": "Verify whether a portable maintainer attestation authorizes a CI action. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_supply_chain_release_scope_and_revoked_maintainer"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_supply_chain_release_scope_and_revoked_maintainer",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_supply_chain_verify_supply_chain_maintainer_gate]"
+      ]
+    },
+    "gm_offline_treaty_verify_attestation_with_treaty": {
+      "kind": "real_core",
+      "scope": "Verify an attestation using a signed recognition treaty as policy input. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_membership_treaty_and_feed_verify_independent_pins_and_revocation"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_membership_treaty_and_feed_verify_independent_pins_and_revocation",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_treaty_verify_attestation_with_treaty]"
+      ]
+    },
+    "gm_offline_treaty_verify_recognition_treaty": {
+      "kind": "real_core",
+      "scope": "Verify a signed direct-recognition treaty. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_membership_treaty_and_feed_verify_independent_pins_and_revocation"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_membership_treaty_and_feed_verify_independent_pins_and_revocation",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_treaty_verify_recognition_treaty]"
+      ]
+    },
+    "gm_offline_treaty_verify_sovereign_revocation_feed": {
+      "kind": "real_core",
+      "scope": "Verify a signed revocation feed from a recognized sovereign. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_membership_treaty_and_feed_verify_independent_pins_and_revocation"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_membership_treaty_and_feed_verify_independent_pins_and_revocation",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_treaty_verify_sovereign_revocation_feed]"
+      ]
+    },
+    "gm_offline_trust_bundle_bundle_hash": {
+      "kind": "real_core",
+      "scope": "Return a deterministic hash of the bundle JSON. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_genesis_and_review_bundle_are_structural_not_trust"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_trust_bundle_bundle_hash]"
+      ]
+    },
+    "gm_offline_trust_bundle_bundle_summary": {
+      "kind": "real_core",
+      "scope": "Return compact operator-facing bundle summary fields. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_genesis_and_review_bundle_are_structural_not_trust"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_trust_bundle_bundle_summary]"
+      ]
+    },
+    "gm_offline_trust_bundle_validate_bundle_against_review": {
+      "kind": "real_core",
+      "scope": "Validate bundle identity against an already-fetched sovereign review; raise ValueError on mismatch. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_genesis_and_review_bundle_are_structural_not_trust"
+      ],
+      "negative": [
+        "tests/test_offline_remaining.py::test_genesis_and_review_bundle_are_structural_not_trust",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_trust_bundle_validate_bundle_against_review]"
+      ]
+    },
+    "gm_offline_trust_bundle_validate_trust_bundle": {
+      "kind": "real_core",
+      "scope": "Validate bundle structure, consistency, and optional live endpoint parity. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_remaining.py::test_genesis_and_review_bundle_are_structural_not_trust"
+      ],
+      "negative": [
+        "tests/test_offline.py::test_bundle_validation_reports_errors_without_fetch",
+        "tests/test_offline_remaining.py::test_genesis_and_review_bundle_are_structural_not_trust",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_trust_bundle_validate_trust_bundle]"
+      ]
+    },
+    "gm_offline_w3c_vc_agreement_to_vc": {
+      "kind": "real_core",
+      "scope": "Map an AgreementRecord to a W3C Verifiable Credential. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_spiffe_and_vc_bridges_keep_evidence_and_reject_foreign_metadata"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_w3c_vc_agreement_to_vc]"
+      ]
+    },
+    "gm_offline_w3c_vc_trust_evidence_to_vc": {
+      "kind": "real_core",
+      "scope": "Map a TrustEvidence record to a W3C Verifiable Credential. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_spiffe_and_vc_bridges_keep_evidence_and_reject_foreign_metadata"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_w3c_vc_trust_evidence_to_vc]"
+      ]
+    },
+    "gm_offline_w3c_vc_vc_to_trust_evidence_fields": {
+      "kind": "real_core",
+      "scope": "Best-effort reverse mapping: extract GM fields from a bridge VC. Uses real core records and the cited semantic assertions; no external action is executed.",
+      "positive": [
+        "tests/test_offline_full.py::test_spiffe_and_vc_bridges_keep_evidence_and_reject_foreign_metadata"
+      ],
+      "negative": [
+        "tests/test_offline_full.py::test_spiffe_and_vc_bridges_keep_evidence_and_reject_foreign_metadata",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_offline_w3c_vc_vc_to_trust_evidence_fields]"
+      ]
+    },
+    "gm_workflow_atlas_build": {
+      "kind": "real_workflow",
+      "scope": "Render signed evidence independently verified against graph digest; detect signature tampering.",
+      "positive": [
+        "tests/test_workflow_state_full.py::test_atlas_checks_signed_evidence_and_marks_tampering"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_atlas_build]",
+        "tests/test_workflow_state_full.py::test_atlas_checks_signed_evidence_and_marks_tampering"
+      ]
+    },
+    "gm_workflow_audit_archive": {
+      "kind": "real_workflow",
+      "scope": "Independently verify persisted pack before archive/retention; corrupted readback cannot prune.",
+      "positive": [
+        "tests/test_local_workflows.py::test_audit_pack_held_anchors_and_verified_archive_end_to_end"
+      ],
+      "negative": [
+        "tests/test_local_workflows.py::test_corrupt_pack_readback_never_records_or_prunes",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_audit_archive]",
+        "tests/test_workflow_residuals.py::test_archive_rechecks_bytes_at_each_mutation_boundary"
+      ]
+    },
+    "gm_workflow_audit_pack": {
+      "kind": "real_workflow",
+      "scope": "Persist real authority audit pack with manifest readback; report operator refusal.",
+      "positive": [
+        "tests/test_local_workflows.py::test_audit_pack_held_anchors_and_verified_archive_end_to_end"
+      ],
+      "negative": [
+        "tests/test_local_workflows.py::test_untrusted_pack_path_is_refused_before_any_file_write",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_audit_pack]"
+      ]
+    },
+    "gm_workflow_evidence_anchors_fetch": {
+      "kind": "real_workflow",
+      "scope": "Hold real verified anchors, retain immutable history and reject rewrites or removal.",
+      "positive": [
+        "tests/test_local_workflows.py::test_audit_pack_held_anchors_and_verified_archive_end_to_end"
+      ],
+      "negative": [
+        "tests/test_local_workflows.py::test_held_anchor_history_cannot_be_removed_or_rewritten",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_evidence_anchors_fetch]",
+        "tests/test_workflow_residuals.py::test_anchor_copy_refuses_rollback_between_observations"
+      ]
+    },
+    "gm_workflow_federation_bootstrap": {
+      "kind": "real_workflow",
+      "scope": "Issue real signed treaty; reject scope or persisted-record substitution.",
+      "positive": [
+        "tests/test_workflow_branches.py::test_registered_federation_and_fleet_handlers_execute_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_federation_bootstrap]",
+        "tests/test_workflow_residuals.py::test_federation_refuses_an_unsigned_issued_treaty",
+        "tests/test_workflow_state_full.py::test_federation_checks_signed_scope_and_persisted_identity"
+      ]
+    },
+    "gm_workflow_federation_preview": {
+      "kind": "real_workflow",
+      "scope": "Root/NA-pinned live sovereign review, bundle endpoint and scope binding.",
+      "positive": [
+        "tests/test_workflow_branches.py::test_registered_federation_and_fleet_handlers_execute_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_federation_preview]",
+        "tests/test_workflow_state_full.py::test_federation_preview_validates_supplied_bundle_endpoint"
+      ]
+    },
+    "gm_workflow_fleet_generate": {
+      "kind": "real_workflow",
+      "scope": "Private core scaffold, signed genesis verified against returned pins, IPv6 endpoint; invalid genesis cannot publish.",
+      "positive": [
+        "tests/test_workflow_branches.py::test_registered_generation_handler_builds_private_ipv6_fleet"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_fleet_generate]",
+        "tests/test_workflow_state_full.py::test_generation_partial_failures_never_publish_invalid_fleet"
+      ]
+    },
+    "gm_workflow_fleet_mesh": {
+      "kind": "real_workflow",
+      "scope": "Create only missing directed relationships; final live path failure remains partial.",
+      "positive": [
+        "tests/test_workflow_branches.py::test_registered_federation_and_fleet_handlers_execute_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_fleet_mesh]",
+        "tests/test_workflow_state_full.py::test_fleet_final_observation_cannot_claim_complete_after_path_loss"
+      ]
+    },
+    "gm_workflow_fleet_status": {
+      "kind": "real_workflow",
+      "scope": "Probe configured disposable authorities and refuse unconfigured fleets.",
+      "positive": [
+        "tests/test_workflow_branches.py::test_registered_federation_and_fleet_handlers_execute_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_fleet_status]",
+        "tests/test_workflow_branches.py::test_registered_multi_handlers_refuse_unconfigured_destinations"
+      ]
+    },
+    "gm_workflow_fleet_verify": {
+      "kind": "real_workflow",
+      "scope": "Observe real directional trust before and after meshing; refuse missing fleet.",
+      "positive": [
+        "tests/test_workflow_branches.py::test_registered_federation_and_fleet_handlers_execute_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_fleet_verify]",
+        "tests/test_workflow_branches.py::test_registered_multi_handlers_refuse_unconfigured_destinations"
+      ]
+    },
+    "gm_workflow_guard_request": {
+      "kind": "real_workflow",
+      "scope": "Real fixed-command guard execution/receipt and idempotent replay; token/signer binding enforced.",
+      "positive": [
+        "tests/test_runtime_workflows.py::test_real_guard_execution_receipt_and_no_repeat_on_same_operation"
+      ],
+      "negative": [
+        "tests/test_runtime_workflows.py::test_guard_refuses_wrong_signed_receipt_binding_and_preserves_uncertainty",
+        "tests/test_runtime_workflows.py::test_guard_rejects_token_binding_and_missing_signer_permission",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_guard_request]"
+      ]
+    },
+    "gm_workflow_node_join": {
+      "kind": "real_workflow",
+      "scope": "Real enrollment and held identity reuse; refuse absent or unmanaged key storage.",
+      "positive": [
+        "tests/test_runtime_workflows.py::test_join_persists_reuses_identity_and_reports_local_status"
+      ],
+      "negative": [
+        "tests/test_runtime_full.py::test_join_invalid_held_certificate_requires_a_fresh_invite",
+        "tests/test_runtime_full.py::test_join_refuses_unavailable_or_unmanaged_identity",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_node_join]"
+      ]
+    },
+    "gm_workflow_node_status": {
+      "kind": "real_workflow",
+      "scope": "Read actual verified held node/policy/revocation state and refuse missing named nodes.",
+      "positive": [
+        "tests/test_runtime_workflows.py::test_join_persists_reuses_identity_and_reports_local_status"
+      ],
+      "negative": [
+        "tests/test_runtime_full.py::test_status_refuses_corrupted_held_material",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_node_status]"
+      ]
+    },
+    "gm_workflow_operation_status": {
+      "kind": "real_workflow",
+      "scope": "Read a completed registered journal with bounded identifiers and refuse missing/unregistered records.",
+      "positive": [
+        "tests/test_workflow_branches.py::test_registered_federation_and_fleet_handlers_execute_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_operation_status]",
+        "tests/test_workflow_branches.py::test_journal_state_corruption_expiry_and_bounded_status"
+      ]
+    },
+    "gm_workflow_peer_send": {
+      "kind": "real_workflow",
+      "scope": "Real Noise-authenticated peer transfer; missing/revoked/unverifiable node cannot send.",
+      "positive": [
+        "tests/test_runtime_workflows.py::test_real_noise_send_verifies_peer_identity_and_reports_transport_only"
+      ],
+      "negative": [
+        "tests/test_runtime_full.py::test_peer_send_refuses_missing_revoked_or_unverifiable_node",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_peer_send]"
+      ]
+    },
+    "gm_workflow_proof_canary": {
+      "kind": "real_workflow",
+      "scope": "Actual remote proof, independent receipt signature check, persisted receipt and audit; missing signer permission refused.",
+      "positive": [
+        "tests/test_workflow_branches.py::test_registered_canary_handler_persists_verifiable_receipt"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_proof_canary]",
+        "tests/test_workflow_residuals.py::test_canary_checks_every_signed_receipt_boundary"
+      ]
+    },
+    "gm_workflow_proof_cleanup": {
+      "kind": "real_workflow",
+      "scope": "Verify exact backup/hash before scoped deletion; backup timeout leaves source rows.",
+      "positive": [
+        "tests/test_workflow_branches.py::test_registered_cleanup_handlers_verify_backup_before_deletion"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_proof_cleanup]",
+        "tests/test_workflow_branches.py::test_cleanup_backup_deadline_never_deletes_rows",
+        "tests/test_workflow_residuals.py::test_cleanup_refuses_a_real_integrity_failure_in_the_backup"
+      ]
+    },
+    "gm_workflow_proof_cleanup_preview": {
+      "kind": "real_workflow",
+      "scope": "Preview exact owned disposable table scope and refuse unpermitted storage.",
+      "positive": [
+        "tests/test_workflow_branches.py::test_registered_cleanup_handlers_verify_backup_before_deletion"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_proof_cleanup_preview]",
+        "tests/test_workflow_state_full.py::test_cleanup_permissions_and_existing_backup_leave_database_unchanged"
+      ]
+    },
+    "gm_workflow_proof_remote": {
+      "kind": "real_workflow",
+      "scope": "Real attestation/treaty recognition, revocation import and rejection; keep failed stage IDs.",
+      "positive": [
+        "tests/test_workflow_branches.py::test_registered_proof_remote_handler_observes_real_revocation"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_proof_remote]",
+        "tests/test_workflow_residuals.py::test_remote_proof_inspector_requires_the_specific_revocation_reason",
+        "tests/test_workflow_state_full.py::test_remote_proof_reports_failed_precheck_and_keeps_issued_ids"
+      ]
+    },
+    "gm_workflow_treaty_renew": {
+      "kind": "real_workflow",
+      "scope": "Linked renewal before revocation, completed replay, uncertain revoke cannot duplicate issuance.",
+      "positive": [
+        "tests/test_local_workflows.py::test_treaty_renew_and_replay_create_one_linked_replacement"
+      ],
+      "negative": [
+        "tests/test_local_workflows.py::test_revoke_timeout_preserves_new_treaty_and_refuses_blind_reissue",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_treaty_renew]",
+        "tests/test_workflow_residuals.py::test_treaty_renew_refuses_concurrent_revocation_before_new_issuance"
+      ]
+    },
+    "gm_workflow_treaty_replace": {
+      "kind": "real_workflow",
+      "scope": "Change treaty scope preserving linkage; operator refusal retained.",
+      "positive": [
+        "tests/test_local_workflows.py::test_treaty_replace_preserves_linkage_and_changes_scope"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_treaty_replace]",
+        "tests/test_workflow_branches.py::test_registered_local_handlers_preserve_known_authority_refusals"
+      ]
+    },
+    "gm_workflow_trust_bundle_export": {
+      "kind": "real_workflow",
+      "scope": "Export real configured authority public material; absent authority refused.",
+      "positive": [
+        "tests/test_workflow_state_full.py::test_bundle_review_compares_live_authority_and_refuses_missing_configuration"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_trust_bundle_export]",
+        "tests/test_workflow_state_full.py::test_bundle_review_compares_live_authority_and_refuses_missing_configuration"
+      ]
+    },
+    "gm_workflow_trust_bundle_review": {
+      "kind": "real_workflow",
+      "scope": "Validate bundle against fresh live material; compare-live without configured authority refused.",
+      "positive": [
+        "tests/test_workflow_state_full.py::test_bundle_review_compares_live_authority_and_refuses_missing_configuration"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[gm_workflow_trust_bundle_review]",
+        "tests/test_workflows.py::test_invalid_bundle_is_refused_for_review"
+      ]
+    },
+    "na_admin_create_invite": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_admin_create_invite]"
+      ]
+    },
+    "na_admin_policy_history": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_public_metadata_policy_versions_and_signed_wire"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_admin_policy_history]"
+      ]
+    },
+    "na_admin_publish_policy": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_public_metadata_policy_versions_and_signed_wire",
+        "tests/test_authority_full.py::test_root_and_new_key_succession_restart_reissues_long_lived_records"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_admin_publish_policy]"
+      ]
+    },
+    "na_admin_revoke_certificate": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_admin_revoke_certificate]"
+      ]
+    },
+    "na_admin_revoke_operator_key": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_holder_change_requires_second_holder_and_revoked_operator_is_refused"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_admin_revoke_operator_key]"
+      ]
+    },
+    "na_admin_rollback_policy": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_public_metadata_policy_versions_and_signed_wire"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_public_metadata_policy_versions_and_signed_wire",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_admin_rollback_policy]"
+      ]
+    },
+    "na_agreement_accept": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_agreement_accept]"
+      ]
+    },
+    "na_agreement_build_counter": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_agreement_build_counter]"
+      ]
+    },
+    "na_agreement_build_offer": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_agreement_build_offer]"
+      ]
+    },
+    "na_agreement_verify": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_agreement_verify]"
+      ]
+    },
+    "na_attestations_get_attestation": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_attestations_get_attestation]"
+      ]
+    },
+    "na_attestations_get_recognition_policy": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_attestations_get_recognition_policy]"
+      ]
+    },
+    "na_attestations_issue_attestation": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles",
+        "tests/test_authority_full.py::test_consensus_denial_and_evidence_through_registered_handlers",
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke",
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive",
+        "tests/test_authority_full.py::test_review_read_returns_the_signed_decision_and_distinct_holders",
+        "tests/test_authority_full.py::test_root_and_new_key_succession_restart_reissues_long_lived_records",
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval",
+        "tests/test_local_full.py::test_nonempty_audit_pack_root_pin_anchors_and_tampering"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_attestations_issue_attestation]"
+      ]
+    },
+    "na_attestations_list_attestations": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_attestations_list_attestations]"
+      ]
+    },
+    "na_attestations_revoke_attestation": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles",
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_attestations_revoke_attestation]"
+      ]
+    },
+    "na_attestations_roster": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles",
+        "tests/test_authority_full.py::test_root_and_new_key_succession_restart_reissues_long_lived_records"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_attestations_roster]"
+      ]
+    },
+    "na_attestations_save_recognition_policy": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_attestations_save_recognition_policy]"
+      ]
+    },
+    "na_attestations_sovereign_revocation_feed": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles",
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_attestations_sovereign_revocation_feed]"
+      ]
+    },
+    "na_attestations_verify_attestation": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_attestations_verify_attestation]"
+      ]
+    },
+    "na_boundary_decide": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_boundary_decide]"
+      ]
+    },
+    "na_boundary_policy_activate_policy": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles",
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke",
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive",
+        "tests/test_authority_full.py::test_review_read_returns_the_signed_decision_and_distinct_holders",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval",
+        "tests/test_local_full.py::test_nonempty_audit_pack_root_pin_anchors_and_tampering"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_boundary_policy_activate_policy]"
+      ]
+    },
+    "na_boundary_policy_active_policies": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_boundary_policy_active_policies]"
+      ]
+    },
+    "na_boundary_policy_deactivate_policy": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_boundary_policy_deactivate_policy]"
+      ]
+    },
+    "na_boundary_policy_evaluate": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive",
+        "tests/test_authority_full.py::test_review_read_returns_the_signed_decision_and_distinct_holders",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval",
+        "tests/test_local_full.py::test_nonempty_audit_pack_root_pin_anchors_and_tampering"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_consensus_denial_and_evidence_through_registered_handlers",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_boundary_policy_evaluate]"
+      ]
+    },
+    "na_boundary_policy_list_policies": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_boundary_policy_list_policies]"
+      ]
+    },
+    "na_boundary_policy_policy_history": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_boundary_policy_policy_history]"
+      ]
+    },
+    "na_boundary_policy_publish_policy": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles",
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke",
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive",
+        "tests/test_authority_full.py::test_review_read_returns_the_signed_decision_and_distinct_holders",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval",
+        "tests/test_local_full.py::test_nonempty_audit_pack_root_pin_anchors_and_tampering"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_boundary_policy_publish_policy]"
+      ]
+    },
+    "na_boundary_policy_validate_policy": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_boundary_policy_validate_policy]"
+      ]
+    },
+    "na_boundary_policy_verify_policy": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_boundary_policy_verify_policy]"
+      ]
+    },
+    "na_boundary_verify": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_consensus_denial_and_evidence_through_registered_handlers"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_boundary_verify]"
+      ]
+    },
+    "na_consensus_proof": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_consensus_denial_and_evidence_through_registered_handlers"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_consensus_proof]"
+      ]
+    },
+    "na_consensus_verify": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_consensus_denial_and_evidence_through_registered_handlers"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_consensus_verify]"
+      ]
+    },
+    "na_consensus_vote": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_consensus_denial_and_evidence_through_registered_handlers"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_consensus_vote]"
+      ]
+    },
+    "na_crl_get_crl": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_crl_get_crl]"
+      ]
+    },
+    "na_data_usage_create_intent": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_data_license_intent_signatures_and_policy_denial"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_data_usage_create_intent]"
+      ]
+    },
+    "na_data_usage_create_policy": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_data_license_intent_signatures_and_policy_denial"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_data_usage_create_policy]"
+      ]
+    },
+    "na_data_usage_get_policy": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_data_license_intent_signatures_and_policy_denial"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_data_usage_get_policy]"
+      ]
+    },
+    "na_data_usage_verify": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_data_license_intent_signatures_and_policy_denial"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_data_license_intent_signatures_and_policy_denial",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_data_usage_verify]"
+      ]
+    },
+    "na_disclosure_commit": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_disclosure_commit]"
+      ]
+    },
+    "na_disclosure_nullifier": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_disclosure_nullifier]"
+      ]
+    },
+    "na_disclosure_prove": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_disclosure_prove]"
+      ]
+    },
+    "na_disclosure_verify": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_disclosure_verify]"
+      ]
+    },
+    "na_discovery_delete_agent": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_discovery_delete_agent]"
+      ]
+    },
+    "na_discovery_get_agent": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_discovery_get_agent]"
+      ]
+    },
+    "na_discovery_list_agents": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_discovery_list_agents]"
+      ]
+    },
+    "na_discovery_register_agent": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_discovery_register_agent]"
+      ]
+    },
+    "na_edge_list_edge_nodes": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_edge_list_edge_nodes]"
+      ]
+    },
+    "na_edge_node_boundary_evaluate": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_edge_node_boundary_evaluate]"
+      ]
+    },
+    "na_edge_node_resource_head": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_edge_node_resource_head]"
+      ]
+    },
+    "na_edge_node_state": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_edge_node_state]"
+      ]
+    },
+    "na_enrollment_heartbeat": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_enrollment_heartbeat]"
+      ]
+    },
+    "na_enrollment_renew_certificate": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_enrollment_renew_certificate]"
+      ]
+    },
+    "na_enrollment_request_join": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_enrollment_request_join]"
+      ]
+    },
+    "na_evidence_build": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_offline_nonempty_trust_path_round_trips_through_authority_evidence"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_build]"
+      ]
+    },
+    "na_evidence_store_apply_retention": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim. Fresh records are retained; this scenario does not prove deletion of expired records.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_apply_retention]"
+      ]
+    },
+    "na_evidence_store_audit_pack": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive",
+        "tests/test_local_full.py::test_nonempty_audit_pack_root_pin_anchors_and_tampering"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_audit_pack]"
+      ]
+    },
+    "na_evidence_store_create_anchor": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_create_anchor]"
+      ]
+    },
+    "na_evidence_store_export": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_export]"
+      ]
+    },
+    "na_evidence_store_list_anchors": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive",
+        "tests/test_local_full.py::test_nonempty_audit_pack_root_pin_anchors_and_tampering"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_list_anchors]"
+      ]
+    },
+    "na_evidence_store_list_archives": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_list_archives]"
+      ]
+    },
+    "na_evidence_store_list_executor_keys": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_list_executor_keys]"
+      ]
+    },
+    "na_evidence_store_record_archive": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_record_archive]"
+      ]
+    },
+    "na_evidence_store_register_executor_key": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive",
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_register_executor_key]"
+      ]
+    },
+    "na_evidence_store_resource_head": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_resource_head]"
+      ]
+    },
+    "na_evidence_store_resource_history": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_resource_history]"
+      ]
+    },
+    "na_evidence_store_retire_executor_key": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_retire_executor_key]"
+      ]
+    },
+    "na_evidence_store_search": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_consensus_denial_and_evidence_through_registered_handlers"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_search]"
+      ]
+    },
+    "na_evidence_store_status": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_status]"
+      ]
+    },
+    "na_evidence_store_submit_execution": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke",
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_submit_execution]"
+      ]
+    },
+    "na_evidence_store_vendor_history": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_vendor_history]"
+      ]
+    },
+    "na_evidence_store_verify": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_store_verify]"
+      ]
+    },
+    "na_evidence_verify": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_offline_nonempty_trust_path_round_trips_through_authority_evidence"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_offline_nonempty_trust_path_round_trips_through_authority_evidence",
+        "tests/test_authority_full.py::test_trust_evidence_uses_trust_decision_and_verifies_binding",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_evidence_verify]"
+      ]
+    },
+    "na_grants_get_grant": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_grants_get_grant]"
+      ]
+    },
+    "na_grants_issue_grant": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
+      ],
+      "negative": [
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_grants_issue_grant]"
+      ]
+    },
+    "na_grants_list_grant_uses": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_grants_list_grant_uses]"
+      ]
+    },
+    "na_grants_list_grants": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_grants_list_grants]"
+      ]
+    },
+    "na_grants_revoke_grant": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
+      ],
+      "negative": [
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_grants_revoke_grant]"
+      ]
+    },
+    "na_grants_submit_grant_execution": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
+      ],
+      "negative": [
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_grants_submit_grant_execution]"
+      ]
+    },
+    "na_grants_time_token": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export"
+      ],
+      "negative": [
+        "tests/test_authority_integration.py::test_mcp_grant_lifecycle_matches_core_and_verifies_export",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_grants_time_token]"
+      ]
+    },
+    "na_health_health": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_public_metadata_policy_versions_and_signed_wire"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_health_health]"
+      ]
+    },
+    "na_health_healthz": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_public_metadata_policy_versions_and_signed_wire"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_health_healthz]"
+      ]
+    },
+    "na_health_list_nodes": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_health_list_nodes]"
+      ]
+    },
+    "na_health_metrics": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_public_metadata_policy_versions_and_signed_wire"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_health_metrics]"
+      ]
+    },
+    "na_health_readyz": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_public_metadata_policy_versions_and_signed_wire"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_health_readyz]"
+      ]
+    },
+    "na_key_history_key_history": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_public_metadata_policy_versions_and_signed_wire"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_key_history_key_history]"
+      ]
+    },
+    "na_key_history_reissue": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim. Restart reissue is independently verified; this endpoint successfully reports no remaining pending records.",
+      "positive": [
+        "tests/test_authority_full.py::test_root_and_new_key_succession_restart_reissues_long_lived_records"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_key_history_reissue]"
+      ]
+    },
+    "na_key_history_succession": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_root_and_new_key_succession_restart_reissues_long_lived_records"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_root_and_new_key_succession_restart_reissues_long_lived_records",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_key_history_succession]"
+      ]
+    },
+    "na_nodes_roster": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_edge_enrollment_renew_discovery_and_revoke"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_nodes_roster]"
+      ]
+    },
+    "na_out_of_band_approve_holder": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_holder_change_requires_second_holder_and_revoked_operator_is_refused"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_holder_change_requires_second_holder_and_revoked_operator_is_refused",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_out_of_band_approve_holder]"
+      ]
+    },
+    "na_out_of_band_judge_break_glass": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_out_of_band_judge_break_glass]"
+      ]
+    },
+    "na_out_of_band_judge_observation": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_out_of_band_judge_observation]"
+      ]
+    },
+    "na_out_of_band_operator_holders": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_holder_change_requires_second_holder_and_revoked_operator_is_refused"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_holder_change_requires_second_holder_and_revoked_operator_is_refused",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_out_of_band_operator_holders]"
+      ]
+    },
+    "na_out_of_band_propose_holder": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_holder_change_requires_second_holder_and_revoked_operator_is_refused"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_out_of_band_propose_holder]"
+      ]
+    },
+    "na_out_of_band_resource_changes": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_out_of_band_resource_changes]"
+      ]
+    },
+    "na_out_of_band_submit_break_glass": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_out_of_band_submit_break_glass]"
+      ]
+    },
+    "na_out_of_band_submit_observation": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_out_of_band_submit_observation]"
+      ]
+    },
+    "na_out_of_band_submit_observations": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_out_of_band_submit_observations]"
+      ]
+    },
+    "na_public_atlas_json": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_trust_evidence_uses_trust_decision_and_verifies_binding"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_public_atlas_json]"
+      ]
+    },
+    "na_public_get_genesis": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_public_metadata_policy_versions_and_signed_wire"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_public_get_genesis]"
+      ]
+    },
+    "na_public_get_policy": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_public_metadata_policy_versions_and_signed_wire"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_public_get_policy]"
+      ]
+    },
+    "na_public_sovereign_metadata": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_public_metadata_policy_versions_and_signed_wire"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_public_sovereign_metadata]"
+      ]
+    },
+    "na_remediation_decide_review": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_review_read_returns_the_signed_decision_and_distinct_holders",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval"
+      ],
+      "negative": [
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_remediation_decide_review]"
+      ]
+    },
+    "na_remediation_due_queue": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_review_read_returns_the_signed_decision_and_distinct_holders",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_remediation_due_queue]"
+      ]
+    },
+    "na_remediation_get_remediation": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_remediation_get_remediation]"
+      ]
+    },
+    "na_remediation_get_review": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_review_read_returns_the_signed_decision_and_distinct_holders"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_remediation_get_review]"
+      ]
+    },
+    "na_remediation_record_notice": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_remediation_record_notice]"
+      ]
+    },
+    "na_remediation_request_review": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_review_read_returns_the_signed_decision_and_distinct_holders",
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval"
+      ],
+      "negative": [
+        "tests/test_authority_integration.py::test_mcp_review_requires_independent_holders_and_core_verifies_approval",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_remediation_request_review]"
+      ]
+    },
+    "na_remediation_submit_remediation": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_evidence_observations_remediation_and_verified_archive"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_remediation_submit_remediation]"
+      ]
+    },
+    "na_treaties_connectome_json": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_treaties_connectome_json]"
+      ]
+    },
+    "na_treaties_connectome_trust_path": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_treaties_connectome_trust_path]"
+      ]
+    },
+    "na_treaties_get_treaty": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_treaties_get_treaty]"
+      ]
+    },
+    "na_treaties_import_sovereign_revocation_feed": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_treaties_import_sovereign_revocation_feed]"
+      ]
+    },
+    "na_treaties_issue_treaty": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_treaties_issue_treaty]"
+      ]
+    },
+    "na_treaties_list_treaties": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_treaties_list_treaties]"
+      ]
+    },
+    "na_treaties_recognition_graph": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_treaties_recognition_graph]"
+      ]
+    },
+    "na_treaties_revoke_treaty": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_treaties_revoke_treaty]"
+      ]
+    },
+    "na_treaties_verify_attestation_with_treaty": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_treaties_verify_attestation_with_treaty]"
+      ]
+    },
+    "na_treaties_verify_treaty": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities"
+      ],
+      "negative": [
+        "tests/test_authority_full.py::test_treaties_agreement_disclosure_and_revocation_between_real_authorities",
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_treaties_verify_treaty]"
+      ]
+    }
+  }
+}

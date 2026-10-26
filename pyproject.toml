@@ -16,6 +16,8 @@ dev = ["pytest>=9,<10", "pytest-asyncio>=1.4,<2", "ruff>=0.17,<0.18", "build>=1.
 
 [project.scripts]
 genesismesh-mcp = "genesismesh_mcp.__main__:main"
+genesismesh-mcp-http = "genesismesh_mcp.remote:main"
+genesismesh-mcp-admin = "genesismesh_mcp.remote:admin_main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

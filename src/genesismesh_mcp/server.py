@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib
 import json
 import logging
+from collections.abc import Callable
 from importlib.metadata import version
 from importlib.resources import files
 from typing import Any
@@ -133,8 +134,16 @@ PROMPTS = {
 }
 
 
-def create_server(settings: Settings | None = None, *, tools: list[ToolSpec] | None = None) -> Server:
+def create_server(settings: Settings | None = None, *, tools: list[ToolSpec] | None = None,
+                  granted_profiles: Callable[[], frozenset[str]] | None = None) -> Server:
+    """The MCP server. ``granted_profiles``, when given, returns the profiles the current
+    request may use (the HTTP transport's access token scopes); the configured profiles are
+    narrowed to them for listing and calling tools. stdio passes none."""
     settings = settings or Settings()
+
+    def allowed() -> frozenset[str]:
+        return settings.profiles if granted_profiles is None else settings.profiles & granted_profiles()
+
     definitions = build_tools(settings) if tools is None else tools
     by_name = {tool.name: tool for tool in definitions}
     if len(by_name) != len(definitions):
@@ -155,7 +164,8 @@ def create_server(settings: Settings | None = None, *, tools: list[ToolSpec] | N
         return items[start:end], prefix + str(end) if end < len(items) else None
 
     async def list_tools(ctx, params):
-        enabled = [tool for tool in definitions if tool.profiles <= settings.profiles]
+        permitted = allowed()
+        enabled = [tool for tool in definitions if tool.profiles <= permitted]
         entries, cursor = page(enabled, params, "tools:", settings.tool_page_size)
         return mt.ListToolsResult(tools=[mt.Tool(name=t.name, description=t.description, inputSchema=t.input_schema,
             annotations=mt.ToolAnnotations(readOnlyHint=t.read_only, destructiveHint=t.destructive,
@@ -170,6 +180,8 @@ def create_server(settings: Settings | None = None, *, tools: list[ToolSpec] | N
             if tool is None:
                 raise ToolError("unknown_tool", "No such tool is registered.")
             settings.require(tool.profiles)
+            if not tool.profiles <= allowed():
+                raise ToolError("scope_required", "The access token's scopes do not include this tool's profiles.")
             args = params.arguments or {}
             if len(_json(args).encode("utf-8")) > settings.max_input_bytes:
                 raise ToolError("input_too_large", "The request exceeds the configured input limit.")

@@ -25,10 +25,14 @@ jobs:
       - run: python -m coverage report
       - run: python scripts/snapshot_cli.py --check
       - run: python scripts/render_coverage.py --check
+      - name: Read the pinned core commit
+        id: core
+        shell: bash
+        run: echo "commit=$(python -c 'import json; print(json.load(open("src/genesismesh_mcp/data/compatibility.json"))["core_commit"])')" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           repository: GenesisMeshLabs/genesismesh
-          ref: 9e4d5c01e6ba7a22e73c17388796ec274f73a2fc
+          ref: ${{ steps.core.outputs.commit }}
           path: temp/core
       - run: python scripts/check_coverage.py --core temp/core --require-http --require-no-gaps --test-evidence temp/coverage/tests.json --branch-coverage temp/coverage/branches.json --require-clean-evidence --require-full-behavior --json > temp/coverage/verification.json
       - run: python -m build

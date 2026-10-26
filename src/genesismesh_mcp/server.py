@@ -17,6 +17,7 @@ from mcp.server.lowlevel import Server
 from pydantic import BaseModel, ValidationError
 
 from . import __version__
+from .catalog import load_compatibility
 from .enrollment import GUIDE_URI
 from .enrollment import PROMPT as ENROLL_PROMPT
 from .enrollment import guide as enrollment_guide
@@ -25,7 +26,9 @@ from .settings import Settings
 from .types import ToolError, ToolSpec
 
 logger = logging.getLogger(__name__)
-CORE_VERSION = "1.8.1"
+#: The exact core release this adapter is verified against, with its commit and contract digest:
+#: data/compatibility.json. pyproject.toml and requirements.lock pin the same release (tests/test_catalog.py).
+CORE_VERSION = load_compatibility()["core_version"]
 PREFIX = "genesis-mesh://"
 
 

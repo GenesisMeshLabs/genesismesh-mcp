@@ -7,6 +7,8 @@ import tempfile
 
 from mcp import Client, StdioServerParameters
 
+from genesismesh_mcp.server import CORE_VERSION
+
 
 async def main():
     with tempfile.TemporaryDirectory(prefix="genesismesh-mcp-wheel-") as directory:
@@ -27,7 +29,7 @@ async def main():
             assert not parsed.is_error and parsed.structured_content == {"result": []}
             assert json.loads(parsed.content[0].text) == []
             print(json.dumps({"wheel_stdio_smoke": "passed", "tools": report["summary"]["registered_tools"],
-                              "visible_tools": len(tools.tools), "core": "1.8.1"}))
+                              "visible_tools": len(tools.tools), "core": CORE_VERSION}))
 
 
 if __name__ == "__main__":

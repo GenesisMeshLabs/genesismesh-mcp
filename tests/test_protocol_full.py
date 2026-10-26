@@ -24,7 +24,7 @@ def test_startup_refuses_wrong_core_version_or_corrupt_snapshot(monkeypatch):
     monkeypatch.setattr(server, "version", lambda package: "0.0.0")
     with pytest.raises(ValueError, match="installed Genesis Mesh version"):
         server.build_tools(Settings())
-    monkeypatch.setattr(server, "version", lambda package: "1.8.1")
+    monkeypatch.setattr(server, "version", lambda package: server.CORE_VERSION)
     monkeypatch.setattr(catalog, "verify_packaged_snapshot", lambda: ["corrupt"])
     with pytest.raises(ValueError, match="Packaged core contract"):
         server.build_tools(Settings())

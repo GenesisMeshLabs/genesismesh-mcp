@@ -66,7 +66,7 @@ Offline signing requires `sign` plus a configured reference explicitly permitted
 
 ## Compatibility and delivery
 
-Core is pinned to 1.8.1 at `9e4d5c01e6ba7a22e73c17388796ec274f73a2fc`. The normalized public-contract digest is `2c6b23036e5584d0bae53369143be73877d16552f8c43ac32e1a217207f25806`. Runtime checks validate the package version and packaged metadata; source verification also checks the exact commit and tracked cleanliness. CLI parameter references have an independent snapshot check.
+Core is pinned in one place, `src/genesismesh_mcp/data/compatibility.json`: the exact release, its commit and the normalized public-contract digest. `pyproject.toml` and `requirements.lock` pin the same release, CI checks out that commit, and a test keeps them in agreement. Runtime checks validate the package version and packaged metadata; source verification also checks the exact commit and tracked cleanliness. CLI parameter references have an independent snapshot check.
 
 The core's proposed contract-bundle release mechanism has not shipped in this baseline. This project therefore uses explicit version/commit/digest pins. It is not enrolled in the core's coordinated release train, and creating this adapter does not change the SDKs' release policies.
 

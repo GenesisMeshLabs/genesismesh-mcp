@@ -93,7 +93,11 @@ Offline signing requires both a signer reference and an exact tool allowlist:
 
 Keys use the core's base64 key-file format. There are no wildcard signer permissions. The model supplies a `signer_ref`, never a private key, key path, signer backend or replacement authority URL. There is no raw arbitrary-signing tool.
 
-An invitation tool intentionally returns its newly issued enrollment token; treat that result as sensitive. Oversight signing does **not** prove that a separate human approved: the host and configured key custodian must control those calls. A policy ALLOW is an assessment, not proof an external action executed.
+An invitation tool intentionally returns its newly issued enrollment token; treat that result as sensitive.
+
+### Nodes and agents that hold their own keys
+
+The connector issues invites; it never holds an outside node's private key, so the node joins and registers itself. Issue the invite with `na_admin_create_invite`, bound to the node's public key (`recipient_public_key`): the result's `token_id` **is** the single-use invite token. The node then joins (`/join`) and registers its descriptor (`/agents`) at the authority's public node URL, signing with its own key. Configure that URL as `node_enrollment_url` when the server's own `authority_url` is a private address. Every MCP client learns this without documentation: the server instructions say it, the invite result carries an `enrollment` note with the `join_url`, the `genesis-mesh://guide/enroll-node` resource holds the steps and a Python example, and the `enroll_node` prompt runs the procedure. Oversight signing does **not** prove that a separate human approved: the host and configured key custodian must control those calls. A policy ALLOW is an assessment, not proof an external action executed.
 
 ## Discover and use the core
 

@@ -219,8 +219,14 @@ def _read_response(settings: Settings, operation: dict[str, Any], response: requ
     # token. Signer seeds are never sent and transport errors never reveal them.
     if _contains_secret(body, (getattr(settings, "invite_token", None) or "",)):
         raise ToolError("sensitive_authority_response", "The authority response unexpectedly contained a configured credential.")
-    return {"http_status": response.status_code, "http_ok": 200 <= response.status_code < 300,
-            "response_format": operation["response"], "result": body}
+    result = {"http_status": response.status_code, "http_ok": 200 <= response.status_code < 300,
+              "response_format": operation["response"], "result": body}
+    if operation["path"] == "/admin/invite" and result["http_ok"]:
+        # Beside the unchanged authority result: what token_id is, and how the node joins itself.
+        from .enrollment import invite_guidance
+
+        result["enrollment"] = invite_guidance(settings)
+    return result
 
 
 def invoke(settings: Settings, operation: dict[str, Any], arguments: dict[str, Any]) -> dict[str, Any]:
@@ -258,7 +264,10 @@ def build_tools(settings: Settings) -> list[ToolSpec]:
                        f"{operation['method']} {operation['path']}]. Returns the authority result unchanged; "
                        "HTTP success is not proof of authorization or external execution.")
         if operation["path"] == "/admin/invite":
-            description += " Sensitive output: the newly issued enrollment token is a bearer capability."
+            description += (" Sensitive output: the result's token_id is the newly issued single-use invite token "
+                            "itself, a bearer capability. Bind it to the node's public key (recipient_public_key); "
+                            "the node then joins and registers itself with its own key: see "
+                            "genesis-mesh://guide/enroll-node.")
         if operation["name"] == "na_health_list_nodes":
             description += " Public count only; use na_nodes_roster for the operator-signed inventory."
         if operation["name"] == "na_attestations_list_attestations":

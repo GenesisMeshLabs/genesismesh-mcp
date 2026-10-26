@@ -66,16 +66,33 @@ _DOMAIN_OUTCOMES = {
 def _denial(result, tool_name=None, arguments=None):
     if tool_name in _DOMAIN_OUTCOMES:
         return _DOMAIN_OUTCOMES[tool_name](result, arguments)
-    historical_fields = {
-        "na_boundary_verify": {"authorized"},  # accepted verifies the signature; authorized describes its decision.
-        "na_out_of_band_propose_holder": {"approved"},  # A newly recorded proposal awaits another holder.
-        "na_remediation_get_remediation": {"verdict"},  # Original decision retained in a state record.
-        "na_remediation_record_notice": {"verdict"},
-    }.get(tool_name)
-    if (historical_fields and isinstance(result, dict) and "http_ok" in result
+    if (isinstance(result, dict) and result.get("http_ok") is True
             and isinstance(result.get("result"), dict)):
-        result = {**result, "result": {key: value for key, value in result["result"].items()
-                                        if key not in historical_fields}}
+        body, status = result["result"], result.get("http_status")
+        args = arguments if isinstance(arguments, dict) else {}
+        path = args.get("path") if isinstance(args.get("path"), dict) else {}
+        request = args.get("body") if isinstance(args.get("body"), dict) else {}
+        historical_fields = set()
+        if (tool_name == "na_boundary_verify" and status == 200
+                and type(body.get("accepted")) is bool and type(body.get("authorized")) is bool
+                and all(isinstance(body.get(key), str) and body[key] for key in ("decision_id", "reason"))):
+            historical_fields = {"authorized"}  # Signature validity and historical policy outcome are distinct.
+        elif (tool_name == "na_out_of_band_propose_holder" and status == 201 and body.get("approved") is False
+                and all(isinstance(body.get(key), str) and body[key] for key in ("proposal_id", "key_id", "holder", "proposed_by"))
+                and body["key_id"] == path.get("key_id") and body["holder"] == request.get("holder")):
+            historical_fields = {"approved"}  # A recorded proposal awaits another holder.
+        elif (tool_name in {"na_remediation_get_remediation", "na_remediation_record_notice"} and status == 200
+                and body.get("subject_kind") in ("decision", "judgement") and body.get("subject_id") == path.get("subject_id")
+                and isinstance(body.get("subject_id"), str) and bool(body["subject_id"])
+                and body.get("state") in ("judged_allowed", "matched", "recorded", "remediation_due", "overdue", "remediated", "upheld", "waived")
+                and type(body.get("review_pending")) is bool):
+            if ((tool_name == "na_remediation_get_remediation" and isinstance(body.get("reviews"), list) and isinstance(body.get("records"), list))
+                    or (tool_name == "na_remediation_record_notice" and all(isinstance(body.get(key), str) and body[key] for key in ("notified_at", "notified_by")))):
+                historical_fields = {"verdict"}  # Original decision retained in a successfully read/updated state record.
+        if historical_fields:
+            result = {**result, "result": {key: value for key, value in body.items() if key not in historical_fields}}
+        if tool_name == "na_treaties_connectome_trust_path" and body.get("trusted") is False:
+            return True
     if result is False:
         return True
     if isinstance(result, dict):
@@ -84,7 +101,7 @@ def _denial(result, tool_name=None, arguments=None):
             # This named constructor succeeds by producing a signed refusal.
             # Other error flags still apply; verification/evaluation False does not get this exception.
             result = {key: value for key, value in result.items() if key != "approved"}
-        return (any(result.get(key) is False for key in ("valid", "verified", "accepted", "http_ok", "authorized", "approved", "completed", "complete", "trusted",
+        return (any(result.get(key) is False for key in ("valid", "verified", "accepted", "http_ok", "authorized", "approved", "completed", "complete",
                                                        "accepted_for_review", "local_state_available"))
                 or (type(result.get("evidence_failures")) is int and result["evidence_failures"] > 0)
                 or result.get("status") in ("failed", "denied", "rejected", "partial", "unknown")

@@ -537,15 +537,19 @@ def test_empty_named_scanner_finding_is_an_adverse_outcome_not_a_clean_result():
 def test_http_record_creation_and_verification_do_not_reinterpret_recorded_denials():
     from conftest import _denial
 
+    state = {"subject_kind": "judgement", "subject_id": "d", "verdict": "deny", "state": "remediation_due", "review_pending": False}
     cases = {
-        "na_boundary_verify": {"accepted": True, "authorized": False},
-        "na_out_of_band_propose_holder": {"proposal_id": "pending", "approved": False},
-        "na_remediation_get_remediation": {"subject_id": "decision", "verdict": "deny", "state": "alerted"},
-        "na_remediation_record_notice": {"subject_id": "decision", "verdict": "deny", "state": "alerted"},
+        "na_boundary_verify": (200, {"decision_id": "d", "reason": "accepted", "accepted": True, "authorized": False}, {}),
+        "na_out_of_band_propose_holder": (201, {"proposal_id": "pending", "key_id": "reader", "holder": "New holder", "proposed_by": "operator", "approved": False}, {"path": {"key_id": "reader"}, "body": {"holder": "New holder"}}),
+        "na_remediation_get_remediation": (200, {**state, "reviews": [{"verdict": "deny"}], "records": []}, {"path": {"subject_id": "d"}}),
+        "na_remediation_record_notice": (200, {**state, "notified_at": "2026-10-26T00:00:00Z", "notified_by": "operator"}, {"path": {"subject_id": "d"}}),
     }
-    for name, body in cases.items():
-        assert not _denial({"http_ok": True, "result": body}, name)
-        assert _denial({"http_ok": False, "result": body}, name)
-        assert _denial({"http_ok": True, "result": {**body, "accepted": False}}, name)
+    for name, (status, body, args) in cases.items():
+        envelope = {"http_ok": True, "http_status": status, "result": body}
+        assert not _denial(envelope, name, args)
+        assert _denial({**envelope, "http_ok": False}, name, args)
+        assert _denial({**envelope, "result": {**body, "accepted": False}}, name, args)
+        if name.startswith("na_remediation_"):
+            assert _denial({**envelope, "result": {**body, "state": "unknown"}}, name, args)
     assert _denial({"http_ok": True, "result": {"authorized": False}}, "na_boundary_policy_evaluate")
     assert _denial({"http_ok": True, "result": {"trusted": False}}, "na_treaties_connectome_trust_path")

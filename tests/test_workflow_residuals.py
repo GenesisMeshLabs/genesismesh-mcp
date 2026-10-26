@@ -401,9 +401,12 @@ def test_published_private_directory_retains_platform_permissions(tmp_path):
     private_directory(destination)
     assert destination.is_dir() and not list(tmp_path.glob(".private-init-*"))
     if os.name == "nt":
+        control = tmp_path / "native-owner-control"
+        control.mkdir(mode=0o700)
         script = r'''
 $ErrorActionPreference = 'Stop'
 $acl = Get-Acl -LiteralPath $env:GENESISMESH_TEST_ACL_PATH
+$control = Get-Acl -LiteralPath $env:GENESISMESH_TEST_ACL_CONTROL_PATH
 $rules = @($acl.Access | ForEach-Object {
     [PSCustomObject]@{
         sid = $_.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value
@@ -416,6 +419,7 @@ $rules = @($acl.Access | ForEach-Object {
 [PSCustomObject]@{
     protected = $acl.AreAccessRulesProtected
     owner = $acl.GetOwner([System.Security.Principal.SecurityIdentifier]).Value
+    native_owner = $control.GetOwner([System.Security.Principal.SecurityIdentifier]).Value
     current_user = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value
     rules = $rules
 } | ConvertTo-Json -Depth 5 -Compress
@@ -424,13 +428,18 @@ $rules = @($acl.Access | ForEach-Object {
         # with Windows PowerShell 5. Let the child discover its bundled modules.
         child_env = {key: value for key, value in os.environ.items() if key.casefold() != "psmodulepath"}
         child_env["GENESISMESH_TEST_ACL_PATH"] = str(destination)
+        child_env["GENESISMESH_TEST_ACL_CONTROL_PATH"] = str(control)
         result = subprocess.run(["powershell.exe", "-NoLogo", "-NoProfile", "-NonInteractive", "-Command", script],
                                 env=child_env,
                                 check=False, capture_output=True, text=True, timeout=15)
         assert result.returncode == 0, result.stderr
         acl = json.loads(result.stdout)
         assert acl["protected"]
-        assert acl["owner"] == acl["current_user"]
+        # Elevated Windows tokens may choose local Administrators as the
+        # default owner. Publication must retain the native creation owner,
+        # and neither it nor OWNER RIGHTS may refer to an unrelated principal.
+        assert acl["owner"] == acl["native_owner"]
+        assert acl["owner"] in {acl["current_user"], "S-1-5-32-544"}
         grants = {rule["sid"]: rule for rule in acl["rules"] if rule["allow"]}
         required = {acl["current_user"], "S-1-5-18"}
         # Python's Windows 0700 implementation retains local Administrators

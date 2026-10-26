@@ -510,3 +510,42 @@ def test_case():
     calls = [event for event in receipt["tool_calls"] if event["tool"] == "gm_offline_oversight_reject_commitment"]
     assert any(event["outcome"] == "returned" and event["schema_valid"] and not event["domain_denial"] for event in calls)
     assert any(event["outcome"] == "ToolError" for event in calls)
+
+
+def test_empty_named_scanner_finding_is_an_adverse_outcome_not_a_clean_result():
+    from genesis_mesh.trust.context_integrity import scan_for_injection_markers
+
+    from conftest import _denial
+    from genesismesh_mcp.offline import build_tools
+    from genesismesh_mcp.settings import Settings
+
+    tools = {tool.name: tool for tool in build_tools(Settings())}
+    # The adapter deliberately fixes the injection scanner's pattern set, while
+    # core also supports custom patterns. Both scanners can represent a finding
+    # with an empty string; the metadata case reaches the registered adapter.
+    results = {
+        "gm_offline_context_integrity_scan_for_injection_markers": scan_for_injection_markers("x", patterns=[""]),
+        "gm_offline_privacy_scan_metadata_fingerprints": tools["gm_offline_privacy_scan_metadata_fingerprints"].handler(
+            {"headers": {"": "x"}, "profile": {"sovereign_id": "alpha"}}),
+    }
+    for name, result in results.items():
+        assert result == [""]
+        assert _denial(result, name) is True
+        assert _denial([], name) is False
+
+
+def test_http_record_creation_and_verification_do_not_reinterpret_recorded_denials():
+    from conftest import _denial
+
+    cases = {
+        "na_boundary_verify": {"accepted": True, "authorized": False},
+        "na_out_of_band_propose_holder": {"proposal_id": "pending", "approved": False},
+        "na_remediation_get_remediation": {"subject_id": "decision", "verdict": "deny", "state": "alerted"},
+        "na_remediation_record_notice": {"subject_id": "decision", "verdict": "deny", "state": "alerted"},
+    }
+    for name, body in cases.items():
+        assert not _denial({"http_ok": True, "result": body}, name)
+        assert _denial({"http_ok": False, "result": body}, name)
+        assert _denial({"http_ok": True, "result": {**body, "accepted": False}}, name)
+    assert _denial({"http_ok": True, "result": {"authorized": False}}, "na_boundary_policy_evaluate")
+    assert _denial({"http_ok": True, "result": {"trusted": False}}, "na_treaties_connectome_trust_path")

@@ -601,8 +601,7 @@
       "kind": "real_core",
       "scope": "Verify stored entries: envelopes, store chain, signatures and chains. Uses real core records and the cited semantic assertions; no external action is executed.",
       "positive": [
-        "tests/test_offline_remaining.py::test_nonempty_evidence_export_and_anchor_integrity",
-        "tests/test_offline_remaining.py::test_received_evidence_envelope_is_never_normalized_before_verification"
+        "tests/test_offline_remaining.py::test_nonempty_evidence_export_and_anchor_integrity"
       ],
       "negative": [
         "tests/test_offline_remaining.py::test_nonempty_evidence_export_and_anchor_integrity",

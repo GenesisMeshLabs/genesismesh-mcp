@@ -35,8 +35,8 @@ _DOMAIN_OUTCOMES = {
     'gm_offline_consensus_assess_cascade_risk': lambda result, arguments: isinstance(result, (list, tuple)) and len(result) == 2 and isinstance(result[0], dict) and result[0].get('blocked') is True and result[1] == 'cascade_detected',
     'gm_offline_context_assess_attestation_basis': lambda result, arguments: isinstance(result, dict) and result.get('status_failure') in {'attestation_not_found', 'attestation_invalid', 'attestation_revoked', 'attestation_subject_mismatch'},
     'gm_offline_context_evaluate_context': lambda result, arguments: isinstance(result, dict) and isinstance(result.get('decision'), dict) and result['decision'].get('authorized') is False,
-    'gm_offline_context_integrity_scan_for_injection_markers': lambda result, arguments: isinstance(result, list) and bool(result) and all(isinstance(item, str) and bool(item) for item in result),
-    'gm_offline_privacy_scan_metadata_fingerprints': lambda result, arguments: isinstance(result, list) and bool(result) and all(isinstance(item, str) and bool(item) for item in result),
+    'gm_offline_context_integrity_scan_for_injection_markers': lambda result, arguments: isinstance(result, list) and bool(result) and all(isinstance(item, str) for item in result),
+    'gm_offline_privacy_scan_metadata_fingerprints': lambda result, arguments: isinstance(result, list) and bool(result) and all(isinstance(item, str) for item in result),
     'gm_offline_context_validate_boundary_policy': lambda result, arguments: isinstance(result, dict) and isinstance(result.get('issues'), list) and bool(result['issues']) and all(isinstance(item, dict) and isinstance(item.get('code'), str) and bool(item['code']) for item in result['issues']),
     'gm_offline_evidence_store_check_metadata_only': lambda result, arguments: isinstance(result, str) and bool(result),
     'gm_offline_grants_envelope_secret_problem': lambda result, arguments: isinstance(result, str) and bool(result),
@@ -66,6 +66,16 @@ _DOMAIN_OUTCOMES = {
 def _denial(result, tool_name=None, arguments=None):
     if tool_name in _DOMAIN_OUTCOMES:
         return _DOMAIN_OUTCOMES[tool_name](result, arguments)
+    historical_fields = {
+        "na_boundary_verify": {"authorized"},  # accepted verifies the signature; authorized describes its decision.
+        "na_out_of_band_propose_holder": {"approved"},  # A newly recorded proposal awaits another holder.
+        "na_remediation_get_remediation": {"verdict"},  # Original decision retained in a state record.
+        "na_remediation_record_notice": {"verdict"},
+    }.get(tool_name)
+    if (historical_fields and isinstance(result, dict) and "http_ok" in result
+            and isinstance(result.get("result"), dict)):
+        result = {**result, "result": {key: value for key, value in result["result"].items()
+                                        if key not in historical_fields}}
     if result is False:
         return True
     if isinstance(result, dict):
@@ -74,7 +84,7 @@ def _denial(result, tool_name=None, arguments=None):
             # This named constructor succeeds by producing a signed refusal.
             # Other error flags still apply; verification/evaluation False does not get this exception.
             result = {key: value for key, value in result.items() if key != "approved"}
-        return (any(result.get(key) is False for key in ("valid", "verified", "accepted", "http_ok", "authorized", "approved", "completed", "complete",
+        return (any(result.get(key) is False for key in ("valid", "verified", "accepted", "http_ok", "authorized", "approved", "completed", "complete", "trusted",
                                                        "accepted_for_review", "local_state_available"))
                 or (type(result.get("evidence_failures")) is int and result["evidence_failures"] > 0)
                 or result.get("status") in ("failed", "denied", "rejected", "partial", "unknown")

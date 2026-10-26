@@ -17,6 +17,10 @@ from mcp.server.lowlevel import Server
 from pydantic import BaseModel, ValidationError
 
 from . import __version__
+from .enrollment import GUIDE_URI
+from .enrollment import PROMPT as ENROLL_PROMPT
+from .enrollment import guide as enrollment_guide
+from .enrollment import instructions as enrollment_instructions
 from .settings import Settings
 from .types import ToolError, ToolSpec
 
@@ -110,7 +114,8 @@ def build_resources(tools: list[ToolSpec], settings: Settings) -> dict[str, str]
                  PREFIX + "tool-evidence": _json(load_tool_evidence()),
                  PREFIX + "compatibility": _json({**load_compatibility(), "installed_core": version("genesis-mesh"),
                                                  "compatible": version("genesis-mesh") == CORE_VERSION}),
-                 PREFIX + "configuration": _json(settings.public_status())}
+                 PREFIX + "configuration": _json(settings.public_status()),
+                 GUIDE_URI: _json(enrollment_guide(settings))}
     for uri, (model, _) in _schema_models().items():
         resources[uri] = _json({"model": model.__name__, "schema": model.model_json_schema(),
                                 "meaning": "Structural schema only; parsing does not verify signatures or trust."})
@@ -131,6 +136,7 @@ PROMPTS = {
     "governed_operation": "Inspect the enabled tool catalog and applicable policy. A boundary ALLOW is an assessment, "
     "not proof an external action executed. Respect named-holder approvals and credentials. Report the actual action, "
     "decision and evidence recorded; do not manufacture approval or successful execution.",
+    "enroll_node": ENROLL_PROMPT,
 }
 
 
@@ -237,7 +243,8 @@ def create_server(settings: Settings | None = None, *, tools: list[ToolSpec] | N
 
     return Server("genesismesh-mcp", version=__version__,
         instructions="Genesis Mesh portable-trust adapters. Use coverage and compatibility resources to inspect scope. "
-        "Verification, policy assessment, evidence recording and external execution are distinct outcomes.",
+        "Verification, policy assessment, evidence recording and external execution are distinct outcomes."
+        + enrollment_instructions(settings),
         get_tool_input_schema=lambda name: by_name[name].input_schema if name in by_name else None,
         on_list_tools=list_tools, on_call_tool=call_tool, on_list_resources=list_resources,
         on_read_resource=read_resource, on_list_prompts=list_prompts, on_get_prompt=get_prompt)

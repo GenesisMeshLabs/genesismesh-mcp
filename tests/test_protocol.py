@@ -40,7 +40,7 @@ async def test_official_client_discovers_resources_prompts_and_real_offline_tool
         compatible = await client.read_resource("genesis-mesh://compatibility")
         assert json.loads(compatible.contents[0].text)["compatible"] is True
         prompts = await client.list_prompts()
-        assert {p.name for p in prompts.prompts} == {"inspect_trust", "verify_evidence", "governed_operation"}
+        assert {p.name for p in prompts.prompts} == {"inspect_trust", "verify_evidence", "governed_operation", "enroll_node"}
         prompt = await client.get_prompt("governed_operation")
         assert "not proof" in prompt.messages[0].content.text
         tool = next(t for t in tools if t.name.endswith("validate_trust_bundle"))

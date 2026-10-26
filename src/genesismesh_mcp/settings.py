@@ -38,6 +38,9 @@ def load_key_file(path: Path):
 @dataclass(frozen=True)
 class Settings:
     authority_url: str | None = None
+    # The authority's public URL for nodes that join themselves (the enrollment guide's join_url);
+    # the server's own authority_url may be a private address.
+    node_enrollment_url: str | None = None
     allow_http_loopback: bool = False
     profiles: frozenset[str] = frozenset({"read", "verify"})
     operator_key_file: Path | None = None
@@ -89,6 +92,9 @@ class Settings:
             raise ValueError("operator_key_id is required with operator_key_file")
         if self.authority_url:
             self._validate_authority()
+        if self.node_enrollment_url:
+            self._validate_origin(self.node_enrollment_url, name="node_enrollment_url")
+            object.__setattr__(self, "node_enrollment_url", self.node_enrollment_url.rstrip("/"))
         self._validate_workflow_configuration()
 
     def _validate_workflow_configuration(self) -> None:
@@ -129,22 +135,22 @@ class Settings:
     def _validate_authority(self) -> None:
         self._validate_origin(self.authority_url or "")
 
-    def _validate_origin(self, url: str) -> None:
+    def _validate_origin(self, url: str, name: str = "authority_url") -> None:
         parsed = urlsplit(url)
         if (not parsed.hostname or parsed.username is not None or parsed.password is not None
                 or parsed.query or parsed.fragment or parsed.path not in ("", "/")
                 or "\\" in url or any(ord(c) < 33 for c in url)):
-            raise ValueError("authority_url must be an origin without credentials, path, query or fragment")
+            raise ValueError(f"{name} must be an origin without credentials, path, query or fragment")
         try:
             parsed.port
         except ValueError:
-            raise ValueError("authority_url has an invalid port") from None
+            raise ValueError(f"{name} has an invalid port") from None
         try:
             loopback = ipaddress.ip_address(parsed.hostname).is_loopback
         except ValueError:
             loopback = parsed.hostname == "localhost"
         if parsed.scheme != "https" and not (parsed.scheme == "http" and loopback and self.allow_http_loopback):
-            raise ValueError("Use HTTPS, or explicitly allow HTTP for a loopback development authority")
+            raise ValueError(f"{name}: use HTTPS, or explicitly allow HTTP for a loopback development authority")
 
     def require(self, profiles: frozenset[str]) -> None:
         if not profiles <= self.profiles:
@@ -215,5 +221,5 @@ class Settings:
                 "proof_stores": sorted(self.proof_stores), "node_runtimes": sorted(self.node_runtimes),
                 "peers": sorted(self.peers), "guard_actions": sorted(self.guard_actions),
                 "workflow_state_configured": self.workflow_state_dir is not None,
-                "tool_page_size": self.tool_page_size,
+                "tool_page_size": self.tool_page_size, "node_enrollment_url": self.node_enrollment_url,
                 "max_input_bytes": self.max_input_bytes, "max_output_bytes": self.max_output_bytes}

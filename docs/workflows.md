@@ -89,6 +89,8 @@ The core scaffold uses a placeholder policy hash and stores root keys beside NA 
 
 ## Nodes and peers
 
+A node runtime configured here is a node identity the **server** holds. A node or agent that holds its own key elsewhere joins and registers itself instead: see the `genesis-mesh://guide/enroll-node` resource, and set `node_enrollment_url` to the authority's public node URL.
+
 Extend an authority's permissions with `gm_workflow_node_join`, `gm_workflow_node_status`, and `gm_workflow_peer_send`, then configure:
 
 ```json

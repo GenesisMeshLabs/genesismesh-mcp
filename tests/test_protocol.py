@@ -6,7 +6,7 @@ import threading
 import pytest
 from mcp import Client, StdioServerParameters
 
-from genesismesh_mcp.server import build_tools, create_server
+from genesismesh_mcp.server import CORE_VERSION, build_tools, create_server
 from genesismesh_mcp.settings import Settings
 from genesismesh_mcp.types import ToolSpec
 
@@ -129,7 +129,7 @@ async def test_real_stdio_process_uses_packaged_server(tmp_path):
     async with Client(params, read_timeout_seconds=30) as client:
         assert client.server_info.name == "genesismesh-mcp"
         result = await client.read_resource("genesis-mesh://compatibility")
-        assert json.loads(result.contents[0].text)["installed_core"] == "1.8.1"
+        assert json.loads(result.contents[0].text)["installed_core"] == CORE_VERSION
         tools = await all_tools(client)
         tool = next(t for t in tools if t.name.endswith("validate_trust_bundle"))
         result = await client.call_tool(tool.name, {"bundle": {}})

@@ -1,6 +1,6 @@
 # Workflow parity and hosting boundaries
 
-All 10 previously missing workflows and all 7 component-only compositions now have named configured adapters. `--require-no-gaps` passes against Genesis Mesh 1.8.1, commit `9e4d5c01e6ba7a22e73c17388796ec274f73a2fc`. The catalog separately reports registration, test evidence, availability and hosting boundaries.
+All 10 previously missing workflows and all 7 component-only compositions now have named configured adapters. `--require-no-gaps` passes against the pinned core (`src/genesismesh_mcp/data/compatibility.json`). The catalog separately reports registration, test evidence, availability and hosting boundaries.
 
 | Core workflow | MCP adapter | Implemented behavior |
 | --- | --- | --- |

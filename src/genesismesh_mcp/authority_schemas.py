@@ -1,4 +1,4 @@
-"""Reviewed HTTP request schemas for Genesis Mesh 1.8.1.
+"""Reviewed HTTP request schemas for the core release in data/compatibility.json.
 
 These schemas describe request envelopes, not a new implementation of protocol
 validation. Signed nested objects are validated without normalizing their bytes

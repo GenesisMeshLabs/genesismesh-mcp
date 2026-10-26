@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -179,6 +180,18 @@ def test_explicit_core_check_reads_source_instead_of_a_sibling_repo(tmp_path: Pa
 
 def test_pin_identifies_exact_release_and_revision() -> None:
     compatibility = load_compatibility()
-    assert compatibility["core_version"] == "1.8.1"
-    assert compatibility["core_commit"] == "9e4d5c01e6ba7a22e73c17388796ec274f73a2fc"
-    assert len(compatibility["contract_sha256"]) == 64
+    assert re.fullmatch(r"\d+\.\d+\.\d+", compatibility["core_version"])
+    assert re.fullmatch(r"[0-9a-f]{40}", compatibility["core_commit"])
+    assert re.fullmatch(r"[0-9a-f]{64}", compatibility["contract_sha256"])
+
+
+def test_every_core_pin_names_the_compatibility_release() -> None:
+    """A core update (Renovate opens it) changes the pins and compatibility.json together."""
+    version = load_compatibility()["core_version"]
+    root = Path(__file__).resolve().parents[1]
+    pins = {
+        "pyproject.toml": re.findall(r'"genesis-mesh==([^"]+)"', (root / "pyproject.toml").read_text(encoding="utf-8")),
+        "requirements.lock": re.findall(r"(?m)^genesis-mesh==(\S+)", (root / "requirements.lock").read_text(encoding="utf-8")),
+        "README.md": re.findall(r"Core compatibility: Genesis Mesh (\d+\.\d+\.\d+)", (root / "README.md").read_text(encoding="utf-8")),
+    }
+    assert pins == {name: [version] for name in pins}

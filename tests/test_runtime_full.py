@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 from dataclasses import replace
 from datetime import datetime, timezone
 
@@ -154,6 +155,7 @@ def test_join_refuses_unavailable_or_unmanaged_identity(authority, tmp_path, fau
         key = tmp_path / "bad.key"
         if fault == "invalid":
             key.write_text("invalid key")
+            os.chmod(key, 0o600)
         settings = replace(settings, node_runtimes={"client": replace(config, node_key_file=key)})
     with pytest.raises(ToolError) as exc:
         call(settings, JOIN, {"node": "client", "operation_id": "refuse"})

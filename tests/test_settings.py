@@ -1,9 +1,10 @@
 import json
+import os
 from pathlib import Path
 
 import pytest
 
-from genesismesh_mcp.settings import Settings
+from genesismesh_mcp.settings import Settings, load_key_file
 from genesismesh_mcp.types import ToolError
 
 
@@ -78,3 +79,28 @@ def test_signer_permission_is_checked_before_loading_a_key(tmp_path):
     assert unavailable.value.code == "signer_unavailable"
     with pytest.raises(ValueError, match="explicit tool names"):
         Settings(signer_files={"issuer": tmp_path / "missing.key"}, signer_permissions={"issuer": frozenset({"*"})})
+
+
+@pytest.mark.skipif(os.name == "nt", reason="POSIX permission bits; Windows relies on directory ACLs")
+def test_private_key_files_others_can_read_are_refused(tmp_path):
+    import base64
+
+    from nacl.signing import SigningKey
+
+    key = tmp_path / "issuer.key"
+    key.write_text(base64.b64encode(bytes(SigningKey.generate())).decode())
+    operation = "gm_offline_approved_operation"
+    settings = Settings(profiles=frozenset({"sign"}), signer_files={"issuer": key},
+                        signer_permissions={"issuer": frozenset({operation})})
+    for mode in (0o644, 0o640, 0o604):
+        os.chmod(key, mode)
+        with pytest.raises(ToolError) as exposed:
+            settings.load_signer("issuer", operation)
+        assert exposed.value.code == "key_file_exposed"
+    os.chmod(key, 0o600)
+    assert settings.load_signer("issuer", operation) is not None
+    directory = tmp_path / "not-a-file.key"
+    directory.mkdir(mode=0o700)
+    with pytest.raises(ToolError) as not_regular:
+        load_key_file(directory)
+    assert not_regular.value.code == "key_file_exposed"

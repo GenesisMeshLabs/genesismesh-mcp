@@ -6,6 +6,7 @@ import base64
 import copy
 import hashlib
 import json
+import os
 from datetime import datetime, timedelta, timezone
 
 import nacl.signing
@@ -28,6 +29,7 @@ def environment(tmp_path_factory):
     for name, key in keys.items():
         path = root / (name + ".key")
         path.write_text(base64.b64encode(bytes(key)).decode(), encoding="utf-8")
+        os.chmod(path, 0o600)
         files[name] = path
     signing_operations = frozenset(t.name for t in build_tools(Settings()) if "sign" in t.profiles)
     settings = Settings(profiles=frozenset({"read", "verify", "sign"}), signer_files=files,

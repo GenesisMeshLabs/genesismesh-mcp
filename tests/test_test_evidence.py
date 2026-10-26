@@ -474,6 +474,7 @@ def test_case():
 
 def test_signed_rejection_constructor_success_is_distinct_from_a_refused_call(child_pytest):
     code, receipt = child_pytest('''import base64
+import os
 from pathlib import Path
 from datetime import datetime, timezone
 from nacl.signing import SigningKey
@@ -487,6 +488,7 @@ def test_case():
     key = SigningKey.generate()
     path = Path("signer.key")
     path.write_text(base64.b64encode(bytes(key)).decode())
+    os.chmod(path, 0o600)
     settings = Settings(profiles=frozenset({"read", "verify", "sign"}), signer_files={"reviewer": path.resolve()},
                         signer_permissions={"reviewer": frozenset(names)})
     tools = {tool.name: tool for tool in build_tools(settings)}

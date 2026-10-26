@@ -5,6 +5,8 @@ from __future__ import annotations
 import ipaddress
 import json
 import math
+import os
+import stat
 from dataclasses import dataclass, field, fields
 from pathlib import Path
 from types import MappingProxyType
@@ -16,6 +18,21 @@ from genesis_mesh.crypto import load_private_key
 from .types import ToolError
 
 PROFILES = frozenset({"read", "verify", "operator", "node", "write", "sign", "local", "execute", "provision", "maintain"})
+
+
+def load_key_file(path: Path):
+    """Load a configured private key file, refusing one that others can read.
+
+    On POSIX the file must be a regular file owned by the server's user with no
+    group or other access (``chmod 600``). Windows relies on the ACLs of the
+    configured path and of the private directories this server creates.
+    """
+    if os.name != "nt":
+        info = os.stat(path)
+        if not stat.S_ISREG(info.st_mode) or info.st_mode & 0o077 or info.st_uid != os.geteuid():
+            raise ToolError("key_file_exposed", "A configured private key file must be a regular file owned by the "
+                                                "server's user, with no group or other access.")
+    return load_private_key(str(path))
 
 
 @dataclass(frozen=True)
@@ -141,7 +158,7 @@ class Settings:
         if operation is None or operation not in self.signer_permissions.get(reference, frozenset()):
             raise ToolError("signer_not_authorized", "The configured signer is not authorized for this operation.")
         try:
-            return load_private_key(str(path))
+            return load_key_file(path)
         except (OSError, ValueError, TypeError):
             raise ToolError("signer_unavailable", "The configured signer could not be loaded.") from None
 

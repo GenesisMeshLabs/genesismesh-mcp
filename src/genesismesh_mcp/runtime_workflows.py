@@ -16,7 +16,6 @@ from time import monotonic
 from genesis_mesh.crypto import (
     KeyPair,
     generate_keypair,
-    load_private_key,
     save_keypair,
     sign_model,
     verify_model_signature,
@@ -38,7 +37,7 @@ from websockets.asyncio.client import connect
 from . import authority
 from .offline.adapter import close_models, json_value
 from .runtime_config import GuardAction, NodeConfig
-from .settings import Settings
+from .settings import Settings, load_key_file
 from .types import ToolError, ToolSpec
 from .workflow_support import WorkflowJournal, atomic_json, pinned_root, private_directory, select_authority
 
@@ -140,7 +139,7 @@ def _node(settings, config, root_pin, *, create=False):
         _state_path(config, "node.pub")
         save_keypair(generate_keypair(), str(config.state_dir / "node"), "node-local")
     try:
-        private_key = load_private_key(str(key_path))
+        private_key = load_key_file(key_path)
     except (OSError, ValueError):
         raise ToolError("node_identity_unavailable", "The configured node identity could not be loaded.") from None
     genesis_data = _read_state(settings, config, "genesis.json")

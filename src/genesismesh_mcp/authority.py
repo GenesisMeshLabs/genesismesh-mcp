@@ -15,7 +15,7 @@ from typing import Any
 from urllib.parse import quote, urlencode
 
 import requests
-from genesis_mesh.crypto import load_private_key, sign_data, sign_model
+from genesis_mesh.crypto import sign_data, sign_model
 from genesis_mesh.crypto.admin_auth import sign_admin_request
 from genesis_mesh.crypto.node_auth import NODE_PURPOSES, sign_executor_proof, sign_node_request
 from genesis_mesh.models import AgentDescriptor
@@ -24,7 +24,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 from urllib3.exceptions import HTTPError as ResponseReadError
 
 from .authority_schemas import S, body_schema, obj, query_schema
-from .settings import Settings
+from .settings import Settings, load_key_file
 from .types import ToolError, ToolSpec
 
 PATH_FIELD = re.compile(r"<(path:)?([^>]+)>")
@@ -77,7 +77,9 @@ def _key(settings: Settings, kind: str):
     if path is None:
         raise ToolError("identity_not_configured", f"A dedicated {kind} identity is required.")
     try:
-        return load_private_key(str(path))
+        return load_key_file(path)
+    except ToolError:
+        raise
     except Exception:
         raise ToolError("identity_unavailable", "The configured identity could not be loaded.") from None
 

@@ -75,6 +75,12 @@ def resource_lock(settings: Settings, kind: str, name: str):
     return WorkflowJournal(settings, "gm_lock_" + kind, lock_id, {}, bind_config=False)
 
 
+def _system_tool(name: str) -> str:
+    """A Windows system tool by absolute path, never resolved through PATH."""
+    root = os.environ.get("SystemRoot", r"C:\Windows")
+    return str(Path(root) / "System32" / name)
+
+
 def private_directory(path: Path) -> None:
     """Create a new private directory before any keys or sensitive state exist."""
     if os.name != "nt":
@@ -90,12 +96,12 @@ def private_directory(path: Path) -> None:
     stage = Path(tempfile.mkdtemp(prefix=".private-init-", dir=path.parent))
     try:
         try:
-            result = subprocess.run(["whoami", "/user", "/fo", "csv", "/nh"], check=True,
+            result = subprocess.run([_system_tool("whoami.exe"), "/user", "/fo", "csv", "/nh"], check=True,
                                     capture_output=True, text=True, timeout=10)
             sid = next(csv.reader(io.StringIO(result.stdout.strip())))[1]
             if not sid.startswith("S-1-"):
                 raise ValueError("Invalid current-user SID")
-            subprocess.run(["icacls", str(stage), "/inheritance:r", "/grant:r", f"*{sid}:(OI)(CI)F",
+            subprocess.run([_system_tool("icacls.exe"), str(stage), "/inheritance:r", "/grant:r", f"*{sid}:(OI)(CI)F",
                             "/grant:r", "*S-1-5-18:(OI)(CI)F"], check=True, capture_output=True, timeout=10)
         except (OSError, ValueError, IndexError, StopIteration, subprocess.SubprocessError):
             raise ToolError("private_storage_unavailable", "Could not secure the new private directory.") from None

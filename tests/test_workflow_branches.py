@@ -9,6 +9,7 @@ import sqlite3
 import subprocess
 import sys
 from dataclasses import replace
+from pathlib import Path
 
 import pytest
 from genesis_mesh.crypto import verify_model_signature, verify_signature
@@ -442,9 +443,9 @@ def test_failed_private_acl_setup_cannot_be_bypassed_on_retry(tmp_path, monkeypa
     failed = False
     def fail_once(command, **kwargs):
         nonlocal failed
-        attempts.append(command[0])
-        if not failed and ((fault == "sid" and command[0] == "whoami")
-                           or (fault == "icacls" and command[0] == "icacls")):
+        attempts.append(Path(command[0]).stem)
+        if not failed and ((fault == "sid" and Path(command[0]).stem == "whoami")
+                           or (fault == "icacls" and Path(command[0]).stem == "icacls")):
             failed = True
             if fault == "sid":
                 return subprocess.CompletedProcess(command, 0, stdout='"user","invalid-sid"\n')
@@ -464,15 +465,13 @@ def test_failed_private_acl_setup_cannot_be_bypassed_on_retry(tmp_path, monkeypa
 @pytest.mark.skipif(os.name != "nt", reason="Windows ACL setup has no POSIX subprocess equivalent")
 @pytest.mark.parametrize("cleanup_failure", ["access_denied", "concurrent_file"])
 def test_failed_acl_and_cleanup_never_publish_or_reuse_unsecured_storage(tmp_path, monkeypatch, cleanup_failure):
-    from pathlib import Path
-
     root = tmp_path / "private"
     settings = Settings(profiles={"local"}, workflow_state_dir=root)
     original_run, original_rmdir = workflow_support.subprocess.run, Path.rmdir
     stages = []
     fail_acl = True
     def fail_permissions(command, **kwargs):
-        if command[0] == "icacls":
+        if Path(command[0]).stem == "icacls":
             stages.append(Path(command[1]))
             if fail_acl:
                 if cleanup_failure == "concurrent_file":
@@ -520,7 +519,7 @@ def test_private_directory_publish_race_preserves_other_destination(tmp_path, mo
     original = workflow_support.subprocess.run
     def competing_creation(command, **kwargs):
         result = original(command, **kwargs)
-        if command[0] == "icacls":
+        if Path(command[0]).stem == "icacls":
             root.mkdir()
             (root / "user-file").write_text("untouched")
         return result
@@ -529,3 +528,14 @@ def test_private_directory_publish_race_preserves_other_destination(tmp_path, mo
         workflow_support.private_directory(root)
     assert (root / "user-file").read_text() == "untouched"
     assert not list(tmp_path.glob(".private-init-*"))
+
+
+def test_windows_system_tools_are_absolute_and_never_resolved_through_path(monkeypatch):
+    monkeypatch.setenv("SystemRoot", r"C:\Windows")
+    monkeypatch.setenv("PATH", "")
+    for name in ("whoami.exe", "icacls.exe"):
+        tool = Path(workflow_support._system_tool(name))
+        assert tool.name == name and tool.parent.name == "System32"
+        assert str(tool).startswith("C:\Windows")
+    monkeypatch.delenv("SystemRoot")
+    assert workflow_support._system_tool("whoami.exe").startswith("C:\Windows")

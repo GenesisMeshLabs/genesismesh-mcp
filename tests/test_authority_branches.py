@@ -1,5 +1,6 @@
 """Transport and configuration refusals, without contacting a real authority."""
 
+import os
 from dataclasses import replace
 
 import pytest
@@ -34,10 +35,23 @@ def test_required_config_refused_before_transport(identities, transport, change,
     assert calls == []
 
 
+@pytest.mark.skipif(os.name == "nt", reason="POSIX permission bits; Windows relies on directory ACLs")
+def test_identity_file_others_can_read_is_refused_not_sanitized(identities, transport, tmp_path):
+    settings, _ = identities
+    exposed = tmp_path / "exposed-private-key"
+    exposed.write_text("never-display-this-private-material")
+    os.chmod(exposed, 0o644)
+    with pytest.raises(ToolError) as caught:
+        call(replace(settings, operator_key_file=exposed), "/admin/invite")
+    assert caught.value.code == "key_file_exposed"
+    assert "never-display" not in str(caught.value)
+
+
 def test_unreadable_identity_is_sanitized(identities, transport, tmp_path):
     settings, _ = identities
     bad = tmp_path / "broken-private-key"
     bad.write_text("never-display-this-private-material")
+    os.chmod(bad, 0o600)
     with pytest.raises(ToolError) as caught:
         call(replace(settings, operator_key_file=bad), "/admin/invite")
     assert caught.value.code == "identity_unavailable"

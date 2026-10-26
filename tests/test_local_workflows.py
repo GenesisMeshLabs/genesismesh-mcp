@@ -285,3 +285,42 @@ def test_local_step_journal_contains_no_private_key_material(configured):
     assert "operator_key_file" not in encoded
     assert str(settings.operator_key_file) not in encoded
     assert "private_key" not in encoded
+
+
+def test_mid_store_pack_verifies_with_cited_registry_records_and_supplied_executor_keys(configured):
+    """A pack cites the registry records before its range. A store whose executor keys predate registry
+    records (as long-running 1.x stores do) needs the keys supplied, as the core's --executor-keys."""
+    from genesis_mesh.models.context import BoundaryDecision
+    from genesis_mesh.trust.execution import record_execution
+    from test_authority_full import active_policy
+
+    from genesismesh_mcp import local
+
+    settings, keys = configured
+    active_policy(settings)
+    workflow._call(settings, "/admin/evidence/executor-keys", "POST", body={
+        "key_id": "executor", "public_key": keys["executor"].public_key_b64, "executor_sovereign_id": "vendor",
+        "role": "executor", "resource_prefix": "kv:test/"})
+    first = workflow._call(settings, "/admin/evidence/anchors", "POST")["anchor"]
+    attestation = workflow._call(settings, "/admin/attestations", "POST", body={
+        "subject_id": "vendor", "roles": ["role:client"], "claims": {"capabilities": ["secret.manage"]}})
+    decision = workflow._call(settings, "/admin/boundary/evaluate", "POST", body={
+        "attestation_id": attestation["attestation_id"], "requested_capability": "secret.manage",
+        "context": {"request_parameters": {"lifetime_days": 30, "resource_id": "kv:test/secret"}}})["decision"]
+    execution = record_execution(BoundaryDecision.model_validate(decision), "vendor", "secret.manage", "success",
+                                 keys["executor"].private_key, issued_by="executor", resource_id="kv:test/secret",
+                                 resource_action="rotate")
+    workflow._call(settings, "/evidence/execution", "POST", body={"evidence": execution.model_dump(mode="json")})
+    second = workflow._call(settings, "/admin/evidence/anchors", "POST")["anchor"]
+    pack = run(settings, "gm_workflow_audit_pack", operation_id="mid", artifact_store="audit",
+               from_sequence=first["store_sequence"] + 1, until_sequence=second["store_sequence"])
+    assert pack["completed"] is True, pack
+    reader = replace(settings, workspace=settings.artifact_roots["audit"])
+    verify = next(tool for tool in local.build_tools(reader) if tool.name == "gm_local_audit_verify").handler
+    request = {"directory": pack["artifact"]["directory"], "root_public_key": keys["root"].public_key_b64}
+    alone = verify(request)
+    assert alone["verified"] is True, alone
+    registry = workflow._call(settings, "/admin/evidence/executor-keys")["executor_keys"]
+    supplied = verify({**request, "executor_keys": {row["key_id"]: row for row in registry}})
+    assert supplied["verified"] is True and supplied["failures"] == [], supplied
+    assert supplied["counts"] == alone["counts"] and supplied["counts"].get("executions") == 1, supplied["counts"]

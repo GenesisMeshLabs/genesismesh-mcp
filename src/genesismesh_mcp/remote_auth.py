@@ -16,6 +16,7 @@ import hashlib
 import html
 import json
 import os
+import re
 import secrets
 import sqlite3
 import threading
@@ -23,6 +24,7 @@ import time
 from collections.abc import Callable, Iterable
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 from mcp.server.auth.provider import (
     AccessToken,
@@ -339,6 +341,19 @@ _HEADERS = {"Content-Security-Policy": "default-src 'none'; style-src 'unsafe-in
             "Referrer-Policy": "same-origin"}
 
 
+_ORIGIN = re.compile(r"^https?://[A-Za-z0-9.-]+(:[0-9]{1,5})?$")
+
+
+def _consent_headers(redirect_uri: str) -> dict[str, str]:
+    """The page headers, with the client's redirect origin allowed as a form target: browsers apply
+    form-action to the redirect that follows the form post, so 'self' alone blocks the hand-back."""
+    parts = urlsplit(redirect_uri)
+    origin = f"{parts.scheme}://{parts.netloc}"
+    target = f" {origin}" if _ORIGIN.match(origin) else ""
+    return {**_HEADERS, "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; "
+                                                   f"form-action 'self'{target}; frame-ancestors 'none'"}
+
+
 def _page(body: str, *, status: int = 200) -> HTMLResponse:
     return HTMLResponse(f"<!doctype html><meta charset=utf-8><title>Genesis Mesh MCP</title><style>{_STYLE}</style>"
                         f"<h1>Genesis Mesh MCP</h1><p>{html.escape(body)}</p>", status_code=status, headers=_HEADERS)
@@ -358,4 +373,4 @@ def _consent_page(pending: dict[str, Any], *, error: str | None, status: int = 2
         '<button name="action" value="approve">Approve</button>'
         '<button name="action" value="deny" formnovalidate>Deny</button></form>'
         "<p>Ask the server's operator for a code: <code>genesismesh-mcp-admin issue-code</code>.</p>",
-        status_code=status, headers=_HEADERS)
+        status_code=status, headers=_consent_headers(str(params.redirect_uri)))

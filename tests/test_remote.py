@@ -76,8 +76,9 @@ def start(client, client_id, scope=None):
 
 
 def approve(client, request_id, code):
+    # As a browser posts the consent form from the server's own page.
     return client.post("/consent", data={"request": request_id, "code": code, "action": "approve"},
-                       follow_redirects=False)
+                       headers={"Origin": ISSUER}, follow_redirects=False)
 
 
 def redeem(client, client_id, location, verifier):
@@ -210,10 +211,17 @@ def test_consent_page_denial_failures_expiry_and_origin(harness):
     page = client.get("/consent", params={"request": request_id})
     assert page.status_code == 200 and "<script>alert" not in page.text and "&lt;script&gt;" in page.text
     assert "default-src 'none'" in page.headers["content-security-policy"]
+    # The browser follows the post's redirect to the client only if form-action allows its origin.
+    assert "form-action 'self' http://127.0.0.1:9999;" in page.headers["content-security-policy"]
+    # Under no-referrer a browser would post the form with Origin: null, which is refused.
+    assert page.headers["referrer-policy"] == "same-origin"
     assert client.get("/consent", params={"request": "unknown"}).status_code == 400
     cross = client.post("/consent", data={"request": request_id, "code": "x", "action": "approve"},
                         headers={"Origin": "https://evil.example"})
     assert cross.status_code == 403
+    opaque = client.post("/consent", data={"request": request_id, "code": "x", "action": "approve"},
+                         headers={"Origin": "null"})
+    assert opaque.status_code == 403
     assert client.post("/consent", data={"request": "unknown", "action": "approve"}).status_code == 400
     for attempt in range(1, MAX_CONSENT_FAILURES):
         failed = approve(client, request_id, "WRONG-CODE")
@@ -355,3 +363,14 @@ async def test_store_refuses_replayed_codes_revoked_refresh_tokens_and_revoked_c
     store._run("UPDATE clients SET revoked = 1 WHERE client_id = ?", ("c-1",))
     assert await store.load_access_token(fresh.access_token) is None  # its client is gone
     store.close()
+
+
+def test_consent_policy_allows_only_a_well_formed_redirect_origin():
+    from genesismesh_mcp.remote_auth import _consent_headers
+
+    assert "form-action 'self' https://claude.ai;" in _consent_headers(
+        "https://claude.ai/api/mcp/auth_callback")["Content-Security-Policy"]
+    assert "form-action 'self' http://localhost:33418;" in _consent_headers(
+        "http://localhost:33418/callback")["Content-Security-Policy"]
+    for odd in ("myapp://callback", "https://user@host.example/cb"):
+        assert "form-action 'self';" in _consent_headers(odd)["Content-Security-Policy"]

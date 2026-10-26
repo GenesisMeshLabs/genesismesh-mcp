@@ -51,6 +51,8 @@ Run it:
 genesismesh-mcp-http --config settings.json --remote remote.json
 ```
 
+The tool settings' `timeout_seconds` (15 by default, at most 300) bounds each authority request. Raise it for an authority with a large evidence store: verifying 11,700 entries takes about 20 seconds on a one-vCPU VM. Audit packs must end at an anchor; on a store whose executor keys predate registry records, pass the authority's executor keys to `gm_local_audit_verify` as `executor_keys`.
+
 ## Connect a client
 
 1. Issue an approval code on the server host:

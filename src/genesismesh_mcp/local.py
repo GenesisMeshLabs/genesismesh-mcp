@@ -72,7 +72,11 @@ def build_tools(settings: Settings) -> list[ToolSpec]:
                 total += len(raw)
                 files[item.relative_to(root).as_posix()] = raw
         held = TypeAdapter(list[StoreAnchor]).validate_python(args["held_anchors"]) if "held_anchors" in args else None
-        result = verify_audit_pack(files, root_public_key=args["root_public_key"], held_anchors=held)
+        # A pack holds only the registry records inside its range: keys registered before it come from the caller,
+        # as with the core's `audit verify --executor-keys`.
+        keys = ({name: TypeAdapter(ExecutorKey).validate_python(row) for name, row in args["executor_keys"].items()}
+                if "executor_keys" in args else None)
+        result = verify_audit_pack(files, root_public_key=args["root_public_key"], held_anchors=held, executor_keys=keys)
         return result.to_dict()
 
     def evidence(args):
@@ -114,9 +118,12 @@ def build_tools(settings: Settings) -> list[ToolSpec]:
                  local_profiles, read_only=True, idempotent=True,
                  core_targets=("cli:trust-bundle inspect", "cli:trust-bundle validate")),
         ToolSpec("gm_local_audit_verify", "Verify a workspace audit pack from an independently held root and optional "
-                 "held anchors. Reads bounded files; never truncates signed evidence.",
+                 "held anchors. A pack carries only the executor key registrations inside its range; supply "
+                 "executor_keys for keys registered before it. Reads bounded files; never truncates signed evidence.",
                  _schema({"directory": path, "root_public_key": public_key,
-                          "held_anchors": {"type": "array", "items": {"type": "object"}, "minItems": 1}},
+                          "held_anchors": {"type": "array", "items": {"type": "object"}, "minItems": 1},
+                          "executor_keys": {"type": "object",
+                                            "additionalProperties": TypeAdapter(ExecutorKey).json_schema()}},
                          ["directory", "root_public_key"]), audit, local_profiles, read_only=True, idempotent=True,
                  core_targets=("cli:audit verify",)),
         ToolSpec("gm_local_evidence_verify_export", "Verify workspace evidence JSONL, record signatures and chains. "

@@ -333,7 +333,10 @@ _STYLE = ("body{font-family:system-ui,sans-serif;max-width:32rem;margin:3rem aut
           ".error{color:#b42318}")
 _HEADERS = {"Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; "
                                        "frame-ancestors 'none'",
-            "X-Frame-Options": "DENY", "Referrer-Policy": "no-referrer", "Cache-Control": "no-store"}
+            "X-Frame-Options": "DENY", "Cache-Control": "no-store",
+            # same-origin, not no-referrer: under no-referrer a browser posts the consent form with
+            # Origin: null, which the same-origin check must refuse.
+            "Referrer-Policy": "same-origin"}
 
 
 def _page(body: str, *, status: int = 200) -> HTMLResponse:

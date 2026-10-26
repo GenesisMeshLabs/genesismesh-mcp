@@ -76,8 +76,9 @@ def start(client, client_id, scope=None):
 
 
 def approve(client, request_id, code):
+    # As a browser posts the consent form from the server's own page.
     return client.post("/consent", data={"request": request_id, "code": code, "action": "approve"},
-                       follow_redirects=False)
+                       headers={"Origin": ISSUER}, follow_redirects=False)
 
 
 def redeem(client, client_id, location, verifier):
@@ -210,10 +211,15 @@ def test_consent_page_denial_failures_expiry_and_origin(harness):
     page = client.get("/consent", params={"request": request_id})
     assert page.status_code == 200 and "<script>alert" not in page.text and "&lt;script&gt;" in page.text
     assert "default-src 'none'" in page.headers["content-security-policy"]
+    # Under no-referrer a browser would post the form with Origin: null, which is refused.
+    assert page.headers["referrer-policy"] == "same-origin"
     assert client.get("/consent", params={"request": "unknown"}).status_code == 400
     cross = client.post("/consent", data={"request": request_id, "code": "x", "action": "approve"},
                         headers={"Origin": "https://evil.example"})
     assert cross.status_code == 403
+    opaque = client.post("/consent", data={"request": request_id, "code": "x", "action": "approve"},
+                         headers={"Origin": "null"})
+    assert opaque.status_code == 403
     assert client.post("/consent", data={"request": "unknown", "action": "approve"}).status_code == 400
     for attempt in range(1, MAX_CONSENT_FAILURES):
         failed = approve(client, request_id, "WRONG-CODE")

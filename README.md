@@ -43,7 +43,9 @@ Use the installed interpreter's absolute path. A typical MCP host configuration 
 }
 ```
 
-The server runs over **stdio**. stdout carries MCP only. There is no unauthenticated remote HTTP listener. Offline verification works without a Network Authority.
+The server runs over **stdio**. stdout carries MCP only. Offline verification works without a Network Authority.
+
+To serve hosts that connect by URL, `genesismesh-mcp-http` runs the same tools over Streamable HTTP with a built-in OAuth authorization server: clients register themselves, an operator-issued approval code authorizes each one, and token scopes (`gm:read`, `gm:operator`, ..., `gm:admin`) narrow the configured profiles per request. Autonomous agents use scoped tokens from `genesismesh-mcp-admin create-agent`. There is no unauthenticated HTTP listener. See [serving over HTTP](docs/http-transport.md).
 
 Tool discovery returns every profile-enabled tool in the initial response so chat hosts that read only one listing can discover the full interface. Set `tool_page_size` to a positive integer only for a client that follows MCP pagination; the default is `null` (one complete listing). Resource discovery remains paginated.
 
@@ -138,4 +140,4 @@ Tests include disposable real HTTP authorities, Noise peers, guard subprocesses,
 
 `max_input_bytes` and `max_output_bytes` default to 1 MiB and 4 MiB. Oversized artifacts are refused, never silently truncated. HTTP responses are read with bounded streaming and redirects/retries disabled. `timeout_seconds` controls socket inactivity and streamed-body elapsed checks; it is not a hard process or CPU deadline. Known quadratic audit/Atlas workloads have separate complexity limits.
 
-General workspace access remains read-only. Workflow writes use separately configured artifact, node, provisioning and proof-store locations. Private workflow/node/provisioning storage cannot overlap readable workspace or artifact roots. The stdio host user is the security boundary: this is not a multi-user hosted authorization service. No production authority was modified to test this implementation.
+General workspace access remains read-only. Workflow writes use separately configured artifact, node, provisioning and proof-store locations. Private workflow/node/provisioning storage cannot overlap readable workspace or artifact roots. Over stdio, the host user is the security boundary; over HTTP, each client's OAuth scopes are, and every client acts with the same configured keys: this is one operator's server, not a multi-tenant service. No production authority was modified to test this implementation.

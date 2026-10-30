@@ -3,7 +3,7 @@
   "core_package": "genesis-mesh",
   "core_version": "1.8.1",
   "core_repository": "https://github.com/GenesisMeshLabs/genesismesh",
-  "core_commit": "9e4d5c01e6ba7a22e73c17388796ec274f73a2fc",
+  "core_commit": "1485b42e84a9e6b40240f3d366a492aca8aab44f",
   "contract_path": "contract/public-surface.json",
   "contract_sha256": "2c6b23036e5584d0bae53369143be73877d16552f8c43ac32e1a217207f25806",
   "digest_encoding": "UTF-8 with LF newlines",

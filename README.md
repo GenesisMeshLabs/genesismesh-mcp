@@ -2,7 +2,7 @@
 
 A standalone [Model Context Protocol](https://modelcontextprotocol.io/) server for Genesis Mesh: Network Authority operations, offline trust primitives, signing, evidence verification and a complete reference to the core public surface.
 
-**Core compatibility: Genesis Mesh 1.8.1.** This is an unreleased development adapter (`0.1.0.dev0`), not yet a component of the coordinated release train. It reuses the core implementation and the [official MCP Python SDK](https://py.sdk.modelcontextprotocol.io/); it does not implement a second trust protocol.
+**Core compatibility: Genesis Mesh 1.9.2.** This is an unreleased development adapter (`0.1.0.dev0`), not yet a component of the coordinated release train. It reuses the core implementation and the [official MCP Python SDK](https://py.sdk.modelcontextprotocol.io/); it does not implement a second trust protocol.
 
 ## Coverage
 

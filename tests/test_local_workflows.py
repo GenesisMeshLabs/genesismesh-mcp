@@ -303,7 +303,7 @@ def test_mid_store_pack_verifies_with_cited_registry_records_and_supplied_execut
         "role": "executor", "resource_prefix": "kv:test/"})
     first = workflow._call(settings, "/admin/evidence/anchors", "POST")["anchor"]
     attestation = workflow._call(settings, "/admin/attestations", "POST", body={
-        "subject_id": "vendor", "roles": ["role:client"], "claims": {"capabilities": ["secret.manage"]}})
+        "subject_id": settings.operator_key_id, "roles": ["role:client"], "claims": {"capabilities": ["secret.manage"]}})
     decision = workflow._call(settings, "/admin/boundary/evaluate", "POST", body={
         "attestation_id": attestation["attestation_id"], "requested_capability": "secret.manage",
         "context": {"request_parameters": {"lifetime_days": 30, "resource_id": "kv:test/secret"}}})["decision"]

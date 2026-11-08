@@ -33,7 +33,7 @@ def test_nonempty_audit_pack_root_pin_anchors_and_tampering(tmp_path, authority)
     settings, keys, _ = authority
     active_policy(settings)
     attestation = request(settings, "/admin/attestations", status=201,
-        body={"subject_id": "vendor", "roles": ["role:client"], "claims": {"capabilities": ["secret.manage"]}})
+        body={"subject_id": settings.operator_key_id, "roles": ["role:client"], "claims": {"capabilities": ["secret.manage"]}})
     decision = request(settings, "/admin/boundary/evaluate", status=201, body={
         "attestation_id": attestation["attestation_id"], "requested_capability": "secret.manage",
         "context": {"request_parameters": {"lifetime_days": 30}}})

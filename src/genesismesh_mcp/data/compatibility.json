@@ -1,15 +1,15 @@
 {
   "format_version": 1,
   "core_package": "genesis-mesh",
-  "core_version": "1.8.1",
+  "core_version": "1.9.2",
   "core_repository": "https://github.com/GenesisMeshLabs/genesismesh",
-  "core_commit": "1485b42e84a9e6b40240f3d366a492aca8aab44f",
+  "core_commit": "0061e1f60f8d0495125d8f8e6210a66d3c8bab71",
   "contract_path": "contract/public-surface.json",
-  "contract_sha256": "2c6b23036e5584d0bae53369143be73877d16552f8c43ac32e1a217207f25806",
+  "contract_sha256": "afa92d8bd38b4ad456db7c5d871b605537eae8270f5750240542ce3a833bda63",
   "digest_encoding": "UTF-8 with LF newlines",
   "mcp_package": "mcp",
   "mcp_version": "2.3.0",
   "contract_version": 1,
   "release_status": "unreleased development adapter; not enrolled in the coordinated release train",
-  "verified_date": "2026-10-25"
+  "verified_date": "2026-11-08"
 }

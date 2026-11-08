@@ -346,7 +346,7 @@ def test_evidence_observations_remediation_and_verified_archive(authority):
             "role": role, "resource_prefix": "kv:test/"})
     registry = request(settings, "/admin/evidence/executor-keys", "GET")["executor_keys"]
     assert {row["key_id"] for row in registry} == {"executor", "node"}
-    attestation = request(settings, "/admin/attestations", status=201, body={"subject_id": "vendor",
+    attestation = request(settings, "/admin/attestations", status=201, body={"subject_id": settings.operator_key_id,
         "roles": ["role:client"], "claims": {"capabilities": ["secret.manage"]}})
     decision = request(settings, "/admin/boundary/evaluate", status=201, body={
         "attestation_id": attestation["attestation_id"], "requested_capability": "secret.manage",
@@ -363,7 +363,7 @@ def test_evidence_observations_remediation_and_verified_archive(authority):
     resource = {"resource_id": "kv:test/secret"}
     assert request(settings, "/admin/evidence/resource-heads/<path:resource_id>", "GET", path=resource)["record_digest"] == execution.digest()
     assert request(settings, "/admin/evidence/resources/<path:resource_id>", "GET", path=resource)["verification"]["verified"]
-    assert request(settings, "/admin/evidence/vendors/<vendor_id>", "GET", path={"vendor_id": "vendor"})["verification"]["verified"]
+    assert request(settings, "/admin/evidence/vendors/<vendor_id>", "GET", path={"vendor_id": settings.operator_key_id})["verification"]["verified"]
     assert request(settings, "/admin/evidence/status", "GET")["entries"] > 0
 
     def observed(event):
@@ -455,7 +455,7 @@ def test_review_read_returns_the_signed_decision_and_distinct_holders(authority)
 
     settings, keys, paths = authority
     active_policy(settings)
-    attestation = request(settings, "/admin/attestations", status=201, body={"subject_id": "vendor",
+    attestation = request(settings, "/admin/attestations", status=201, body={"subject_id": settings.operator_key_id,
         "roles": ["role:client"], "claims": {"capabilities": ["secret.manage"]}})
     decision = request(settings, "/admin/boundary/evaluate", status=201, body={
         "attestation_id": attestation["attestation_id"], "requested_capability": "secret.manage",

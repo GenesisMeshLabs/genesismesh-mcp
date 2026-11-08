@@ -176,7 +176,7 @@ async def test_mcp_grant_lifecycle_matches_core_and_verifies_export(authority):
             "executor_sovereign_id": "edge-test"})
         assert registered["key_id"] == "executor"
         attestation = await request("/admin/attestations", expected=201, body={
-            "subject_id": "client", "roles": ["role:client"], "claims": {"capabilities": ["secret.manage"]}})
+            "subject_id": settings.operator_key_id, "roles": ["role:client"], "claims": {"capabilities": ["secret.manage"]}})
         policy = await request("/admin/boundary-policies", expected=201, body={
             "policy_id": "lifetime", "valid_from": (now - timedelta(minutes=1)).isoformat(),
             "valid_until": (now + timedelta(hours=3)).isoformat(), "selector": {"capabilities": ["secret.manage"]},
@@ -309,7 +309,7 @@ async def test_mcp_review_requires_independent_holders_and_core_verifies_approva
             return body["result"]
 
         attestation = await request(actor_client, "/admin/attestations", expected=201,
-            body={"subject_id": "client", "roles": ["role:client"], "claims": {"capabilities": ["secret.manage"]}})
+            body={"subject_id": settings.operator_key_id, "roles": ["role:client"], "claims": {"capabilities": ["secret.manage"]}})
         now = datetime.now(timezone.utc)
         policy = await request(actor_client, "/admin/boundary-policies", expected=201, body={
             "policy_id": "review-lifetime", "valid_from": (now - timedelta(minutes=1)).isoformat(),

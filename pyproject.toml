@@ -9,7 +9,7 @@ description = "Model Context Protocol adapter for Genesis Mesh portable trust."
 readme = "README.md"
 requires-python = ">=3.12"
 license = "MIT"
-dependencies = ["genesis-mesh==1.8.1", "mcp==2.3.0", "jsonschema>=4.26,<5"]
+dependencies = ["genesis-mesh==1.9.2", "mcp==2.3.0", "jsonschema>=4.26,<5"]
 
 [project.optional-dependencies]
 dev = ["pytest>=9,<10", "pytest-asyncio>=1.4,<2", "ruff>=0.17,<0.18", "build>=1.4,<2", "coverage>=7.17,<8"]

@@ -2087,6 +2087,16 @@
           "name": "expected_subject_id",
           "kind": "keyword_only",
           "required": false
+        },
+        {
+          "name": "expected_requester_key_id",
+          "kind": "keyword_only",
+          "required": false
+        },
+        {
+          "name": "expected_policy_ids",
+          "kind": "keyword_only",
+          "required": false
         }
       ]
     },
@@ -2333,6 +2343,11 @@
           "name": "integrity_failures",
           "kind": "keyword_only",
           "required": false
+        },
+        {
+          "name": "require_coverage",
+          "kind": "keyword_only",
+          "required": false
         }
       ]
     },
@@ -2382,6 +2397,11 @@
         },
         {
           "name": "caller_public_key",
+          "kind": "keyword_only",
+          "required": false
+        },
+        {
+          "name": "subject_id_names_caller",
           "kind": "keyword_only",
           "required": false
         }
@@ -2474,6 +2494,11 @@
         },
         {
           "name": "at_time",
+          "kind": "keyword_only",
+          "required": false
+        },
+        {
+          "name": "bearer_public_keys",
           "kind": "keyword_only",
           "required": false
         }

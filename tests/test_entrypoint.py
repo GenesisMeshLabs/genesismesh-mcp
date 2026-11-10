@@ -14,7 +14,7 @@ def test_cli_check_prints_the_actual_registered_catalog(monkeypatch, capsys):
     monkeypatch.setattr(sys, "argv", ["genesismesh-mcp", "--check"])
     cli.main()
     result = json.loads(capsys.readouterr().out)
-    assert result["registered_tools"] == 284
+    assert result["registered_tools"] == 285
     assert result["sections"]["http_routes"]["implemented"] == 116
 
 
@@ -25,7 +25,7 @@ def test_python_module_entrypoint_uses_config_file(monkeypatch, tmp_path, capsys
     monkeypatch.delitem(sys.modules, "genesismesh_mcp.__main__", raising=False)
     runpy.run_module("genesismesh_mcp", run_name="__main__")
     result = json.loads(capsys.readouterr().out)
-    assert result["registered_tools"] == 284
+    assert result["registered_tools"] == 285
 
 
 def test_invalid_configuration_is_refused_without_disclosing_contents(monkeypatch, tmp_path, capsys):

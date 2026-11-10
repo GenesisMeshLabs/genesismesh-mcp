@@ -1915,6 +1915,16 @@
         "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_attestations_get_attestation]"
       ]
     },
+    "na_attestations_read_attestation": {
+      "kind": "real_authority",
+      "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",
+      "positive": [
+        "tests/test_authority_full.py::test_boundary_policy_and_recognition_lifecycles"
+      ],
+      "negative": [
+        "tests/test_tool_permissions.py::test_every_registered_handler_refuses_disabled_profile[na_attestations_read_attestation]"
+      ]
+    },
     "na_attestations_get_recognition_policy": {
       "kind": "real_authority",
       "scope": "Real disposable HTTP authority with reviewed route-specific request/result assertions. A recorded denial remains a denial; no CLI hosting or external-action claim.",

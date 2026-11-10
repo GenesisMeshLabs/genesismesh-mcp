@@ -89,9 +89,18 @@ def test_operator_tiers_signed_reads_and_attestation_lifecycle(authority):
     issued = invoke(settings, operation("/admin/attestations"), {"body": {"subject_id": "client", "roles": ["role:client"], "claims": {"apps": ["example"]}}})
     assert issued["http_status"] == 201, issued
     attestation = issued["result"]
-    fetched = invoke(settings, operation("/attestations/<attestation_id>", "GET"), {"path": {"attestation_id": attestation["attestation_id"]}})
-    assert fetched["http_status"] == 200
+    by_id = {"path": {"attestation_id": attestation["attestation_id"]}}
+    status_only = invoke(settings, operation("/attestations/<attestation_id>", "GET", "na_attestations_get_attestation"), by_id)
+    assert status_only["http_status"] == 200
+    assert status_only["result"]["status"] == "active"
+    assert "attestation" not in status_only["result"]
+    fetched = invoke(reader, operation("/attestations/<attestation_id>", "GET", "na_attestations_read_attestation"), by_id)
+    assert fetched["http_status"] == 200, fetched
     assert fetched["result"]["attestation"]["attestation_id"] == attestation["attestation_id"]
+    forged = replace(settings, operator_key_file=paths["node"], operator_key_id="reader")
+    refused_read = invoke(forged, operation("/attestations/<attestation_id>", "GET", "na_attestations_read_attestation"), by_id)
+    assert refused_read["http_status"] == 401
+    assert refused_read["http_ok"] is False
     public_count = invoke(reader, operation("/attestations", "GET", "na_attestations_list_attestations"), {})
     assert public_count["result"] == {"count": 1}
     signed_list = invoke(reader, operation("/attestations", "GET", "na_attestations_roster"), {"query": {"subject_id": "client"}})

@@ -92,8 +92,11 @@ def test_boundary_policy_and_recognition_lifecycles(authority):
     attestation = request(settings, "/admin/attestations", status=201,
                           body={"subject_id": "vendor", "roles": ["role:client"],
                                 "claims": {"capabilities": ["secret.manage"]}})
-    assert request(settings, "/attestations/<attestation_id>", "GET",
-                   path={"attestation_id": attestation["attestation_id"]})["attestation"] == attestation
+    by_id = {"attestation_id": attestation["attestation_id"]}
+    status_only = request(settings, "/attestations/<attestation_id>", "GET", name="na_attestations_get_attestation", path=by_id)
+    assert status_only["status"] == "active" and "attestation" not in status_only
+    assert request(settings, "/attestations/<attestation_id>", "GET", name="na_attestations_read_attestation",
+                   path=by_id)["attestation"] == attestation
     recognition = {"local_sovereign_id": "mcp-test", "recognized_issuers": [{
         "sovereign_id": "mcp-test", "public_keys": [keys["root"].public_key_b64],
         "allowed_roles": ["role:client"], "accepted_statuses": ["active"]}], "revoked_attestation_ids": []}

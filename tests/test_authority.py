@@ -120,9 +120,9 @@ def by_path(path, method="POST"):
 
 def test_registry_has_every_public_operation_and_private_roster():
     registered = operations()
-    assert len(registered) == 118
+    assert len(registered) == 119
     assert len({(op["method"], op["path"]) for op in registered}) == 116
-    assert len({op["name"] for op in registered}) == 118
+    assert len({op["name"] for op in registered}) == 119
     for op in registered:
         Draft202012Validator.check_schema(input_schema(op))
         assert op["source"].startswith("genesis_mesh/na_service/routes/")

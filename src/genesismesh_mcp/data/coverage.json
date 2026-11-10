@@ -1,6 +1,6 @@
 {
   "format_version": 1,
-  "core_contract_sha256": "afa92d8bd38b4ad456db7c5d871b605537eae8270f5750240542ce3a833bda63",
+  "core_contract_sha256": "33aa3ba0a7b371c75cc23a48571493cfc045fdde539b04ea35f50b250daf8dcf",
   "note": "Every source item is accounted for. Runtime ToolSpec/resource registrations determine implemented coverage. A reference, manual recipe or schema is not executable behavior.",
   "rows": [
     {

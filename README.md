@@ -2,7 +2,7 @@
 
 A standalone [Model Context Protocol](https://modelcontextprotocol.io/) server for Genesis Mesh: Network Authority operations, offline trust primitives, signing, evidence verification and a complete reference to the core public surface.
 
-**Core compatibility: Genesis Mesh 1.9.2.** This is an unreleased development adapter (`0.1.0.dev0`), not yet a component of the coordinated release train. It reuses the core implementation and the [official MCP Python SDK](https://py.sdk.modelcontextprotocol.io/); it does not implement a second trust protocol.
+**Core compatibility: Genesis Mesh 1.10.0.** This is an unreleased development adapter (`0.1.0.dev0`), not yet a component of the coordinated release train. It reuses the core implementation and the [official MCP Python SDK](https://py.sdk.modelcontextprotocol.io/); it does not implement a second trust protocol.
 
 ## Coverage
 
@@ -10,7 +10,7 @@ A standalone [Model Context Protocol](https://modelcontextprotocol.io/) server f
 - Offline tools cover agreements, delegation, recognition, tokens, freshness, policy decisions, execution evidence, audit verification, disclosure, consensus, data governance, oversight, risk, privacy, purge, discovery, interoperability, grants and key history.
 - The catalog accounts for **782 contract entries**, including every CLI command, public Python symbol, signed artifact, error code, package and behavioral rule. These are overlapping surfaces, not 782 independent features.
 - Resources include model schemas, all **137 CLI command references**, compatibility details, configuration capabilities, the coverage report and reviewed per-tool test citations.
-- **284 tools** include configured workflows for federation, fleet generation/mesh/status/verification, remote proofs/canaries/cleanup, audit packs/archives, held anchors, treaty lifecycle, node enrollment/status, peer sends and guard requests.
+- **285 tools** include configured workflows for federation, fleet generation/mesh/status/verification, remote proofs/canaries/cleanup, audit packs/archives, held anchors, treaty lifecycle, node enrollment/status, peer sends and guard requests.
 
 Coverage accounting, executable adapters and tested behavior are reported separately. The executable-workflow gap count is **zero** against the pinned contract: 119 CLI commands have adapters and 18 describe host/custody operations. Host daemons, general database migration/restore and production root-key custody remain documented boundaries. This is not identical CLI flag/process behavior or proof of production deployment. See [measured coverage](docs/coverage.md), [workflow scope](docs/operational-gaps.md), and [configuration examples](docs/workflows.md).
 

@@ -8571,6 +8571,16 @@
         "help": "InvocationUseRecord JSON files (for budget checking). Repeatable."
       },
       {
+        "name": "bearer_key_inputs",
+        "options": [
+          "--bearer-key"
+        ],
+        "type": "text",
+        "required": false,
+        "multiple": true,
+        "help": "Bearer public key (base64 or file). Given, only use records it signed count. Repeatable."
+      },
+      {
         "name": "output_format",
         "options": [
           "--format"
